@@ -1,0 +1,87 @@
+//
+//  CustomerMonitoringDocumentList.swift
+//  EFTA1
+//
+//  Created by Joshua on 4/11/24.
+//
+
+import SwiftUI
+
+struct CustomerMonitoringDocumentList: View {
+    var title: String
+
+    @StateObject var documentHandler = CustomerMonitoringDocumentHandler()
+    
+    @State private var progress: CGFloat = 0.6 // Initial progress
+
+    var body: some View {
+
+        GeometryReader { geometry in
+            
+            VStack{
+                ProgressBar(geometry: geometry, progress: $progress,title:title,description: "Kindly complete the following details") // Pass progress as a binding
+                    .padding(.trailing,20)
+
+                ScrollView{
+                    
+                    
+                    ForEach(documentHandler.selectedDocuments, id: \.self) { documentURL in
+                            ListedDocument(documentName: documentURL.lastPathComponent)
+                            }
+           
+                    
+                }
+                Spacer ()
+                NavigationLink(destination: Dashboard()){
+                Text("Continue")
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height:40)
+                    .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                    .cornerRadius(8)
+                    .padding(.horizontal)
+                }
+
+                }
+            }
+            
+       
+
+    }
+}
+
+struct ListedDocument: View {
+    var documentName: String
+
+    var body: some View {
+        VStack {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.gray.opacity(0.2))
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .overlay(
+                    VStack {
+                        HStack {
+                            Image(systemName: "doc")
+                                .resizable()
+                                .frame(width: 30, height: 30) // Adjusted size for better layout
+                                .foregroundColor(Color(hex: "#2AA241"))
+                            
+                            Text(documentName) // Use the passed document name
+                                .font(.headline)
+                            Spacer()
+
+                            Image(systemName: "checkmark")
+                                .resizable()
+                                .frame(width: 20, height: 20) // Adjusted size for better layout
+                                .foregroundColor(Color.green)
+                        }
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.green)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 1)
+                    }
+                )
+        }
+    }
+}

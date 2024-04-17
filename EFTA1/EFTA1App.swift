@@ -9,9 +9,20 @@ import SwiftUI
 
 @main
 struct EFTA1App: App {
+    @StateObject var SiteQuestionData = SiteQuestionDataHandler()
+    @StateObject var documentHandler = DocumentHandler() // Instantiate your DocumentHandler
+    @StateObject var CustomerOnboardingData = OnboardingData() // Instantiate your DocumentHandler
+    
+
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashView()
+                .environmentObject(SiteQuestionData)
+                .environmentObject(documentHandler)
+                .environmentObject(CustomerOnboardingData)
+
+
         }
     }
 }
