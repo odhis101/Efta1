@@ -17,6 +17,7 @@ struct CustomerApraisalDetails: View {
         
         ]
     var userData: UserData
+    @EnvironmentObject var config: AppConfig
 
     var body: some View {
         GeometryReader { geometry in
@@ -34,13 +35,13 @@ struct CustomerApraisalDetails: View {
 
             HStack{
                 Text("Schedule")
-                    .foregroundColor(.green) // Set text color to green
+                    .foregroundColor(config.primaryColor) // Set text color to green
                     .frame(maxWidth: .infinity)
                     .frame(height: 30)
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 8) // Apply corner radius to the background
-                            .stroke(Color.green, lineWidth: 2) // Set border color and width
+                            .stroke(config.primaryColor, lineWidth: 2) // Set border color and width
                     )
                     .cornerRadius(20) // Apply corner radius to the text view
 
@@ -52,7 +53,7 @@ struct CustomerApraisalDetails: View {
                     .frame(maxWidth: .infinity)
                     .frame(height:30)
                     .padding()
-                    .background(Color.green) // Set background color to green when enabled, gray when disabled
+                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
                     .cornerRadius(20)
 
                     
@@ -77,7 +78,8 @@ struct CustomerDetailsReceiptBox: View {
     let items: [(String, String)]
     let geometry: GeometryProxy
 
-    
+    @EnvironmentObject var config: AppConfig
+
     var body: some View {
         VStack(spacing: 10) {
             RoundedRectangle(cornerRadius: 10)
@@ -88,7 +90,7 @@ struct CustomerDetailsReceiptBox: View {
                 .overlay(
                     VStack(spacing: 0) {
                         Text("Customer details")
-                            .foregroundColor(.green)
+                            .foregroundColor(config.primaryColor)
                         ForEach(items, id: \.0) { item in
                             HStack {
                                 Text(item.0)
@@ -101,7 +103,7 @@ struct CustomerDetailsReceiptBox: View {
                             Divider()
                         }
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(.green)
+                            .fill(config.primaryColor)
                             .frame(height:40)
                             .padding()
 
@@ -118,7 +120,7 @@ struct CustomerDetailsReceiptBox: View {
                             )
                         
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(.green)
+                            .fill(config.primaryColor)
                             .frame(height:40)
                             .padding()
                             .overlay(

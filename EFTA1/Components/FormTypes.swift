@@ -7,6 +7,9 @@
 
 import Foundation
 import SwiftUI
+import UIKit
+import SwiftUIDigitalSignature  // Ensure you import the package
+
 
 struct DropdownQuestionView: View {
     let questions: [String]
@@ -100,6 +103,7 @@ struct OptionCheckBox: View {
     var option: String
     var isSelected: Bool
     var action: () -> Void
+    @EnvironmentObject var config: AppConfig
 
     var body: some View {
         Button(action: action) {
@@ -108,7 +112,7 @@ struct OptionCheckBox: View {
                     .stroke(Color.black, lineWidth: 2)
                     .frame(width: 24, height: 24)
                     .overlay(
-                        isSelected ? Image(systemName: "checkmark").foregroundColor(.green) : nil
+                        isSelected ? Image(systemName: "checkmark").foregroundColor(config.primaryColor) : nil
                     )
                 Text(option)
             }
@@ -204,5 +208,491 @@ struct QuestionWithSmallTextField: View {
                 .padding(.horizontal)
         }
    
+    }
+}
+
+struct ToggleableTextComponent: View {
+    var text1: String
+    var text2: String
+    var isActiveFirstText: Bool
+    var onToggle: () -> Void // Closure to handle toggle action
+    @EnvironmentObject var config: AppConfig
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 20)
+            .fill(Color.gray)
+            .frame(height: 40)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .overlay(
+                HStack {
+                    Button(action: {
+                        // toggle active state
+                        onToggle()
+                    }) {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(isActiveFirstText ? config.primaryColor : Color.clear) // Use green color if active
+                            .frame(height: 40)
+                            .padding()
+
+
+                            .overlay(
+                                Text(text1)
+                                    .foregroundColor(isActiveFirstText ? .white : .black) // Text color changes based on active state
+                            )
+                    }
+                    Spacer()
+                    Button(action: {
+                        // toggle active state
+                        onToggle()
+                    }) {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(!isActiveFirstText ? config.primaryColor: Color.clear) // Use green color if active
+                            .frame(height: 40)
+                            .padding()
+
+                            .overlay(
+                                Text(text2)
+                                    .foregroundColor(!isActiveFirstText ? .white : .black) // Text color changes based on active state
+                            )
+                    }
+                }
+            )
+    }
+}
+
+struct QuestionWithDate: View {
+    @State private var showDatePicker = false
+    @State private var selectedDate = Date()
+    var question: String
+
+    var body: some View {
+        VStack(spacing:10)  {
+            HStack{
+            Text(question)
+                .font(.caption)
+                .multilineTextAlignment(.leading)
+            Spacer ()
+            }
+            Button(action: {
+                // Action to show date picker
+                showDatePicker.toggle()
+            }) {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(height: 60) // Adjust height as needed
+                    .overlay(
+                        HStack {
+                            Text(verbatim: selectedDate.formatted(date: .numeric, time: .omitted))
+                                .foregroundColor(.black)
+                                .padding(.leading)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "calendar")
+                                .foregroundColor(.gray)
+                                .padding(.trailing)
+                        }
+                    )
+            }
+            .sheet(isPresented: $showDatePicker) {
+                // Date picker modal
+                DatePicker("Select a date", selection: $selectedDate, displayedComponents: .date)
+                    .datePickerStyle(GraphicalDatePickerStyle())
+                    .padding()
+            }
+        }
+        .padding(.horizontal)
+
+    }
+}
+
+struct QuestionWithTime: View {
+    @State private var showTimePicker = false
+    @State private var selectedTime = Date()
+    var question: String
+
+    var body: some View {
+        VStack(spacing: 10) {
+            HStack {
+                Text(question)
+                    .font(.headline)
+                    .multilineTextAlignment(.leading)
+                Spacer()
+            }
+            Button(action: {
+                // Toggle visibility of the time picker
+                showTimePicker.toggle()
+            }) {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(height: 50) // Standard form field height
+                    .overlay(
+                        HStack {
+                            Text(selectedTime, format: .dateTime.hour().minute())
+                                .foregroundColor(.black)
+                                .padding(.leading)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "clock")
+                                .foregroundColor(.gray)
+                                .padding(.trailing)
+                        }
+                    )
+            }
+            .sheet(isPresented: $showTimePicker) {
+                // Use a date picker within a modal sheet
+                DatePicker("Select Time", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                    .datePickerStyle(WheelDatePickerStyle())
+                    .padding()
+                    .toolbar {
+                        // Adding a Done button to toolbar for better UX
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Done") {
+                                showTimePicker = false
+                            }
+                        }
+                    }
+            }
+        }
+        .padding(.horizontal)
+    }
+}
+
+struct QuestionWithTextField: View {
+    var question: String
+    @State private var answer = ""
+
+    var body: some View {
+        VStack(spacing: 10) {
+            HStack{
+            Text(question)
+                .font(.caption)
+            Spacer()
+            }
+
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(hex: "#F2F2F7"))
+                .frame(height: 80) // Adjust height as needed
+                .frame(maxWidth:.infinity)
+                .overlay(
+                    TextField("Enter your answer", text: $answer)
+                        .padding()
+                )
+        }
+        .padding(.horizontal)
+
+   
+    }
+}
+
+
+struct QuestionWithBulletpoints: View {
+    var question: String
+    var bulletPoints: [String]
+
+    @State private var answer = ""
+
+    var body: some View {
+        VStack(spacing: 10) {
+            HStack{
+            Text(question)
+                .font(.caption)
+            Spacer()
+            }
+            ForEach(bulletPoints, id: \.self) { bulletPoint in
+                          HStack {
+                              Text("•")
+                                  .font(.system(size: 12))
+                                  .foregroundColor(Color.black) // Bullet point color
+                              Text(bulletPoint)
+                                  .font(.system(size: 12))
+                                  .foregroundColor(Color.black)
+                                  .italic()
+                              Spacer()
+                          }
+            }
+
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(hex: "#F2F2F7"))
+                .frame(height: 80) // Adjust height as needed
+                .frame(maxWidth:.infinity)
+                .overlay(
+                    TextField("Enter your answer", text: $answer)
+                        .padding()
+                )
+        }
+        .padding(.horizontal)
+
+   
+    }
+}
+
+struct PhotoCaptureButton: View {
+    @Binding var capturedImage: UIImage?
+    @ObservedObject var SiteQuestionData: SiteQuestionDataHandler
+    var question: String
+    
+    var imagePickerTitle: String = "Select Photo"
+    @State private var isPickerPresented = false
+    var imageStorage: Binding<UIImage?> // Binding to a dynamic image storage property
+
+    var body: some View {
+        VStack{
+            Text(question)
+                .font(.caption) // Adjust font size as needed
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.gray.opacity(0.2))
+                .frame(maxWidth: .infinity)
+                .frame(height:60)
+                .overlay(
+                    HStack {
+                        Text("Capture a Photo ")
+                            .padding(.leading, 20)
+                        Spacer()
+                        Button(action: {
+                            // Toggle image picker presentation
+                            isPickerPresented.toggle()
+                        }) {
+                            Image(systemName: "photo")
+                                .padding(.trailing,30)
+
+                        }
+                        if SiteQuestionData.profileImage != nil {
+                            Button(action: {
+                                // Clear the captured image
+                                imageStorage.wrappedValue = nil
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.red)
+                            }
+                        }
+                    }
+                )
+            if let storedImage = imageStorage.wrappedValue {
+                Image(uiImage: storedImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 60, height: 60)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray, lineWidth: 3))
+                    .padding()
+                    .offset(x: 150, y: -20) // Adjust position as needed
+            }
+        }
+    }
+        .padding()
+
+        .sheet(isPresented: $isPickerPresented) {
+            ImagePicker(image: $capturedImage, isPickerPresented: $isPickerPresented, sourceType: .photoLibrary)
+        }
+        .onChange(of: capturedImage) { newValue in
+            // Update the profile image in the imageStorage when capturedImage changes
+            imageStorage.wrappedValue = newValue
+        }
+    }
+}
+
+struct QuestionWithButtons: View {
+    var question: String
+    @State private var isYesSelected = false
+    @State private var isNoSelected = false
+    @EnvironmentObject var config: AppConfig
+
+
+    var body: some View {
+        VStack(spacing: 10) {
+            HStack{
+            Text(question)
+                .font(.caption)
+            Spacer ()
+            }
+
+            HStack {
+                Button(action: {
+                    isYesSelected.toggle()
+                    isNoSelected = false
+                }) {
+                    RoundedRectangle(cornerRadius: 20)
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(isYesSelected ? config.primaryColor : .clear)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(config.primaryColor, lineWidth: 2)
+                                .padding(2)
+                        )
+                }
+                Text("Yes")
+                    .padding(.leading, 5)
+
+
+                Button(action: {
+                    isNoSelected.toggle()
+                    isYesSelected = false
+                }) {
+                    RoundedRectangle(cornerRadius: 8)
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(isNoSelected ? config.primaryColor : .clear)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(config.primaryColor, lineWidth: 2)
+                                .padding(2)
+                        )
+                }
+                Text("No")
+                    .padding(.trailing, 5)
+                
+                Spacer()
+
+            }
+
+        }
+        .padding()
+    }
+}
+
+/*
+
+struct SignatureCaptureView: UIViewRepresentable {
+    @Binding var signatureImage: UIImage?
+    
+    class Coordinator: NSObject {
+        var path = UIBezierPath()
+        var currentPoint: CGPoint = .zero
+        
+        func touchMoved(to point: CGPoint) {
+            path.move(to: currentPoint)
+            path.addLine(to: point)
+            currentPoint = point
+        }
+        
+        func getImage(from view: UIView) -> UIImage {
+            UIGraphicsBeginImageContextWithOptions(view.bounds.size, false, UIScreen.main.scale)
+            view.layer.render(in: UIGraphicsGetCurrentContext()!)
+            let image = UIGraphicsGetImageFromCurrentImageContext()!
+            UIGraphicsEndImageContext()
+            return image
+        }
+    }
+    
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.isUserInteractionEnabled = true
+        let panRecognizer = UIPanGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.panGesture(_:)))
+        view.addGestureRecognizer(panRecognizer)
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {}
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+}
+
+extension SignatureCaptureView.Coordinator {
+    @objc func panGesture(_ sender: UIPanGestureRecognizer) {
+        let location = sender.location(in: sender.view)
+        
+        switch sender.state {
+        case .began:
+            currentPoint = location
+        case .changed:
+            touchMoved(to: location)
+            sender.view?.setNeedsDisplay()
+        case .ended:
+            if let view = sender.view {
+                let image = getImage(from: view)
+                DispatchQueue.main.async {
+                    self.signatureImage = image
+                }
+            }
+        default:
+            break
+        }
+    }
+}
+*/
+struct SignatureCaptureField: View {
+    @Binding var signatureImage: UIImage?
+    @State private var isPresentingSignatureView = false
+
+    var body: some View {
+        Button(action: {
+            isPresentingSignatureView = true
+        }) {
+            HStack {
+                if signatureImage != nil {
+                    Image(uiImage: signatureImage!)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 30)
+                    Text("Tap to change signature")
+                        .foregroundColor(.gray)
+                        .font(.caption)
+                } else {
+                    Text("Tap to add signature")
+                        .foregroundColor(.gray)
+                }
+                Spacer()
+                Image(systemName: "pencil")
+            }
+            .padding()
+            .background(Color.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(Color.gray, lineWidth: 1)
+            )
+        }
+        .sheet(isPresented: $isPresentingSignatureView) {
+            SignatureView(availableTabs: [.draw], onSave: { image in
+                self.signatureImage = image
+                isPresentingSignatureView = false
+            }, onCancel: {
+                isPresentingSignatureView = false
+            })
+        }
+    }
+}
+
+
+struct PhotoCaptureField: View {
+    @Binding var image: UIImage?
+    @State private var isPresentingCamera = false
+    @State private var isPickerPresented = false
+
+    var body: some View {
+        Button(action: {
+            isPresentingCamera = true
+        }) {
+            HStack {
+                if image != nil {
+                    Image(uiImage: image!)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 30)
+                    Text("Tap to retake photo")
+                        .foregroundColor(.gray)
+                        .font(.caption)
+                } else {
+                    Text("Tap to take photo Of Signature ")
+                        .foregroundColor(.gray)
+                }
+                Spacer()
+                Image(systemName: "camera")
+            }
+            .padding()
+            .background(Color.white)
+            .overlay(
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(Color.gray, lineWidth: 1)
+            )
+        }
+        .sheet(isPresented: $isPresentingCamera) {
+            ImagePicker(image: $image, isPickerPresented: $isPickerPresented, sourceType: .camera)
+        }
     }
 }

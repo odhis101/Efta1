@@ -12,6 +12,8 @@ struct CompanyDocument: View {
     @State private var progress: CGFloat = 0.9 // Initial progress
     @State private var isModalVisible = false
     @State private var selectedFiles: [URL] = []
+    @EnvironmentObject var config: AppConfig
+
 
     var body: some View {
 
@@ -36,7 +38,7 @@ struct CompanyDocument: View {
                         .foregroundColor(.white)
                         .frame(width: 280)
                         .frame(height:60)
-                        .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                        .background(config.primaryColor) // Gray background when profileImage is nil
                         .opacity(0.5)
                         .cornerRadius(8)
                         .padding(.horizontal)
@@ -48,16 +50,18 @@ struct CompanyDocument: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height:40)
-                        .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                        .background(config.primaryColor) // Gray background when profileImage is nil
                         .cornerRadius(8)
                         .padding(.horizontal)
                     }
                     
                 }
+                /*
                 .overlay(
                     DocumentModalView(isVisible: $isModalVisible, destinationTitle: "Company Onboarding", documentHandler: CustomerMonitoringDocumentHandler())
                     .animation(.easeInOut)
                  )
+                 */
 
             }
         }

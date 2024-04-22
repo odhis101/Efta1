@@ -20,6 +20,7 @@ struct EquipmentDeliveryForm2: View {
             ("Equipment Serial number:", "1234567"),
             ("6975766100292", "6975766100292"),
         ]
+    @EnvironmentObject var config: AppConfig
 
     var body: some View {
 
@@ -60,7 +61,7 @@ struct EquipmentDeliveryForm2: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 50)
-                    .background(Color.green)
+                    .background(config.primaryColor)
                     .cornerRadius(20)
                     .padding()
 

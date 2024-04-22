@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>MKDirectionsRequest</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>com.apple.maps.directionsrequest</string>
+            </array>
+        </dict>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>PDF files</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>com.adobe.pdf</string>
+            </array>
+        </dict>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Word documents</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>com.microsoft.word.doc</string>
+            </array>
+        </dict>
+    </array>
+    <key>MKDirectionsApplicationSupportedModes</key>
+    <array>
+        <string>MKDirectionsModeStreetCar</string>
+    </array>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>This application needs access to the photo library to open photos.</string>
+    <key>NSDocumentPickerUsageDescription</key>
+    <string>This application needs access to documents to open them.</string>
+</dict>
+</plist>

@@ -28,7 +28,6 @@
 		421400B42BB55580003E5A85 /* PINEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421400B32BB55580003E5A85 /* PINEntryView.swift */; };
 		421400B62BB55588003E5A85 /* KeypadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421400B52BB55588003E5A85 /* KeypadView.swift */; };
 		421400B82BB5558F003E5A85 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421400B72BB5558F003E5A85 /* Color+Extension.swift */; };
-		421400BA2BB55B62003E5A85 /* ConfirmPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421400B92BB55B62003E5A85 /* ConfirmPin.swift */; };
 		421400BC2BB564A9003E5A85 /* SecurityQuestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421400BB2BB564A9003E5A85 /* SecurityQuestions.swift */; };
 		421400BE2BB57BF7003E5A85 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421400BD2BB57BF6003E5A85 /* Login.swift */; };
 		421400C02BB57F28003E5A85 /* LoginOnBoarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421400BF2BB57F27003E5A85 /* LoginOnBoarding.swift */; };
@@ -36,6 +35,15 @@
 		422557D72BC2F00100FA14EF /* CustomerDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422557D62BC2F00000FA14EF /* CustomerDocument.swift */; };
 		422557D92BC3480400FA14EF /* CustomerSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422557D82BC3480400FA14EF /* CustomerSummary.swift */; };
 		422557DB2BC3E0E700FA14EF /* MyTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422557DA2BC3E0E700FA14EF /* MyTabView.swift */; };
+		4242D9B42BD13F17004AF3F3 /* keychainAcess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4242D9B32BD13F15004AF3F3 /* keychainAcess.swift */; };
+		4242D9B62BD14595004AF3F3 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4242D9B52BD14595004AF3F3 /* AuthManager.swift */; };
+		4242D9B82BD14BB5004AF3F3 /* ImpactReporting1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4242D9B72BD14BB4004AF3F3 /* ImpactReporting1.swift */; };
+		4242D9BA2BD2659D004AF3F3 /* CustomerDocumentList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4242D9B92BD2659C004AF3F3 /* CustomerDocumentList.swift */; };
+		425A5EC02BCFB8FD00C520B5 /* SwiftUIDigitalSignature in Frameworks */ = {isa = PBXBuildFile; productRef = 425A5EBF2BCFB8FD00C520B5 /* SwiftUIDigitalSignature */; };
+		425A5EC32BCFF47D00C520B5 /* Statements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425A5EC22BCFF47D00C520B5 /* Statements.swift */; };
+		425A5EC52BCFF6B000C520B5 /* CustomerStatements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425A5EC42BCFF6B000C520B5 /* CustomerStatements.swift */; };
+		425A5EC72BD0FC3C00C520B5 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425A5EC62BD0FC3B00C520B5 /* Config.swift */; };
+		426F81552BD6592F002A6D6A /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 426F81542BD6592F002A6D6A /* FilePicker */; };
 		429BB8F42BBBEB3200A323A2 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BB8F32BBBEB3100A323A2 /* Images.swift */; };
 		429BB8F62BBC09DC00A323A2 /* CustomerLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BB8F52BBC09DB00A323A2 /* CustomerLocation.swift */; };
 		429BB8FA2BBC0E8300A323A2 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 429BB8F92BBC0E8300A323A2 /* MapKit.framework */; };
@@ -54,12 +62,14 @@
 		42B5EC682BCE718000D5418C /* PieChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC672BCE717F00D5418C /* PieChart.swift */; };
 		42B5EC6A2BCE78BC00D5418C /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC692BCE78BC00D5418C /* NetworkManager.swift */; };
 		42B5EC6C2BCE7AAA00D5418C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC6B2BCE7AAA00D5418C /* Constants.swift */; };
-		42B5EC6E2BCE858E00D5418C /* AllData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC6D2BCE858E00D5418C /* AllData.swift */; };
+		42B5EC6E2BCE858E00D5418C /* OnboardingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC6D2BCE858E00D5418C /* OnboardingData.swift */; };
 		42B5EC702BCEB8D100D5418C /* SelectProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC6F2BCEB8CF00D5418C /* SelectProfile.swift */; };
 		42DAADE12BBAE3C900F7FC7B /* CustomerOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DAADE02BBAE3C800F7FC7B /* CustomerOnboarding.swift */; };
 		42DDB66B2BBB60E00038D1CA /* IndividualOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DDB66A2BBB60E00038D1CA /* IndividualOnboarding.swift */; };
 		42DDB66F2BBB65450038D1CA /* CapturePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DDB66E2BBB65450038D1CA /* CapturePhoto.swift */; };
 		42E299752BB59DDB008598C3 /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E299742BB59DDA008598C3 /* Dashboard.swift */; };
+		42E822042BD112B6003D59CF /* DataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E822032BD112B6003D59CF /* DataHandler.swift */; };
+		42E822062BD12386003D59CF /* ConfirmPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E822052BD12386003D59CF /* ConfirmPin.swift */; };
 		42ECA29D2BC54D1300FB4B43 /* CompanyOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ECA29C2BC54D1300FB4B43 /* CompanyOnboarding.swift */; };
 		42ECA29F2BC54F2E00FB4B43 /* CompanyLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ECA29E2BC54F2E00FB4B43 /* CompanyLocation.swift */; };
 		42ECA2A12BC54F7E00FB4B43 /* CompanyDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ECA2A02BC54F7E00FB4B43 /* CompanyDocument.swift */; };
@@ -126,7 +136,6 @@
 		421400B32BB55580003E5A85 /* PINEntryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PINEntryView.swift; sourceTree = "<group>"; };
 		421400B52BB55588003E5A85 /* KeypadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeypadView.swift; sourceTree = "<group>"; };
 		421400B72BB5558F003E5A85 /* Color+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
-		421400B92BB55B62003E5A85 /* ConfirmPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPin.swift; sourceTree = "<group>"; };
 		421400BB2BB564A9003E5A85 /* SecurityQuestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityQuestions.swift; sourceTree = "<group>"; };
 		421400BD2BB57BF6003E5A85 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		421400BF2BB57F27003E5A85 /* LoginOnBoarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginOnBoarding.swift; sourceTree = "<group>"; };
@@ -134,6 +143,13 @@
 		422557D62BC2F00000FA14EF /* CustomerDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerDocument.swift; sourceTree = "<group>"; };
 		422557D82BC3480400FA14EF /* CustomerSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerSummary.swift; sourceTree = "<group>"; };
 		422557DA2BC3E0E700FA14EF /* MyTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabView.swift; sourceTree = "<group>"; };
+		4242D9B32BD13F15004AF3F3 /* keychainAcess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = keychainAcess.swift; sourceTree = "<group>"; };
+		4242D9B52BD14595004AF3F3 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		4242D9B72BD14BB4004AF3F3 /* ImpactReporting1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpactReporting1.swift; sourceTree = "<group>"; };
+		4242D9B92BD2659C004AF3F3 /* CustomerDocumentList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerDocumentList.swift; sourceTree = "<group>"; };
+		425A5EC22BCFF47D00C520B5 /* Statements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statements.swift; sourceTree = "<group>"; };
+		425A5EC42BCFF6B000C520B5 /* CustomerStatements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerStatements.swift; sourceTree = "<group>"; };
+		425A5EC62BD0FC3B00C520B5 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		429BB8F32BBBEB3100A323A2 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		429BB8F52BBC09DB00A323A2 /* CustomerLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerLocation.swift; sourceTree = "<group>"; };
 		429BB8F72BBC0E8300A323A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -154,12 +170,14 @@
 		42B5EC672BCE717F00D5418C /* PieChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PieChart.swift; sourceTree = "<group>"; };
 		42B5EC692BCE78BC00D5418C /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		42B5EC6B2BCE7AAA00D5418C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		42B5EC6D2BCE858E00D5418C /* AllData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllData.swift; sourceTree = "<group>"; };
+		42B5EC6D2BCE858E00D5418C /* OnboardingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingData.swift; sourceTree = "<group>"; };
 		42B5EC6F2BCEB8CF00D5418C /* SelectProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectProfile.swift; sourceTree = "<group>"; };
 		42DAADE02BBAE3C800F7FC7B /* CustomerOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerOnboarding.swift; sourceTree = "<group>"; };
 		42DDB66A2BBB60E00038D1CA /* IndividualOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualOnboarding.swift; sourceTree = "<group>"; };
 		42DDB66E2BBB65450038D1CA /* CapturePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePhoto.swift; sourceTree = "<group>"; };
 		42E299742BB59DDA008598C3 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
+		42E822032BD112B6003D59CF /* DataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataHandler.swift; sourceTree = "<group>"; };
+		42E822052BD12386003D59CF /* ConfirmPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPin.swift; sourceTree = "<group>"; };
 		42ECA29C2BC54D1300FB4B43 /* CompanyOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyOnboarding.swift; sourceTree = "<group>"; };
 		42ECA29E2BC54F2E00FB4B43 /* CompanyLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyLocation.swift; sourceTree = "<group>"; };
 		42ECA2A02BC54F7E00FB4B43 /* CompanyDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyDocument.swift; sourceTree = "<group>"; };
@@ -189,6 +207,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				426F81552BD6592F002A6D6A /* FilePicker in Frameworks */,
+				425A5EC02BCFB8FD00C520B5 /* SwiftUIDigitalSignature in Frameworks */,
 				429BB8FA2BBC0E8300A323A2 /* MapKit.framework in Frameworks */,
 				429BB8FD2BBC0E9B00A323A2 /* HealthKit.framework in Frameworks */,
 			);
@@ -251,11 +271,7 @@
 				421400812BB554FD003E5A85 /* EFTA1App.swift */,
 				421400832BB554FD003E5A85 /* ContentView.swift */,
 				421400AB2BB5555A003E5A85 /* SplashView.swift */,
-				421400AD2BB55563003E5A85 /* OnBoard.swift */,
-				421400B12BB55574003E5A85 /* Verification.swift */,
-				421400B32BB55580003E5A85 /* PINEntryView.swift */,
-				421400B92BB55B62003E5A85 /* ConfirmPin.swift */,
-				421400BB2BB564A9003E5A85 /* SecurityQuestions.swift */,
+				42E822022BD1125B003D59CF /* Register */,
 				421400BF2BB57F27003E5A85 /* LoginOnBoarding.swift */,
 				421400BD2BB57BF6003E5A85 /* Login.swift */,
 				42B5EC6F2BCEB8CF00D5418C /* SelectProfile.swift */,
@@ -267,14 +283,18 @@
 				42ECA2A52BC5616100FB4B43 /* CustomerAppraisals */,
 				42ECA2C12BC6FFA000FB4B43 /* CustomerMonitoring */,
 				420210682BC95D3100FB24B4 /* Repossessions */,
-				42ECA2AC2BC6C95100FB4B43 /* DataHandler */,
 				42B5EC4D2BCD097F00D5418C /* EquipmentDelivery */,
 				42B5EC612BCE6CCA00D5418C /* CreateSchedule */,
-				42B5EC562BCD1D0100D5418C /* Components */,
 				42B5EC642BCE714300D5418C /* Reports */,
+				425A5EC12BCFF41800C520B5 /* Statements */,
+				42B5EC562BCD1D0100D5418C /* Components */,
+				42ECA2AC2BC6C95100FB4B43 /* DataHandler */,
 				421400B52BB55588003E5A85 /* KeypadView.swift */,
 				42B5EC692BCE78BC00D5418C /* NetworkManager.swift */,
 				42B5EC6B2BCE7AAA00D5418C /* Constants.swift */,
+				4242D9B32BD13F15004AF3F3 /* keychainAcess.swift */,
+				4242D9B52BD14595004AF3F3 /* AuthManager.swift */,
+				425A5EC62BD0FC3B00C520B5 /* Config.swift */,
 				421400B72BB5558F003E5A85 /* Color+Extension.swift */,
 				421400852BB5550E003E5A85 /* Assets.xcassets */,
 				421400872BB5550E003E5A85 /* Preview Content */,
@@ -305,6 +325,15 @@
 				4214009E2BB5550F003E5A85 /* EFTA1UITestsLaunchTests.swift */,
 			);
 			path = EFTA1UITests;
+			sourceTree = "<group>";
+		};
+		425A5EC12BCFF41800C520B5 /* Statements */ = {
+			isa = PBXGroup;
+			children = (
+				425A5EC22BCFF47D00C520B5 /* Statements.swift */,
+				425A5EC42BCFF6B000C520B5 /* CustomerStatements.swift */,
+			);
+			path = Statements;
 			sourceTree = "<group>";
 		};
 		429BB8F82BBC0E8300A323A2 /* Frameworks */ = {
@@ -354,6 +383,19 @@
 			path = Reports;
 			sourceTree = "<group>";
 		};
+		42E822022BD1125B003D59CF /* Register */ = {
+			isa = PBXGroup;
+			children = (
+				421400AD2BB55563003E5A85 /* OnBoard.swift */,
+				421400B12BB55574003E5A85 /* Verification.swift */,
+				421400B32BB55580003E5A85 /* PINEntryView.swift */,
+				42E822052BD12386003D59CF /* ConfirmPin.swift */,
+				421400BB2BB564A9003E5A85 /* SecurityQuestions.swift */,
+				42E822032BD112B6003D59CF /* DataHandler.swift */,
+			);
+			path = Register;
+			sourceTree = "<group>";
+		};
 		42ECA29A2BC54AB600FB4B43 /* CustomerOnboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -363,10 +405,11 @@
 				42DDB66E2BBB65450038D1CA /* CapturePhoto.swift */,
 				429BB8F52BBC09DB00A323A2 /* CustomerLocation.swift */,
 				422557D62BC2F00000FA14EF /* CustomerDocument.swift */,
+				4242D9B92BD2659C004AF3F3 /* CustomerDocumentList.swift */,
 				422557D82BC3480400FA14EF /* CustomerSummary.swift */,
 				42B5EC5B2BCD29B200D5418C /* DataForCustomerOnboarding.swift */,
 				42B5EC5F2BCD646B00D5418C /* PhotoCaptureViewModel.swift */,
-				42B5EC6D2BCE858E00D5418C /* AllData.swift */,
+				42B5EC6D2BCE858E00D5418C /* OnboardingData.swift */,
 			);
 			path = CustomerOnboarding;
 			sourceTree = "<group>";
@@ -396,6 +439,7 @@
 				42ECA2B92BC6FD1C00FB4B43 /* Character&Credit.swift */,
 				42ECA2BB2BC6FD8B00FB4B43 /* Character&Credit2.swift */,
 				42ECA2BD2BC6FDEE00FB4B43 /* FinancialData.swift */,
+				4242D9B72BD14BB4004AF3F3 /* ImpactReporting1.swift */,
 				42ECA2BF2BC6FE8400FB4B43 /* ImpactReporting.swift */,
 			);
 			path = CustomerAppraisals;
@@ -441,6 +485,10 @@
 			dependencies = (
 			);
 			name = EFTA1;
+			packageProductDependencies = (
+				425A5EBF2BCFB8FD00C520B5 /* SwiftUIDigitalSignature */,
+				426F81542BD6592F002A6D6A /* FilePicker */,
+			);
 			productName = EFTA1;
 			productReference = 4214007E2BB554FD003E5A85 /* EFTA1.app */;
 			productType = "com.apple.product-type.application";
@@ -513,6 +561,10 @@
 				Base,
 			);
 			mainGroup = 421400752BB554FD003E5A85;
+			packageReferences = (
+				425A5EBE2BCFB8FD00C520B5 /* XCRemoteSwiftPackageReference "swiftui-digital-signature" */,
+				426F81532BD6592E002A6D6A /* XCRemoteSwiftPackageReference "FilePicker" */,
+			);
 			productRefGroup = 4214007F2BB554FD003E5A85 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -555,9 +607,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42E822062BD12386003D59CF /* ConfirmPin.swift in Sources */,
 				42B5EC552BCD13DE00D5418C /* EquipmentDeliveryForm1.swift in Sources */,
+				425A5EC32BCFF47D00C520B5 /* Statements.swift in Sources */,
 				42ECA2C02BC6FE8400FB4B43 /* ImpactReporting.swift in Sources */,
 				42B5EC532BCD109C00D5418C /* EquipmentDeliveryItems.swift in Sources */,
+				4242D9B82BD14BB5004AF3F3 /* ImpactReporting1.swift in Sources */,
+				42E822042BD112B6003D59CF /* DataHandler.swift in Sources */,
 				42ECA29F2BC54F2E00FB4B43 /* CompanyLocation.swift in Sources */,
 				42ECA2A72BC5629300FB4B43 /* CustomerApraisalsSearch.swift in Sources */,
 				42B5EC662BCE716700D5418C /* Reports.swift in Sources */,
@@ -569,13 +625,13 @@
 				421400BE2BB57BF7003E5A85 /* Login.swift in Sources */,
 				42DDB66F2BBB65450038D1CA /* CapturePhoto.swift in Sources */,
 				420210702BC9611100FB24B4 /* RepossesionsStorage.swift in Sources */,
+				425A5EC52BCFF6B000C520B5 /* CustomerStatements.swift in Sources */,
 				42ECA29D2BC54D1300FB4B43 /* CompanyOnboarding.swift in Sources */,
 				4202106C2BC95F1300FB24B4 /* ReposessionDetails.swift in Sources */,
 				421400C02BB57F28003E5A85 /* LoginOnBoarding.swift in Sources */,
 				42ECA2AE2BC6C9AC00FB4B43 /* SiteDetailsQuestion.swift in Sources */,
 				42ECA2B62BC6FC1300FB4B43 /* Market2.swift in Sources */,
-				421400BA2BB55B62003E5A85 /* ConfirmPin.swift in Sources */,
-				42B5EC6E2BCE858E00D5418C /* AllData.swift in Sources */,
+				42B5EC6E2BCE858E00D5418C /* OnboardingData.swift in Sources */,
 				42ECA2B02BC6F90400FB4B43 /* SiteDetails2.swift in Sources */,
 				42B5EC5E2BCD556D00D5418C /* IndividualOnboarding2.swift in Sources */,
 				42E299752BB59DDB008598C3 /* Dashboard.swift in Sources */,
@@ -586,10 +642,12 @@
 				422557DB2BC3E0E700FA14EF /* MyTabView.swift in Sources */,
 				420210632BC81C2200FB24B4 /* CustomerMonitioringDocument.swift in Sources */,
 				429BB8F62BBC09DC00A323A2 /* CustomerLocation.swift in Sources */,
+				4242D9B62BD14595004AF3F3 /* AuthManager.swift in Sources */,
 				42ECA2B22BC6FA4C00FB4B43 /* Document&Assets.swift in Sources */,
 				42B5EC582BCD1D2D00D5418C /* FormTypes.swift in Sources */,
 				422557D92BC3480400FA14EF /* CustomerSummary.swift in Sources */,
 				421400AE2BB55564003E5A85 /* OnBoard.swift in Sources */,
+				4242D9B42BD13F17004AF3F3 /* keychainAcess.swift in Sources */,
 				42B5EC682BCE718000D5418C /* PieChart.swift in Sources */,
 				42B5EC5A2BCD23D300D5418C /* EquipmentDeliveryForm2.swift in Sources */,
 				42ECA2A32BC54FF400FB4B43 /* CompanySummary.swift in Sources */,
@@ -603,6 +661,7 @@
 				42B5EC5C2BCD29B200D5418C /* DataForCustomerOnboarding.swift in Sources */,
 				42ECA2BA2BC6FD1C00FB4B43 /* Character&Credit.swift in Sources */,
 				42B5EC632BCE6D4100D5418C /* CreateSchedule.swift in Sources */,
+				4242D9BA2BD2659D004AF3F3 /* CustomerDocumentList.swift in Sources */,
 				421400B62BB55588003E5A85 /* KeypadView.swift in Sources */,
 				420210672BC8244000FB24B4 /* CustomerMonitoringDocumentList.swift in Sources */,
 				42B5EC602BCD646B00D5418C /* PhotoCaptureViewModel.swift in Sources */,
@@ -622,6 +681,7 @@
 				429BB8F42BBBEB3200A323A2 /* Images.swift in Sources */,
 				42ECA2B82BC6FC6A00FB4B43 /* Market3.swift in Sources */,
 				421400B42BB55580003E5A85 /* PINEntryView.swift in Sources */,
+				425A5EC72BD0FC3C00C520B5 /* Config.swift in Sources */,
 				420210652BC81F2F00FB24B4 /* DocumentHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -786,6 +846,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EFTA1/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to take photos for uploading Signature Pictures";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -818,6 +879,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EFTA1/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to take photos for uploading Signature Pictures";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -949,6 +1011,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		425A5EBE2BCFB8FD00C520B5 /* XCRemoteSwiftPackageReference "swiftui-digital-signature" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/globulus/swiftui-digital-signature";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.2;
+			};
+		};
+		426F81532BD6592E002A6D6A /* XCRemoteSwiftPackageReference "FilePicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/markrenaud/FilePicker.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		425A5EBF2BCFB8FD00C520B5 /* SwiftUIDigitalSignature */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 425A5EBE2BCFB8FD00C520B5 /* XCRemoteSwiftPackageReference "swiftui-digital-signature" */;
+			productName = SwiftUIDigitalSignature;
+		};
+		426F81542BD6592F002A6D6A /* FilePicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 426F81532BD6592E002A6D6A /* XCRemoteSwiftPackageReference "FilePicker" */;
+			productName = FilePicker;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 421400762BB554FD003E5A85 /* Project object */;
 }

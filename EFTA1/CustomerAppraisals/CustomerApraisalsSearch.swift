@@ -81,54 +81,6 @@ struct QuickIntro: View {
 }
 
 
-struct ToggleableTextComponent: View {
-    var text1: String
-    var text2: String
-    var isActiveFirstText: Bool
-    var onToggle: () -> Void // Closure to handle toggle action
-    
-    var body: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(Color.gray)
-            .frame(height: 40)
-            .frame(maxWidth: .infinity)
-            .padding()
-            .overlay(
-                HStack {
-                    Button(action: {
-                        // toggle active state
-                        onToggle()
-                    }) {
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(isActiveFirstText ? Color.green : Color.clear) // Use green color if active
-                            .frame(height: 40)
-                            .padding()
-
-
-                            .overlay(
-                                Text(text1)
-                                    .foregroundColor(isActiveFirstText ? .white : .black) // Text color changes based on active state
-                            )
-                    }
-                    Spacer()
-                    Button(action: {
-                        // toggle active state
-                        onToggle()
-                    }) {
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(!isActiveFirstText ? Color.green : Color.clear) // Use green color if active
-                            .frame(height: 40)
-                            .padding()
-
-                            .overlay(
-                                Text(text2)
-                                    .foregroundColor(!isActiveFirstText ? .white : .black) // Text color changes based on active state
-                            )
-                    }
-                }
-            )
-    }
-}
 
 struct DataListComponent: View {
     var data: [UserData]
@@ -176,6 +128,9 @@ struct DataListComponent: View {
                 EquipmentDeliveryDetails(userData: userData)
         case .reposessionDetails:
                 ReposessionDetails(userData: userData)
+        case .customerStatements:
+                CustomerStatements(userData: userData)
+            
 
         }
     }
@@ -193,4 +148,6 @@ enum DestinationType {
     case customerReposessionsDetails
     case equipmentDeliveryDetails
     case reposessionDetails
+    case customerStatements
+
 }

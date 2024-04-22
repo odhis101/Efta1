@@ -5,6 +5,11 @@ struct ConfirmPin: View {
     private let pinLength = 4 // Define the length of the PIN
       @State var pinCode:String = ""
     @State private var shouldNavigate = false // State variable for navigation
+    @EnvironmentObject var pinHandler: PinHandler
+    @State private var showingConfirmation = false // State for showing the confirmation dialog
+
+    @StateObject private var networkManager = NetworkManager()
+    
 
     var body: some View {
         
@@ -33,13 +38,32 @@ struct ConfirmPin: View {
         .onChange(of: pinCode) { newValue in
                         // Check if the PIN length reaches 4
                         if newValue.count == pinLength {
-                            // Navigate to the next page
-                            shouldNavigate = true
+                            
+                            if pinCode != pinHandler.pinCode {
+                                showingConfirmation = true
+                            }
+                            else {
+                                shouldNavigate = true
+                                
+                            }
                         }
+            
             
            
         
     }
+        .alert(isPresented: $showingConfirmation) {
+            Alert(
+                title: Text("Pin Dont Match "),
+                message: Text("Please try again "),
+                primaryButton: .destructive(Text("Retry"), action: {
+                    //shouldNavigate = true
+                }),
+                secondaryButton: .cancel({
+                    // Optional: Handle cancellation
+                })
+            )
+        }
     
 }
 

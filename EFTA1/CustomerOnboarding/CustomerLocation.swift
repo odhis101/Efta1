@@ -8,6 +8,8 @@ struct CustomerLocation: View {
     @State private var isSearchExpanded = false
     @State private var progress: CGFloat = 0.8 // Initial progress
     @EnvironmentObject var onboardingData: OnboardingData
+    @EnvironmentObject var config: AppConfig
+
 
     
     var body: some View {
@@ -84,7 +86,7 @@ struct CustomerLocation: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .frame(height:40)
-                .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                .background(config.primaryColor) // Gray background when profileImage is nil
                 .cornerRadius(8)
                 .padding(.horizontal)
             }

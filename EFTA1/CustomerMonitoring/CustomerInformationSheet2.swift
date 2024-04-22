@@ -12,7 +12,8 @@ struct CustomerInformationSheet2: View {
     
     @State private var capturedImage: UIImage?
 
-    
+    @EnvironmentObject var config: AppConfig
+
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
     
     let bulletedQuestions1 = ["Promoting or partaking in unethical or antisocial activities","Partaking in forced compulsory labor;employing anyone lessthan 18 years of age;showing evidence of discrimination onrejecting employee unions","Having health & safety incidents or lacking health & safetyequipment"]
@@ -50,7 +51,7 @@ struct CustomerInformationSheet2: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height:40)
-                    .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                    .background(config.primaryColor) // Gray background when profileImage is nil
                     .cornerRadius(8)
                     .padding(.horizontal)
 
@@ -68,6 +69,8 @@ struct CustomerInformationSheet2: View {
 
 struct ImpactReportingButton: View {
     let geometry: GeometryProxy
+    @EnvironmentObject var config: AppConfig
+
     var body: some View {
         
         RoundedRectangle(cornerRadius: 8)
@@ -81,12 +84,12 @@ struct ImpactReportingButton: View {
                     Text("Impact Reporting")
                     Spacer()
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.green.opacity(0.3))
+                        .fill(config.primaryColor.opacity(0.3))
                         .frame(width:geometry.size.width*0.3)
                         .frame(height:30)
                         .overlay(
                             Text("View Report")
-                                .foregroundColor(.green)
+                                .foregroundColor(config.primaryColor)
                         
                         )
                 }

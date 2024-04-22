@@ -9,6 +9,8 @@ import SwiftUI
 
 struct forgotPin: View {
     @State private var answer1: String = ""
+    @EnvironmentObject var config: AppConfig
+
 
     var body: some View {
         GeometryReader { geometry in
@@ -19,7 +21,7 @@ struct forgotPin: View {
                     Text("Question: What is the name of your pet? ")
                         // italics
                         .italic()
-                        .foregroundColor(Color(hex: "#2AA241"))
+                        .foregroundColor(config.primaryColor)
 
                 }
                 .padding()
@@ -33,7 +35,7 @@ struct forgotPin: View {
                     Text("Continue")
                         .foregroundColor(.white)
                         .padding()
-                        .background( Color.green ) // Set background color to green when enabled, gray when disabled
+                        .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
                         .cornerRadius(8)
                         .frame(maxWidth: .infinity)
                 }

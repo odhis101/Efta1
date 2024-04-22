@@ -17,6 +17,8 @@ struct EquipmentDeliveryDetails: View {
 
         
         ]
+    @EnvironmentObject var config: AppConfig
+
     var userData: UserData
 
 
@@ -42,7 +44,7 @@ struct EquipmentDeliveryDetails: View {
                     .frame(maxWidth: .infinity)
                     .frame(height:30)
                     .padding()
-                    .background(Color.green) // Set background color to green when enabled, gray when disabled
+                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
                     .cornerRadius(20)
                     .padding(.top,-50)
             }

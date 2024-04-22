@@ -16,7 +16,7 @@ struct MyTabView: View {
                 .tabItem {
                     Image(systemName: "house")
                 }
-            Reports()
+            ContentView()
                 .tag("Reports")
                 .tabItem {
                     Image(systemName: "person")

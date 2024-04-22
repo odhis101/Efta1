@@ -55,12 +55,14 @@ struct Dashboard: View {
 
 
 struct PointsView: View {
+    @EnvironmentObject var config: AppConfig
+
     let geometry: GeometryProxy
     
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                Image("greenDashboard")
+                Image(config.dashboardColor)
                     //.frame(height: geometry.size.height * 0.3)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -86,7 +88,7 @@ struct PointsView: View {
                     .overlay(
                         VStack(spacing: 0) {
                             HStack {
-                        Image(systemName: "doc")
+                        Image("appraisal")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20)
@@ -99,13 +101,22 @@ struct PointsView: View {
                             .padding(.horizontal)
 
                         Spacer()
-                        Image(systemName: "checkmark.circle.fill")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.green)
-                            .padding()
-                        
+                                Circle()
+                                    .foregroundColor(.green) // Set the circle color to green
+                                    .frame(width: 20, height: 20) // Adjust size as needed
+                                    .overlay(
+                                        Text("2")
+                                            .foregroundColor(.white) // Set the text color to white
+                                            .font(.system(size: 16, weight: .bold)) // Adjust font size and weight as needed
+                                    )
+
+                                Image(systemName: "arrow.right")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.white)
+                                .padding()
+                            
                     }
                     .padding()
                     
@@ -114,42 +125,51 @@ struct PointsView: View {
 
                             )
                     
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.gray.opacity(0.3)) // Adjust the opacity as needed
-                    .frame(height: 50)
-                    .padding(.leading,10)
-                    .padding(.top,10)
-                    .frame(width: geometry.size.width * 0.95)
-                    .overlay(
-                        VStack(spacing: 0) {
-                            HStack {
-                        Image(systemName: "doc")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.white)
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(height: 50)
+                        .frame(width: geometry.size.width * 0.95)
+                        .padding(.top,10)
+                        .padding(.leading,10)
+                        .overlay(
+                            VStack(spacing: 0) {
+                                HStack {
+                            Image("appraisal")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.white)
 
-                        
-                        Text("Customer appraisal")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding(.horizontal)
+                            
+                            Text("Customer appraisal")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding(.horizontal)
 
-                        Spacer()
-                        Image(systemName: "checkmark.circle.fill")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.green)
-                            .padding()
+                            Spacer()
+                                    Circle()
+                                        .foregroundColor(.green) // Set the circle color to green
+                                        .frame(width: 20, height: 20) // Adjust size as needed
+                                        .overlay(
+                                            Text("2")
+                                                .foregroundColor(.white) // Set the text color to white
+                                                .font(.system(size: 16, weight: .bold)) // Adjust font size and weight as needed
+                                        )
+                                Image(systemName: "arrow.right")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(.white)
+                                .padding()
+                                .foregroundColor(.white)
+                            
+                        }
+                        .padding()
                         
+                 
                     }
-                    .padding()
-                    
-             
-                }
 
-                            )
+                                )
                     
                     
                 }
@@ -182,7 +202,9 @@ struct CustomComponent: View {
                 }
                 .padding(.bottom, 10)
                 
+                
                 Text(text)
+                    .fixedSize(horizontal: false, vertical: true) // Allow text to wrap and grow vertically
                     .foregroundColor(.black)
                     .font(.headline)
                     .padding(.leading, 10)
@@ -214,6 +236,9 @@ struct CustomComponent: View {
         if variable == 6 {
             return AnyView(Reports())
         }
+        if variable == 7 {
+            return AnyView(Statements())
+        }
         
         
         
@@ -226,6 +251,8 @@ struct CustomComponent: View {
 
 
 struct TopDashboardComponent: View {
+    @EnvironmentObject var config: AppConfig
+
     var body: some View {
         HStack{
             VStack(alignment: .leading){
@@ -238,7 +265,7 @@ struct TopDashboardComponent: View {
         
                 Rectangle()
                     .frame(height: 2)
-                    .foregroundColor(Color(hex: "#2AA241"))
+                    .foregroundColor(config.primaryColor)
                     .frame(width: 38)
 
                 

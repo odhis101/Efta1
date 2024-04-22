@@ -4,7 +4,7 @@
 //
 //  Created by Joshua on 4/11/24.
 //
-
+/*
 import SwiftUI
 
 struct CustomerMonitoringDocumentList: View {
@@ -13,6 +13,8 @@ struct CustomerMonitoringDocumentList: View {
     @StateObject var documentHandler = CustomerMonitoringDocumentHandler()
     
     @State private var progress: CGFloat = 0.6 // Initial progress
+    @EnvironmentObject var config: AppConfig
+
 
     var body: some View {
 
@@ -37,7 +39,7 @@ struct CustomerMonitoringDocumentList: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height:40)
-                    .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                    .background(config.primaryColor) // Gray background when profileImage is nil
                     .cornerRadius(8)
                     .padding(.horizontal)
                 }
@@ -49,9 +51,10 @@ struct CustomerMonitoringDocumentList: View {
 
     }
 }
-
+/*
 struct ListedDocument: View {
     var documentName: String
+    @EnvironmentObject var config: AppConfig
 
     var body: some View {
         VStack {
@@ -65,7 +68,7 @@ struct ListedDocument: View {
                             Image(systemName: "doc")
                                 .resizable()
                                 .frame(width: 30, height: 30) // Adjusted size for better layout
-                                .foregroundColor(Color(hex: "#2AA241"))
+                                .foregroundColor(config.primaryColor)
                             
                             Text(documentName) // Use the passed document name
                                 .font(.headline)
@@ -74,10 +77,10 @@ struct ListedDocument: View {
                             Image(systemName: "checkmark")
                                 .resizable()
                                 .frame(width: 20, height: 20) // Adjusted size for better layout
-                                .foregroundColor(Color.green)
+                                .foregroundColor(config.primaryColor)
                         }
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.green)
+                            .fill(config.primaryColor)
                             .frame(maxWidth: .infinity)
                             .frame(height: 1)
                     }
@@ -85,3 +88,5 @@ struct ListedDocument: View {
         }
     }
 }
+*/
+*/

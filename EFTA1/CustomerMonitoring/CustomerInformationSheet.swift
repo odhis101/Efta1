@@ -12,6 +12,8 @@ struct CustomerInformationSheet: View {
     
     @State private var capturedImage: UIImage?
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @EnvironmentObject var config: AppConfig
+
     
     let bulletedQuestions1 = ["Disrupting or destroying biodiversity", "Leading to harmful or high levels of emissions, hazardous waste products or other pollution", "Contribution to or partaking in unacceptable non-renewable resource extraction or degradation"]
     
@@ -36,7 +38,7 @@ struct CustomerInformationSheet: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .frame(height: 40)
-                            .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                            .background(config.primaryColor) // Gray background when profileImage is nil
                             .cornerRadius(8)
                             .padding(.horizontal)
                     }

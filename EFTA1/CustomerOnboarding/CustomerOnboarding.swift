@@ -14,7 +14,7 @@ struct CustomerOnboarding: View {
     var body: some View {
             GeometryReader { geometry in
                 VStack {
-                    ProgressBar(geometry: geometry, progress: $progress,title:"Individual onboarding",description: "Kindly collect the following information from the customer")
+                    ProgressBar(geometry: geometry, progress: $progress,title:"Customer onboarding",description: "Kindly collect the following information from the customer")
                         .padding(.trailing, 20)
 
 
@@ -30,7 +30,7 @@ struct CustomerOnboarding: View {
                     RectangleOptions(imageIcon:"corporate" ,geometry: geometry,title:"Limmid Company", variable: 6)
                         }
                     }
-                    .padding(.trailing, 20)
+                    .padding(.trailing, 25)
 
 
                     
@@ -46,7 +46,8 @@ struct CustomerOnboarding: View {
 struct ProgressBar: View {
     let geometry: GeometryProxy
     @Binding var progress: CGFloat // Binding for dynamic progress
-    
+    @EnvironmentObject var config: AppConfig
+
     let title:String
     
     let description:String
@@ -70,7 +71,7 @@ struct ProgressBar: View {
                 
                 Rectangle()
                     .frame(width: (geometry.size.width - 40) * progress, height: 20) // Adjusted width to account for padding
-                    .foregroundColor(.green)
+                    .foregroundColor(config.primaryColor)
                     .cornerRadius(10)
             }
         }

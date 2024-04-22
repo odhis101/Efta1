@@ -6,12 +6,21 @@
 //
 
 import SwiftUI
+import SwiftUIDigitalSignature  // Ensure you import the package
 
 struct RepossesionPickUp: View {
     @State private var progress: CGFloat = 0.5 // Initial progress
     
     @State private var capturedImage: UIImage?
     
+    
+    @State private var signature: UIImage?
+    
+    @State private var image: UIImage?
+
+    @EnvironmentObject var config: AppConfig
+
+
     var body: some View {
 
         GeometryReader { geometry in
@@ -32,7 +41,13 @@ struct RepossesionPickUp: View {
                     
                     QuestionWithTextField(question: "Comments about Condition of Equipment")
 
-                    QuestionWithTextField(question: "Notes from Customer Interview, if Held")                
+                    QuestionWithTextField(question: "Notes from Customer Interview, if Held")
+                    
+                    SignatureCaptureField(signatureImage: $signature)
+                         .padding()
+                    
+                    PhotoCaptureField(image: $image)
+                        .padding()
                     
 
                 
@@ -44,7 +59,7 @@ struct RepossesionPickUp: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height:40)
-                    .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                    .background(config.primaryColor) // Gray background when profileImage is nil
                     .cornerRadius(8)
                     .padding(.horizontal)
                     

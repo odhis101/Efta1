@@ -12,6 +12,7 @@ struct CustomerSummary: View {
     @EnvironmentObject var onboardingData: OnboardingData
     @State private var showingConfirmation = false // State for showing the confirmation dialog
     @State private var  navigateToDashboard = false
+    @EnvironmentObject var config: AppConfig
 
     var receiptItems: [(String, String)] {
           [
@@ -64,7 +65,7 @@ struct CustomerSummary: View {
                           .foregroundColor(.white)
                           .frame(maxWidth: .infinity)
                           .frame(height: 50)
-                          .background(Color.green)
+                          .background(config.primaryColor)
                           .cornerRadius(20)
                           .padding()
                       }
@@ -127,6 +128,8 @@ struct ReceiptBox: View {
 
 struct DocumentContainerView: View {
     var title: String
+    @EnvironmentObject var config: AppConfig
+
     
     var body: some View {
         Rectangle()
@@ -157,7 +160,7 @@ struct DocumentContainerView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20, height: 20)
                 // change the color
-                    .foregroundColor(.green)
+                    .foregroundColor(config.primaryColor)
                     .padding()
                 
             }

@@ -7,21 +7,20 @@
 
 import SwiftUI
 import UIKit
+import FilePicker
 
 struct CustomerDocument: View {
     @State private var progress: CGFloat = 0.9 // Initial progress
     @State private var isModalVisible = false
-    @State private var selectedFiles: [URL] = []
-    @StateObject var documentHandler = DocumentHandler() // Use @ObservedObject if passed from parent view
     @EnvironmentObject var onboardingData: OnboardingData
-
+    @EnvironmentObject var config: AppConfig
 
 
     var body: some View {
 
             GeometryReader { geometry in
                 VStack{
-                    ProgressBar(geometry: geometry, progress: $progress,title:"\(onboardingData.titleForCustomerOnboarding) document",description: "Kindly upload the customer documents ")
+                    ProgressBar(geometry: geometry, progress: $progress,title:"\(onboardingData.titleForCustomerOnboarding) document",description: "Kindly upload the customer documentsssss")
                         .padding(.trailing,20)
                     
                     Spacer()
@@ -40,24 +39,28 @@ struct CustomerDocument: View {
                         .foregroundColor(.white)
                         .frame(width: 280)
                         .frame(height:60)
-                        .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                        .background(config.primaryColor) // Gray background when profileImage is nil
                         .opacity(0.5)
                         .cornerRadius(8)
                         .padding(.horizontal)
                     }
                     Spacer()
-                    NavigationLink( destination: CustomerSummary()){
+                    NavigationLink( destination: CustomerDocumentList()){
                     Text("Continue")
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height:40)
-                        .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                        .background(config.primaryColor) // Gray background when profileImage is nil
                         .cornerRadius(8)
                         .padding(.horizontal)
                     }
                     
                 }
-                DocumentModalView(isVisible: $isModalVisible, destinationTitle: "Customer Onboarding", documentHandler: CustomerMonitoringDocumentHandler())
+                DocumentModalView(
+                    isVisible: $isModalVisible,
+                    destinationView: { CustomerDocumentList()},
+                    documentHandler: onboardingData
+                )
             }
         }
 }
@@ -66,21 +69,15 @@ struct CustomerDocument: View {
 
 
 
-struct DocumentModalView: View {
+struct DocumentModalView<Destination: View>: View {
     @Binding var isVisible: Bool
     @GestureState private var dragState = DragState()
     @State private var selectedFileURLs: [URL] = []
-    let destinationTitle: String
-
-    @State private var isNavigationActive: Bool = false  // State to control navigation
-
-
-    var documentHandler: DocumentHandling // Use the protocol type here
-
-    // State variable to track keyboard height
+    var destinationView: () -> Destination
+    var documentHandler: DocumentHandling
+    @State private var isNavigationActive: Bool = false
+    @EnvironmentObject var config: AppConfig
     @State private var keyboardHeight: CGFloat = 0
-
-    var onSelectFiles: (([URL]) -> Void)? // Closure to pass selected files
 
     var body: some View {
         GeometryReader { geometry in
@@ -91,100 +88,43 @@ struct DocumentModalView: View {
                         .fill(Color.white)
                         .frame(width: geometry.size.width, height: modalHeight)
                         .cornerRadius(20)
-                        .padding(.bottom, keyboardHeight) // Move below keyboard
+                        .padding(.bottom, keyboardHeight)
 
                     VStack(spacing: 16) {
-                        // Title
-                        HStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(LinearGradient(gradient: Gradient(colors: [Color.gray.opacity(0.5), Color.gray.opacity(0.1)]), startPoint: .leading, endPoint: .trailing))
-                                .frame(width: 80, height: 20) // Adjust size as needed
-                                .padding(.vertical, 8)
-                                .overlay(
-                                    Capsule()
-                                        .fill(Color.gray.opacity(0.8))
-                                        .frame(width: 30, height: 6)
-                                )
-                        }
-
-                        // Upload Button
-                        Button(action: {
-                            // Present file picker
-                            let documentPicker = UIDocumentPickerViewController(documentTypes: ["public.content"], in: .import)
-                            documentPicker.delegate = makeCoordinator() // Use the coordinator here
-                            UIApplication.shared.windows.first?.rootViewController?.present(documentPicker, animated: true, completion: nil)
-                        }) {
-                            HStack {
-                                Image(systemName: "square.and.arrow.up")
-                                Text("Upload Files")
-                            }
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(8)
-                        }
-
-                        // List of selected files
-                        if !selectedFileURLs.isEmpty {
-                            VStack(alignment: .leading) {
-                                Text("Selected Files:")
-                                    .font(.headline)
-                                    .padding(.bottom, 4)
-                                ForEach(selectedFileURLs, id: \.self) { fileURL in
-                                    Text(fileURL.lastPathComponent)
-                                        .foregroundColor(.secondary)
-                                }
-                            }
-                        }
-
-                        // Continue Button
-                        Button(action: {
-                            // Handle continue button action here
-                            isVisible.toggle()
-                            documentHandler.addDocuments(selectedFileURLs) // Use DocumentHandler to manage documents
-                            isNavigationActive = true  // Set the navigation flag to true to trigger navigation
-
-                        }) {
-                            Text("Continue")
-                                .foregroundColor(.white)
-                                .cornerRadius(8)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.green)
-                        }
-                    
-                        
-
+                        titleBar
+                        uploadButton
+                        fileList
+                        continueButton
                     }
                     .padding()
-                    NavigationLink(destination: CustomerMonitoringDocumentList(title: destinationTitle), isActive: $isNavigationActive) {
+                    
+                    NavigationLink(destination: destinationView(), isActive: $isNavigationActive) {
                         EmptyView()  // Invisible view for programmatic navigation
                     }
                 }
             }
-            .offset(y: isVisible ? 0 : geometry.size.height) // Adjust offset
-            .animation(.easeInOut(duration: isVisible ? 0.3 : 0)) // Apply animation duration conditionally
+            .offset(y: isVisible ? 0 : geometry.size.height)
+            .animation(.easeInOut(duration: isVisible ? 0.3 : 0))
             .gesture(
                 DragGesture()
                     .updating($dragState) { value, state, _ in
                         state = DragState()
                     }
                     .onEnded { value in
-                        let screenHeight = geometry.size.height
-                        let threshold = screenHeight * 0.2 // Adjust threshold as needed
-                        if value.translation.height > threshold {
+                        if value.translation.height > geometry.size.height * 0.2 {
                             isVisible = false
                         }
                     }
             )
             .edgesIgnoringSafeArea(.all)
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
-            guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-            self.keyboardHeight = keyboardFrame.height
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-            self.keyboardHeight = 0
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
+                if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                    keyboardHeight = keyboardFrame.height
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                keyboardHeight = 0
+            }
         }
     }
 
@@ -192,13 +132,79 @@ struct DocumentModalView: View {
         UIScreen.main.bounds.height * 0.3
     }
 
-    private struct DragState {
-        // No need for any member here
-    }
+    private struct DragState { }
 
-    // Coordinator for UIDocumentPickerViewController
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
+    }
+
+    private var titleBar: some View {
+        HStack {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(LinearGradient(gradient: Gradient(colors: [Color.gray.opacity(0.5), Color.gray.opacity(0.1)]), startPoint: .leading, endPoint: .trailing))
+                .frame(width: 80, height: 20)
+                .padding(.vertical, 8)
+                .overlay(
+                    Capsule()
+                        .fill(Color.gray.opacity(0.8))
+                        .frame(width: 30, height: 6)
+                )
+        }
+    }
+
+    public var uploadButton: some View {
+        FilePicker(
+            types: [.item],
+            allowMultiple: false,
+            title: "Upload Files",
+            onPicked: { urls in
+                if let url = urls.first {
+                    // File picked successfully, handle the selected URL
+                    print("Selected file URL: \(url)")
+                    selectedFileURLs = [url]
+                } else {
+                    // File picking was canceled or failed
+                    print("File picking was canceled or failed.")
+                }
+            }
+        )
+        .foregroundColor(.white)
+        .padding()
+        .background(Color.blue)
+        .cornerRadius(8)
+    }
+
+
+    // Define a custom button style for the FilePicker
+
+    private var fileList: some View {
+        VStack(alignment: .leading) {
+            if !selectedFileURLs.isEmpty {
+                Text("Selected Files:")
+                    .font(.headline)
+                    .padding(.bottom, 4)
+                ForEach(selectedFileURLs, id: \.self) { fileURL in
+                    Text(fileURL.lastPathComponent)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+    }
+
+    private var continueButton: some View {
+        Button(action: {
+            isVisible = false
+            documentHandler.addDocuments(selectedFileURLs)
+            isNavigationActive = true
+        }) {
+            Text("Continue")
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height:40)
+                .background(config.primaryColor) // Gray background when profileImage is nil
+                .cornerRadius(8)
+                .padding(.horizontal)
+        }
     }
 
     class Coordinator: NSObject, UIDocumentPickerDelegate {
@@ -209,11 +215,24 @@ struct DocumentModalView: View {
         }
 
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            print("Document picker selected URLs: \(urls)")
             parent.selectedFileURLs = urls
         }
 
         func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-            // Handle document picker cancellation
+            print("Document picker was cancelled.")
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didFailToPickDocumentAt url: URL, error: Error?) {
+            if let error = error {
+                print("Document picker failed to pick document at \(url.absoluteString) with error: \(error.localizedDescription)")
+            } else {
+                print("Document picker failed to pick document at \(url.absoluteString) with an unknown error.")
+            }
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didFailWithError error: Error) {
+            print("Document picker failed with error: \(error.localizedDescription)")
         }
     }
 }

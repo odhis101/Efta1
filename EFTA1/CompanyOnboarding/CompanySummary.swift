@@ -19,7 +19,8 @@ struct CompanySummary: View {
             ("District", "Baga moyo"),
             ("ward", "Makumbusho")
         ]
-    
+    @EnvironmentObject var config: AppConfig
+
     
     var body: some View {
         GeometryReader { geometry in
@@ -34,7 +35,7 @@ struct CompanySummary: View {
                 
                     ReceiptBox(items: receiptItems,geometry: geometry,size:0.5)
 
-                DocumentContainerView(title: "Document Title")
+                    DocumentContainerView(title: "Document Title")
 
 
 
@@ -49,7 +50,7 @@ struct CompanySummary: View {
                     .frame(maxWidth: .infinity)
                     .frame(height:20)
                     .padding()
-                    .background(Color.green) // Set background color to green when enabled, gray when disabled
+                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
                     .cornerRadius(20)
                 
                 

@@ -17,12 +17,14 @@ struct Verification: View {
     @State private var isNavigationActive = false // State variable to track navigation
     @StateObject private var networkManager = NetworkManager()
     @State private var showAlert = false // State variable to control the alert
+    @EnvironmentObject var config: AppConfig
+
     
     var body: some View {
      
             GeometryReader { geometry in
                 VStack {
-                    Image("logo")
+                    Image(config.splashImageName)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: geometry.size.width * 0.4, height: geometry.size.width * 0.4)
@@ -34,7 +36,7 @@ struct Verification: View {
                                 Text("Verifying your details")
                                     .font(.title)
                                     .fontWeight(.bold)
-                                    .foregroundColor(Color(hex: "#2AA241"))
+                                    .foregroundColor(config.primaryColor)
                                 
                                 Text("Just sit back and relax we will verify you")
                                     .font(.headline)
@@ -94,7 +96,7 @@ struct Verification: View {
                         
                         Text(" \(timerValue) seconds")
                             .font(.headline)
-                            .foregroundColor(Color(hex: "#2AA241"))
+                            .foregroundColor(config.primaryColor)
         
                             .onAppear {
                                 self.startTimer()
@@ -117,7 +119,7 @@ struct Verification: View {
                         Text("Continue")
                             .foregroundColor(.white)
                             .padding()
-                            .background(isResendEnabled ? Color.green : Color.gray) // Set background color to green when enabled, gray when disabled
+                            .background(isResendEnabled ? config.primaryColor : Color.gray) // Set background color to green when enabled, gray when disabled
                             .cornerRadius(8)
                             .frame(maxWidth: .infinity)
                     }

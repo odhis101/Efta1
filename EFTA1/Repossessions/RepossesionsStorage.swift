@@ -10,6 +10,9 @@ import SwiftUI
 struct RepossesionsStorage: View {
     @State private var progress: CGFloat = 0.5 // Initial progress
     
+    @EnvironmentObject var config: AppConfig
+
+    
     @State private var capturedImage: UIImage?
     var body: some View {
 
@@ -43,7 +46,7 @@ struct RepossesionsStorage: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height:40)
-                        .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                        .background(config.primaryColor) // Gray background when profileImage is nil
                         .cornerRadius(8)
                         .padding(.horizontal)
                         

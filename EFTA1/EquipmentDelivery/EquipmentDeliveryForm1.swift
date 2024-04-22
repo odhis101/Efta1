@@ -9,7 +9,8 @@ import SwiftUI
 
 struct EquipmentDeliveryForm1: View {
     @State private var progress: CGFloat = 0.2 // Initial progress
-    
+    @EnvironmentObject var config: AppConfig
+
     let receiptItems: [(String, String)] = [
             ("Equipment name & model:", "Trailer"),
             ("Model:", "CIMC 53 Foot Truck"),
@@ -48,7 +49,7 @@ struct EquipmentDeliveryForm1: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 40)
-                        .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                        .background(config.primaryColor) // Gray background when profileImage is nil
                         .cornerRadius(8)
                         .padding(.horizontal)
                 }

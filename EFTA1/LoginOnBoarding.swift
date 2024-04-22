@@ -133,6 +133,8 @@ struct ModalViews: View {
     // State variables for input fields
     
     // State variable to track keyboard height
+    @EnvironmentObject var config: AppConfig
+
     @State private var keyboardHeight: CGFloat = 0
     
     var body: some View {
@@ -164,7 +166,7 @@ struct ModalViews: View {
                                 Text("Welcome to Efta")
                                     .font(.title)
                                     .fontWeight(.bold)
-                                    .foregroundColor(Color(hex: "#2AA241"))
+                                    .foregroundColor(config.primaryColor)
                                 
                                 Text("When other lenders say no, we often say yes.")
                                     .font(.headline)
@@ -178,7 +180,7 @@ struct ModalViews: View {
                                 .cornerRadius(8)
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.green) // Set background color to green when enabled, gray when disabled
+                                .background(config.primaryColor) 
 
                         }
                         

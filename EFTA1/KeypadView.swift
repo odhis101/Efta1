@@ -11,6 +11,7 @@ import SwiftUI
 
 struct KeyPadView:View{
     
+    
     @State var state:CalculationState = CalculationState()
     
     @Binding var pinCode:String
@@ -89,12 +90,14 @@ struct KeyPadView:View{
 
 struct CircleView: View {
     let name: String
+    @EnvironmentObject var config: AppConfig
+
     
     var body: some View {
         HStack(spacing: 10) {
             ForEach(0..<4) { index in
                 Circle()
-                    .foregroundColor(index < self.name.count ? Color.green : .gray.opacity(0.5))
+                    .foregroundColor(index < self.name.count ? config.primaryColor : .gray.opacity(0.5))
                     .frame(width: 20, height: 20)
                 /*
                  .overlay(

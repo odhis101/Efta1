@@ -17,9 +17,12 @@ struct ImpactReporting: View {
     @State private var RevenueNexttMonth:String=""
     @State private var showingConfirmation = false // State for showing the confirmation dialog
     @State private var navigateToDashboard = false
+    @State private var signature: UIImage?
+    @State private var image: UIImage?
 
 
-    
+    @EnvironmentObject var config: AppConfig
+
 
 
     var body: some View {
@@ -36,13 +39,14 @@ struct ImpactReporting: View {
                     QuestionWithSmallTextField(question: "Revenues last month",placeholder:"Enter amount Tzs",selectedOption: $RevenueLastMonth)
                     QuestionWithSmallTextField(question: "Revenues this month",placeholder:"Enter amount Tzs",selectedOption: $CurrentMonthlyWage)
                     QuestionWithSmallTextField(question: "Revenues next month",placeholder:"Enter amount Tzs",selectedOption: $RevenueNexttMonth)
-
-
-                    //QuestionWithSmallTextField(question: "Enter ID Number",placeholder:"ID Numher",selectedOption:$IDNumber)
-
+                    SignatureCaptureField(signatureImage: $signature)
+                         .padding()
                     
-
-                    NavigationLink(destination: Dashboard(), isActive: $navigateToDashboard) {
+                    PhotoCaptureField(image: $image)
+                        .padding()
+                    
+                    
+                    NavigationLink(destination: MyTabView(), isActive: $navigateToDashboard) {
                                         EmptyView()
                 }
                 Spacer ()
@@ -54,7 +58,7 @@ struct ImpactReporting: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 50)
-                    .background(Color.green)
+                    .background(config.primaryColor)
                     .cornerRadius(20)
                     .padding()
 

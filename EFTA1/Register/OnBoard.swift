@@ -7,6 +7,7 @@ import Combine
  */
 
 struct OnBoard: View {
+    
     // Array containing carousel items
     let carouselItems: [(String, [String])] = [
         ("background1", ["Welcome to EFTA", "“When other lenders say no, we often say yes."]),
@@ -18,6 +19,8 @@ struct OnBoard: View {
     @State private var currentIndex = 0
     @State private var StaffNumber:String=""
     @State private var PhoneNumber:String=""
+    @EnvironmentObject var config: AppConfig
+    @EnvironmentObject var pinHandler: PinHandler
 
 
 
@@ -45,7 +48,7 @@ struct OnBoard: View {
                             Spacer()
                             
                             HStack(alignment: .center) {
-                                Image("splashView")
+                                Image(config.splashImageName)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: geometry.size.width * 0.5, height: geometry.size.width * 0.3)
@@ -90,7 +93,7 @@ struct OnBoard: View {
                                         .frame(maxWidth: .infinity)
                                         .frame(height:30)
                                         .padding()
-                                        .background(Color.green) // Set background color to green when enabled, gray when disabled
+                                        .background(config.primaryColor)
                                         .cornerRadius(20)
                                 }
                                 .padding(.horizontal, 20)
@@ -127,6 +130,8 @@ struct OnBoard: View {
 }
 
 struct PageControl: View {
+    @EnvironmentObject var config: AppConfig
+
     var numberOfPages: Int
     @Binding var currentPage: Int
 
@@ -134,7 +139,7 @@ struct PageControl: View {
         HStack {
             ForEach(0..<numberOfPages) { page in
                 Circle()
-                    .fill(page == currentPage ? Color.green : Color.gray)
+                    .fill(page == currentPage ? config.primaryColor : Color.gray)
                     .frame(width: 10, height: 10)
                     .padding(5)
             }
@@ -149,10 +154,11 @@ struct ModalView: View {
     @Binding var isVisible: Bool
     @GestureState private var dragState = DragState()
     @State private var keyboardHeight: CGFloat = 0
-    @State private var staffNumber = ""
-    @State private var phoneNumber = ""
+    @EnvironmentObject var pinHandler: PinHandler
     @State private var isLoading = false
     @State private var navigationActive = false
+    @EnvironmentObject var config: AppConfig
+
     
     // State variable to track keyboard height
    
@@ -186,7 +192,7 @@ struct ModalView: View {
                                 Text("Welcome to Efta")
                                     .font(.title)
                                     .fontWeight(.bold)
-                                    .foregroundColor(Color(hex: "#2AA241"))
+                                    .foregroundColor(config.primaryColor)
                                 
                                 Text("When other lenders say no, we often say yes.")
                                     .font(.headline)
@@ -194,9 +200,9 @@ struct ModalView: View {
                             }
                         }
                         
-                        CustomTextField(placeholder: "Staff Number", text: $staffNumber)
+                        CustomTextField(placeholder: "Staff Number", text: $pinHandler.staffNumber)
                         
-                        CustomTextField(placeholder: "Phone Number", text: $phoneNumber)
+                        CustomTextField(placeholder: "Phone Number", text: $pinHandler.phoneNumber)
                         if isLoading {
                                 ProgressView()
                                 } else {
@@ -245,7 +251,7 @@ struct ModalView: View {
            .foregroundColor(.white)
            .frame(maxWidth: .infinity)
            .frame(height: 60)
-           .background(Color.green)
+           .background(config.primaryColor)
            .cornerRadius(8)
            .padding(.horizontal)
            .padding(.vertical, 16)
@@ -262,7 +268,7 @@ struct ModalView: View {
     
     private func sendStaffDetails() {
           isLoading = true
-          NetworkManager.shared.sendStaffDetails(staffNumber: staffNumber, phoneNumber: phoneNumber) { success, error in
+        NetworkManager.shared.sendStaffDetails(staffNumber: pinHandler.staffNumber, phoneNumber: pinHandler.phoneNumber) { success, error in
               isLoading = false
               if success {
                   navigationActive = true

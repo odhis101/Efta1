@@ -1,10 +1,12 @@
 import SwiftUI
-/*
- splash view screen
- */
+
 struct SplashView: View {
     @State private var isActive = false
+    @State private var destinationView: AnyView = AnyView(OnBoard())  // Default to Onboarding if no token
     
+    @EnvironmentObject var config: AppConfig
+    @StateObject private var authManager = AuthManager.shared
+
     var body: some View {
         NavigationView {
             GeometryReader { geometry in
@@ -12,19 +14,13 @@ struct SplashView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        Image("splashView")
+                        Image(config.splashImageName)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth:.infinity)
-                            
-                        
-                        
+                            .frame(maxWidth: .infinity)
                             .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                    isActive = true
-                                }
+                                checkTokenStatus()
                             }
-                         
                         Spacer()
                     }
                     Spacer()
@@ -32,20 +28,27 @@ struct SplashView: View {
                 .edgesIgnoringSafeArea(.all)
                 .navigationBarHidden(true)
                 
-                
-                 .background(
-                    
+                // Conditional navigation based on token presence
+                .background(
                     NavigationLink(
-                        destination:
-                            OnBoard(),
+                        destination: destinationView,
                         isActive: $isActive,
                         label: { EmptyView() }
                     )
                 )
-                 
             }
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
+    
+    private func checkTokenStatus() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {  // Delay for splash screen duration
+            if let _ = AuthManager.shared.loadToken() {
+                destinationView = AnyView(LoginOnBoarding())  // Set to login view if token exists
+            } else {
+                destinationView = AnyView(OnBoard())  // Set to initial onboarding if no token
+            }
+            isActive = true  // Trigger navigation after determining the destination
+        }
+    }
 }
-

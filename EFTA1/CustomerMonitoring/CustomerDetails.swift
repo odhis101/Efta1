@@ -22,6 +22,7 @@ struct CustomerDetails: View {
         ]
     var userData: UserData
 
+    @EnvironmentObject var config: AppConfig
 
     var body: some View {
         GeometryReader { geometry in
@@ -37,13 +38,13 @@ struct CustomerDetails: View {
             }
             HStack{
                 Text("Schedule")
-                    .foregroundColor(.green) // Set text color to green
+                    .foregroundColor(config.primaryColor) // Set text color to green
                     .frame(maxWidth: .infinity)
                     .frame(height: 30)
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 8) // Apply corner radius to the background
-                            .stroke(Color.green, lineWidth: 2) // Set border color and width
+                            .stroke(config.primaryColor, lineWidth: 2) // Set border color and width
                     )
                     .cornerRadius(20) // Apply corner radius to the text view
 
@@ -54,11 +55,11 @@ struct CustomerDetails: View {
                     .frame(maxWidth: .infinity)
                     .frame(height:30)
                     .padding()
-                    .background(Color.green) // Set background color to green when enabled, gray when disabled
+                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
                     .cornerRadius(20)
                 }
             }
-            .padding(.bottom,150)
+            .padding(.top,-50)
 
             
             
@@ -70,8 +71,6 @@ struct CustomerDetails: View {
             
             
         }
-        //hide the navigation
-        .navigationBarHidden(true)
     }
     
 }

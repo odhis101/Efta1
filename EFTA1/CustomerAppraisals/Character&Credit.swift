@@ -11,6 +11,7 @@ struct Character_Credit: View {
     @State private var progress: CGFloat = 0.2 // Initial progress
     
     @State private var capturedImage: UIImage?
+    @EnvironmentObject var config: AppConfig
 
     
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
@@ -45,7 +46,7 @@ struct Character_Credit: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height:40)
-                    .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                    .background(config.primaryColor) // Gray background when profileImage is nil
                     .cornerRadius(8)
                     .padding(.horizontal)
                     }

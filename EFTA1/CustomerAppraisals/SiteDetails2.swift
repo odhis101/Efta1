@@ -12,6 +12,8 @@ struct SiteDetails2: View {
     
     @State private var capturedImage: UIImage?
 
+    @EnvironmentObject var config: AppConfig
+
     
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
     var body: some View {
@@ -20,7 +22,7 @@ struct SiteDetails2: View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Individual onboarding",description: "Kindly collect the following information from the customer") // Pass progress as a binding
+                ProgressBar(geometry: geometry, progress: $progress,title:"Site Details",description: "Kindly collect the following information from the customer") // Pass progress as a binding
                     .padding(.trailing,20)
 
                 ScrollView{
@@ -53,7 +55,7 @@ struct SiteDetails2: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height:40)
-                    .background(Color(hex: "#2AA241")) // Gray background when profileImage is nil
+                    .background(config.primaryColor) // Gray background when profileImage is nil
                     .cornerRadius(8)
                     .padding(.horizontal)
 

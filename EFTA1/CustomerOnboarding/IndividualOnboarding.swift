@@ -10,6 +10,7 @@ import SwiftUI
 struct IndividualOnboarding: View {
     @State private var progress: CGFloat = 0.5 // Initial progress
     @EnvironmentObject var onboardingData: OnboardingData
+    @EnvironmentObject var config: AppConfig
 
     let questions = ["What is your favorite color?", "What is your pet's name?", "Where were you born?"]
         let locationData: [LocationData] = createLocationData()
@@ -24,7 +25,8 @@ struct IndividualOnboarding: View {
                   
                     ScrollView{
                         QuestionWithSmallTextField(question: "Enter Name", placeholder: "Name", selectedOption: $onboardingData.name)
-                        QuestionWithSmallTextField(question: "Enter ID Number", placeholder: "ID Number", selectedOption: $onboardingData.idNumber)
+                        QuestionWithDropdown(question: "Type Of ID", options: ["Driving License", "Passport","National ID "], selectedOption: $onboardingData.IDtype)
+                        QuestionWithSmallTextField(question: "Enter IDNumber", placeholder: "ID Number", selectedOption: $onboardingData.idNumber)
                         QuestionWithDropdown(question: "Gender", options: ["Male", "Female"], selectedOption: $onboardingData.gender)
                         QuestionWithDropdown(question: "Marital Status", options: ["Married", "Single"], selectedOption: $onboardingData.maritalStatus)
                         QuestionWithSmallTextField(question: "Postal Address", placeholder: "Postal Address", selectedOption: $onboardingData.postalAddress)
@@ -40,20 +42,22 @@ struct IndividualOnboarding: View {
                         QuestionWithDropdown(question: "District", options: onboardingData.districtOptions, selectedOption: $onboardingData.selectedDistrict)
                         QuestionWithSmallTextField(question: "Ward", placeholder: "Enter Respective Ward", selectedOption: $onboardingData.ward)
                                 }
+ 
+ 
                     Spacer()
                     
                     
-                    NavigationLink(destination: CapturePhoto()) {
-                        Text("Continue")
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                            .frame(height:40)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.green) // Set background color to green when enabled, gray when disabled
+                    NavigationLink(destination: IndividualOnboarding2()) {
 
+                    Text("Continue")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height:50)
+                        .background(config.primaryColor) // Gray background when profileImage is nil
+                        .cornerRadius(8)
+                        .padding(.horizontal)
+                        .padding(.vertical)
                     }
-                    
                     
                     
                

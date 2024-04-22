@@ -5,6 +5,7 @@ struct CapturePhoto: View {
     @ObservedObject var viewModel = PhotoCaptureViewModel() // Initialize the ViewModel
     @State private var progress: CGFloat = 0.7// Initial progress
     @EnvironmentObject var onboardingData: OnboardingData  // Use the shared onboarding data
+    @EnvironmentObject var config: AppConfig
 
     
     var body: some View {
@@ -51,7 +52,7 @@ struct CapturePhoto: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .frame(height: 40)
-                            .background(onboardingData.profileImage == nil ? Color.gray : Color(hex: "#2AA241"))
+                            .background(onboardingData.profileImage == nil ? Color.gray : config.primaryColor)
                             .cornerRadius(8)
                             .padding(.horizontal)
                     }

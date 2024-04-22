@@ -19,6 +19,8 @@ struct ReposessionDetails: View {
         
         ]
     var userData: UserData
+    @EnvironmentObject var config: AppConfig
+
 
 
     var body: some View {
@@ -43,7 +45,7 @@ struct ReposessionDetails: View {
                     .frame(maxWidth: .infinity)
                     .frame(height:30)
                     .padding()
-                    .background(Color.green) // Set background color to green when enabled, gray when disabled
+                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
                     .cornerRadius(20)
                     .padding(.bottom,100)
                 

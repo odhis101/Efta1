@@ -23,6 +23,7 @@ struct CompanyOnboarding: View {
     let locationData: [LocationData] = createLocationData()
     @State private var districtOptions: [String] = []
 
+    @EnvironmentObject var config: AppConfig
 
 
     
@@ -61,7 +62,7 @@ struct CompanyOnboarding: View {
                             .cornerRadius(8)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.green) // Set background color to green when enabled, gray when disabled
+                            .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
 
                     }
                     

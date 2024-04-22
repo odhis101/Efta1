@@ -8,6 +8,7 @@
 import SwiftUI
 
 import Foundation
+/*
 protocol DocumentHandling: AnyObject {
     var selectedDocuments: [URL] { get set }
     func addDocuments(_ documents: [URL])
@@ -40,3 +41,4 @@ class CustomerMonitoringDocumentHandler: ObservableObject, DocumentHandling {
         self.selectedDocuments.removeAll()
     }
 }
+ */
