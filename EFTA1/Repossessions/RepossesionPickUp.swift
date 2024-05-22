@@ -19,6 +19,9 @@ struct RepossesionPickUp: View {
     @State private var image: UIImage?
 
     @EnvironmentObject var config: AppConfig
+    
+    @Environment(\.presentationMode) var presentionMode
+    
 
 
     var body: some View {
@@ -26,7 +29,7 @@ struct RepossesionPickUp: View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Repossesions Pick UP",description: "Kindly complete the following details") // Pass progress as a binding
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentionMode, title:"Repossesions Pick UP",description: "Kindly complete the following details") // Pass progress as a binding
                     .padding(.trailing,20)
                     .padding(.bottom,10)
 
@@ -53,6 +56,7 @@ struct RepossesionPickUp: View {
                 
                 }
                 Spacer ()
+                /*
                 NavigationLink(destination: RepossesionsStorage()){
 
                 Text("Continue")
@@ -64,6 +68,9 @@ struct RepossesionPickUp: View {
                     .padding(.horizontal)
                     
                 }
+                 */
+                CustomNavigationButton(destination: RepossesionsStorage(), label: "Continue", backgroundColor: config.primaryColor)
+                
 
                 }
 

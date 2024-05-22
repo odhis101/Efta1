@@ -21,16 +21,19 @@ struct CustomerApraisalDetails: View {
 
     var body: some View {
         GeometryReader { geometry in
-
         VStack{
-        
-            QuickIntro(title: "Alex Mwangi", description: "Kindly proceed to appraise the customer after confirming their details")
+            VStack{
+            QuickIntro(title: "Alex Mwangiss", description: "Kindly proceed to appraise the customer after confirming their details")
             ZStack{
                 MapComponent(geometry: geometry)
                 CustomerDetailsReceiptBox(items: receiptItems,geometry: geometry)
                     .padding(.bottom,200)
                 
             }
+            }
+            .padding(.top, -50)
+
+            
             Spacer()
 
             HStack{
@@ -39,11 +42,12 @@ struct CustomerApraisalDetails: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 30)
                     .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 8) // Apply corner radius to the background
+                    .background(Color.clear)
+                    .cornerRadius(20)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
                             .stroke(config.primaryColor, lineWidth: 2) // Set border color and width
                     )
-                    .cornerRadius(20) // Apply corner radius to the text view
 
 
                 NavigationLink(destination: SiteDetails()){
@@ -53,12 +57,13 @@ struct CustomerApraisalDetails: View {
                     .frame(maxWidth: .infinity)
                     .frame(height:30)
                     .padding()
-                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
+                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabledx
                     .cornerRadius(20)
 
                     
                 }
             }
+            .padding()
             .padding(.top,-50)
 
 
@@ -71,6 +76,9 @@ struct CustomerApraisalDetails: View {
             
             
         }
+      
+        
+        
     }
 }
 
@@ -103,7 +111,7 @@ struct CustomerDetailsReceiptBox: View {
                             Divider()
                         }
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(config.primaryColor)
+                            .fill(config.primaryColor.opacity(0.3))
                             .frame(height:40)
                             .padding()
 
@@ -120,7 +128,7 @@ struct CustomerDetailsReceiptBox: View {
                             )
                         
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(config.primaryColor)
+                            .fill(config.primaryColor.opacity(0.3))
                             .frame(height:40)
                             .padding()
                             .overlay(
@@ -150,7 +158,7 @@ struct MapComponent: View {
 
     var body: some View {
         Map(coordinateRegion: $region)
-            .frame(height: geometry.size.height * 0.5)
+            .frame(height: geometry.size.height * 0.7)
             .cornerRadius(10)
     }
     

@@ -10,7 +10,8 @@ import SwiftUI
 struct EquipmentDeliveryForm1: View {
     @State private var progress: CGFloat = 0.2 // Initial progress
     @EnvironmentObject var config: AppConfig
-
+    @Environment(\.presentationMode) var presentationMode
+    @State private var navigateToCustomerDetailsss = false
     let receiptItems: [(String, String)] = [
             ("Equipment name & model:", "Trailer"),
             ("Model:", "CIMC 53 Foot Truck"),
@@ -22,10 +23,12 @@ struct EquipmentDeliveryForm1: View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Equipments for delivery",description: "Kindly select one of the equipments to fulfill delivery") // Pass progress as a binding
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Equipments for delivery",description: "Kindly select one of the equipments to fulfill delivery") // Pass progress as a binding
                     .padding(.trailing,20)                
                 ScrollView{
-                    ReceiptBox(items: receiptItems,geometry: geometry,size: 0.3)
+                    ReceiptBox(items: receiptItems, geometry: geometry, size: 0.5) {
+                        navigateToCustomerDetailsss = true
+                    }                    
                     QuestionWithOptionView(question: "What benefits do employees receive?", options: ["Accessories", "Manual instructions", "Vehicle jack", "Training ", "Carrying case"])
                     QuestionWithFileType()
                     QuestionWithFileType()
@@ -43,7 +46,7 @@ struct EquipmentDeliveryForm1: View {
                 }
                 Spacer()
                 
-                
+                /*
                 NavigationLink(destination: EquipmentDeliveryForm2()) {
                     Text("Continue")
                         .foregroundColor(.white)
@@ -53,6 +56,9 @@ struct EquipmentDeliveryForm1: View {
                         .cornerRadius(8)
                         .padding(.horizontal)
                 }
+                 */
+                
+                CustomNavigationButton(destination: EquipmentDeliveryForm2(), label: "Continue", backgroundColor: config.primaryColor)
 
                 
 

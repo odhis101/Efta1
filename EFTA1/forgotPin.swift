@@ -15,8 +15,10 @@ struct forgotPin: View {
     var body: some View {
         GeometryReader { geometry in
             VStack{
+                /*
                 LogoAndTitleView(geometry: geometry, title: "Forgot PIN", subTitle: "Sorry for the inconvenience kindly answer the following question to proceed")
                     .padding(.bottom,10)
+                 */
                 VStack(alignment: .leading) {
                     Text("Question: What is the name of your pet? ")
                         // italics

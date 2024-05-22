@@ -11,12 +11,15 @@ struct EquipmentDeliveryItems: View {
     @State private var progress: CGFloat = 0.2 // Initial progress
     
     @State private var capturedImage: UIImage?
+    @EnvironmentObject var config: AppConfig
+    
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
 
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Equipments for delivery",description: "Kindly select one of the equipments to fulfill delivery") // Pass progress as a binding
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Equipments for delivery",description: "Kindly select one of the equipments to fulfill delivery") // Pass progress as a binding
                     .padding(.trailing,20)
                 
                 ScrollView{
@@ -53,17 +56,18 @@ struct EquipmentDeliveryItemsList : View {
             RoundedRectangle(cornerRadius: 8)
                 .foregroundColor(.gray.opacity(0.2))
                 .frame(maxWidth:.infinity)
-                .padding()
-                .frame(height:90)
+                .padding(.horizontal)
+                .frame(height:50)
                 .overlay(
                     VStack{
                     HStack{
                         Text(ItemTitle)
+                            .font(.subheadline)
                             .padding(.horizontal)
-                            .foregroundColor(.black)
+                            .foregroundColor(.gray)
                         Spacer()
                         Image(systemName: "arrow.right")
-                            .padding(.leading,20)
+                            .padding(.horizontal, 10)
                             .foregroundColor(.gray)
                         
                     }

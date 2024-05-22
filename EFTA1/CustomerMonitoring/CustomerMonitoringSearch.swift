@@ -56,3 +56,10 @@ struct CustomerMonitoringSearch: View {
     
 }
 
+struct CustomerMonitoringSearch_Previews: PreviewProvider {
+    static var previews: some View {
+        CustomerMonitoringSearch()
+            .environmentObject(AppConfig(region: .efken))
+            .environmentObject(PinHandler())
+    }
+}

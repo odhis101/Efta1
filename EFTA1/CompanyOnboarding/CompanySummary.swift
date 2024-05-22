@@ -20,20 +20,26 @@ struct CompanySummary: View {
             ("ward", "Makumbusho")
         ]
     @EnvironmentObject var config: AppConfig
-
     
+
+    @Environment(\.presentationMode) var presentationMode
+    let navigateToCustomerDetails = false
+    @State private var navigateToCustomerDetailss = false // State to handle navigation to CustomerName
+
+
     var body: some View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Summary",description: "Kindly review the information collected")
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Summary",description: "Kindly review the information collected")
                 .padding(.trailing,20)
 
                 ScrollView{
 
-                    ReceiptBox(items: receiptItems,geometry: geometry,size:0.5)
-                
-                    ReceiptBox(items: receiptItems,geometry: geometry,size:0.5)
+                    ReceiptBox(items: receiptItems, geometry: geometry, size: 0.5) {
+                        navigateToCustomerDetailss = true
+                    }
+                   
 
                     DocumentContainerView(title: "Document Title")
 

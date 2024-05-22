@@ -3,13 +3,15 @@
 //  EFTA1
 //
 //  Created by Joshua on 4/15/24.
+
+
+// joshua is the greatest alivessss
 //
 
 import Foundation
 import SwiftUI
 import UIKit
-import SwiftUIDigitalSignature  // Ensure you import the package
-
+import SwiftUIDigitalSignature
 
 struct DropdownQuestionView: View {
     let questions: [String]
@@ -54,7 +56,7 @@ struct AnswerView: View {
         TextField("Your Answer", text: $answer)
             .padding()
             .frame(height: 50)
-            .background(Color.gray.opacity(0.2))
+            .background(Color(hex: "#F2F2F7"))
             .cornerRadius(8)
             .padding(.horizontal)
     }
@@ -131,9 +133,11 @@ struct QuestionWithDropdown: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            
             Text(question)
-                .font(.headline)
+                //.font(.headline)
                 .padding(.horizontal)
+
 
             Button(action: {
                 withAnimation(.spring()) {
@@ -141,7 +145,7 @@ struct QuestionWithDropdown: View {
                 }
             }) {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.gray.opacity(0.2))
+                    .fill(Color(hex: "#F2F2F7"))
                     .frame(height: 50)
                     .overlay(
                         HStack {
@@ -181,7 +185,268 @@ struct QuestionWithDropdown: View {
     }
 }
 
+struct QuestionWithDropdownStatement: View {
+    var question: String
+    let options: [String]
+    @State private var isExpanded = false
+    @Binding public var selectedOption: String?
+    @EnvironmentObject var config: AppConfig
+
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(question)
+                .font(.caption)
+                .foregroundColor(Color.gray)
+                .multilineTextAlignment(.leading)
+            Button(action: {
+                withAnimation(.spring()) {
+                    isExpanded.toggle()
+                }
+            }) {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.white)
+                    .frame(height: 50)
+                    .overlay(
+                        VStack{
+                        HStack {
+                            Text(selectedOption ?? "Select an option")
+                                .foregroundColor(Color.gray)
+                                .multilineTextAlignment(.leading)
+                                .padding(.bottom)
+
+                            Spacer()
+                            Image(systemName: "chevron.down")
+                                .foregroundColor(.gray)
+                                .rotationEffect(Angle(degrees: isExpanded ? 180 : 0))
+                                .padding(.trailing)
+                        }
+                            Rectangle()
+                                .frame(height: 3)
+                                .foregroundColor(config.primaryColor) // Adjust color as needed
+                               
+                            
+                        }
+                    )
+                
+                
+            }
+            
+            if isExpanded {
+                ForEach(options, id: \.self) { option in
+                    Button(action: {
+                        withAnimation(.spring()) {
+                            selectedOption = option
+                            isExpanded = false
+                        }
+                    }) {
+                        Text(option)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .foregroundColor(.black)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(5)
+                    .padding(.horizontal)
+                }
+            }
+        }
+        .padding(.horizontal)
+        .animation(.spring(), value: isExpanded)
+    }
+}
+
+
+struct QuestionWithDropdownModal: View {
+    var question: String
+    @Binding public var DropdownExpand: Bool
+    let options: [String]
+    @State private var isExpanded = false
+    @Binding public var selectedOption: String?
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(question)
+                .font(.headline)
+                .padding(.horizontal)
+
+            Button(action: {
+                withAnimation(.spring()) {
+                    isExpanded.toggle()
+                    DropdownExpand.toggle()
+                }
+            }) {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(height: 50)
+                    .overlay(
+                        HStack {
+                            Text(selectedOption ?? "Select an option")
+                                .foregroundColor(.black)
+                                .padding(.leading)
+                            Spacer()
+                            Image(systemName: "chevron.down")
+                                .foregroundColor(.gray)
+                                .rotationEffect(Angle(degrees: isExpanded ? 180 : 0))
+                                .padding(.trailing)
+                        }
+                    )
+                    .padding(.horizontal)
+            }
+            
+            if isExpanded {
+                ForEach(options, id: \.self) { option in
+                    Button(action: {
+                        withAnimation(.spring()) {
+                            selectedOption = option
+                            isExpanded = false
+                            DropdownExpand = false
+
+                        }
+                    }) {
+                        Text(option)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .foregroundColor(.black)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(5)
+                    .padding(.horizontal)
+                }
+            }
+        }
+        .animation(.spring(), value: isExpanded)
+    }
+}
+
+struct QuestionWithDropdownModalDocument: View {
+    var question: String
+    @Binding public var DropdownExpand: Bool
+    let options: [String]
+    @State private var isExpanded = false
+    @Binding public var selectedOption: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(question)
+                .font(.headline)
+                .padding(.horizontal)
+
+            Button(action: {
+                withAnimation(.spring()) {
+                    isExpanded.toggle()
+                    DropdownExpand.toggle()
+                }
+            }) {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(height: 50)
+                    .overlay(
+                        HStack {
+                            Text(selectedOption ?? "Select an option")
+                                .foregroundColor(.black)
+                                .padding(.leading)
+                            Spacer()
+                            Image(systemName: "chevron.down")
+                                .foregroundColor(.gray)
+                                .rotationEffect(Angle(degrees: isExpanded ? 180 : 0))
+                                .padding(.trailing)
+                        }
+                    )
+                    .padding(.horizontal)
+            }
+            
+            if isExpanded {
+                ForEach(options, id: \.self) { option in
+                    Button(action: {
+                        withAnimation(.spring()) {
+                            selectedOption = option
+                            isExpanded = false
+                            DropdownExpand = false
+                        }
+                    }) {
+                        Text(option)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .opacity(selectedOption == option ? 0.5 : 1.0) // Apply reduced opacity to the selected option
+                            .disabled(selectedOption == option) // Disable the button if it's the selected option
+                    }
+                    .foregroundColor(.black)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(5)
+                    .padding(.horizontal)
+                }
+            }
+        }
+        .animation(.spring(), value: isExpanded)
+    }
+}
+
+
+
 struct QuestionWithSmallTextField: View {
+    var question: String
+    var placeholder:String
+    @Binding public var selectedOption: String
+
+    var body: some View {
+        VStack(spacing: 10) {
+            
+            HStack{
+                Text(question)
+            Spacer()
+            }
+            .padding(.horizontal)
+             
+
+            
+
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(hex: "#F2F2F7"))
+                .frame(height: 50) // Adjust height as needed
+                .frame(maxWidth:.infinity)
+                .overlay(
+                    TextField(placeholder, text: $selectedOption ?? .constant(""))
+                        .padding()
+                )
+                .padding(.horizontal)
+        }
+   
+    }
+}
+
+struct QuestionWithSmallField: View {
+    var question: String
+    var placeholder:String
+    @Binding public var selectedOption: String
+    @EnvironmentObject var config: AppConfig
+
+    var body: some View {
+        VStack(spacing: 10) {
+            HStack{
+                Text(question)
+                    .foregroundColor(.gray)
+                    .font(.caption)
+            Spacer()
+            }
+            .padding(.horizontal)
+                    TextField(placeholder, text: $selectedOption ?? .constant(""))
+                        .padding()
+                Rectangle ()
+                    .frame(height: 2)
+                    .foregroundColor(config.primaryColor)
+
+
+                        
+                    
+                
+                .padding(.horizontal)
+        }
+        .padding(.top,5)
+   
+    }}
+
+struct QuestionWithSearchFeild: View {
     var question: String
     var placeholder:String
     @Binding public var selectedOption: String
@@ -190,7 +455,6 @@ struct QuestionWithSmallTextField: View {
         VStack(spacing: 10) {
             HStack{
                 Text(question)
-                    .font(.headline)
             Spacer()
             }
             .padding(.horizontal)
@@ -202,8 +466,11 @@ struct QuestionWithSmallTextField: View {
                 .frame(height: 40) // Adjust height as needed
                 .frame(maxWidth:.infinity)
                 .overlay(
-                    TextField(placeholder, text: $selectedOption ?? .constant(""))
+                    HStack{
+                        Image("magnifyingglass")
+                        TextField(placeholder, text: $selectedOption ?? .constant(""))
                         .padding()
+                    }
                 )
                 .padding(.horizontal)
         }
@@ -220,7 +487,7 @@ struct ToggleableTextComponent: View {
 
     var body: some View {
         RoundedRectangle(cornerRadius: 20)
-            .fill(Color.gray)
+            .fill(Color.white)
             .frame(height: 40)
             .frame(maxWidth: .infinity)
             .padding()
@@ -233,12 +500,16 @@ struct ToggleableTextComponent: View {
                         RoundedRectangle(cornerRadius: 20)
                             .fill(isActiveFirstText ? config.primaryColor : Color.clear) // Use green color if active
                             .frame(height: 40)
+                            .frame(maxWidth: .infinity)
+
                             .padding()
+
 
 
                             .overlay(
                                 Text(text1)
                                     .foregroundColor(isActiveFirstText ? .white : .black) // Text color changes based on active state
+                                    .padding()
                             )
                     }
                     Spacer()
@@ -249,11 +520,13 @@ struct ToggleableTextComponent: View {
                         RoundedRectangle(cornerRadius: 20)
                             .fill(!isActiveFirstText ? config.primaryColor: Color.clear) // Use green color if active
                             .frame(height: 40)
+                        
                             .padding()
 
                             .overlay(
                                 Text(text2)
                                     .foregroundColor(!isActiveFirstText ? .white : .black) // Text color changes based on active state
+                                    .padding()
                             )
                     }
                 }
@@ -306,6 +579,63 @@ struct QuestionWithDate: View {
 
     }
 }
+
+struct QuestionWithDateStatement: View {
+    @State private var showDatePicker = false
+    @State private var selectedDate = Date()
+    @EnvironmentObject var config: AppConfig
+
+    var question: String
+
+    var body: some View {
+        VStack(spacing:10)  {
+            HStack{
+            Text(question)
+                    .font(.caption)
+                    .foregroundColor(Color.gray)
+                    .multilineTextAlignment(.leading)
+                Spacer()
+            }
+            Button(action: {
+                // Action to show date picker
+                showDatePicker.toggle()
+            }) {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.white)
+                    .frame(height: 60) // Adjust height as needed
+                    .overlay(
+                        VStack{
+                        HStack {
+                            Text(verbatim: selectedDate.formatted(date: .numeric, time: .omitted))
+                                .foregroundColor(.black)
+                                .padding(.leading)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "calendar")
+                                .foregroundColor(.gray)
+                                .padding(.trailing)
+                        }
+                            Rectangle()
+                                .frame(height: 3)
+                                .foregroundColor(config.primaryColor) // Adjust color as needed
+                            
+                        }
+                        
+                    )
+            }
+            .sheet(isPresented: $showDatePicker) {
+                // Date picker modal
+                DatePicker("Select a date", selection: $selectedDate, displayedComponents: .date)
+                    .datePickerStyle(GraphicalDatePickerStyle())
+                    .padding()
+            }
+        }
+        .padding(.horizontal)
+
+    }
+}
+
 
 struct QuestionWithTime: View {
     @State private var showTimePicker = false
@@ -553,7 +883,7 @@ struct QuestionWithButtons: View {
     }
 }
 
-/*
+
 
 struct SignatureCaptureView: UIViewRepresentable {
     @Binding var signatureImage: UIImage?
@@ -593,6 +923,7 @@ struct SignatureCaptureView: UIViewRepresentable {
     }
 }
 
+
 extension SignatureCaptureView.Coordinator {
     @objc func panGesture(_ sender: UIPanGestureRecognizer) {
         let location = sender.location(in: sender.view)
@@ -607,7 +938,7 @@ extension SignatureCaptureView.Coordinator {
             if let view = sender.view {
                 let image = getImage(from: view)
                 DispatchQueue.main.async {
-                    self.signatureImage = image
+                    //self.signatureImage = image
                 }
             }
         default:
@@ -615,7 +946,7 @@ extension SignatureCaptureView.Coordinator {
         }
     }
 }
-*/
+
 struct SignatureCaptureField: View {
     @Binding var signatureImage: UIImage?
     @State private var isPresentingSignatureView = false
@@ -694,5 +1025,20 @@ struct PhotoCaptureField: View {
         .sheet(isPresented: $isPresentingCamera) {
             ImagePicker(image: $image, isPickerPresented: $isPickerPresented, sourceType: .camera)
         }
+    }
+}
+
+struct QuestionWithDropdownStatement_Previews: PreviewProvider {
+    @State static var selectedOption: String = ""
+    @StateObject var config = AppConfig(region: .efken)
+
+    static var previews: some View {
+        
+            QuestionWithSmallTextField(question: "Select your option",placeholder: "Enter Name" , selectedOption: $selectedOption)
+                .environmentObject(AppConfig(region: .efken))
+
+            
+           
+        
     }
 }

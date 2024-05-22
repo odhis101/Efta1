@@ -15,13 +15,14 @@ struct CustomerDocument: View {
     @EnvironmentObject var onboardingData: OnboardingData
     @EnvironmentObject var config: AppConfig
 
-
+    @Environment(\.presentationMode) var presentationMode
+ 
     var body: some View {
 
             GeometryReader { geometry in
-                VStack{
-                    ProgressBar(geometry: geometry, progress: $progress,title:"\(onboardingData.titleForCustomerOnboarding) document",description: "Kindly upload the customer documentsssss")
-                        .padding(.trailing,20)
+                VStack(alignment: .center){
+                    ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"\(onboardingData.titleForCustomerOnboarding) document",description: "Kindly upload the customer documentsssss")
+
                     
                     Spacer()
                     
@@ -35,16 +36,29 @@ struct CustomerDocument: View {
                         isModalVisible.toggle()
                         
                     }){
-                    Text("Upload Document")
-                        .foregroundColor(.white)
-                        .frame(width: 280)
-                        .frame(height:60)
-                        .background(config.primaryColor) // Gray background when profileImage is nil
-                        .opacity(0.5)
-                        .cornerRadius(8)
-                        .padding(.horizontal)
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundColor(config.primaryColor.opacity(0.3))
+                            .frame(width: 200)
+                            .frame(height:60)
+                            .overlay(
+                                HStack{
+                                    Text("+")
+                                    
+                                        .foregroundColor(config.primaryColor)
+                                        .padding(.leading)
+                                    Text("Upload Document")
+                                        .foregroundColor(config.primaryColor)
+                                        .padding(.horizontal)
+
+                                        
+
+                                }
+                                
+                                )
+                    
                     }
                     Spacer()
+                    /*
                     NavigationLink( destination: CustomerDocumentList()){
                     Text("Continue")
                         .foregroundColor(.white)
@@ -54,6 +68,8 @@ struct CustomerDocument: View {
                         .cornerRadius(8)
                         .padding(.horizontal)
                     }
+                     */
+                    CustomNavigationButton(destination: CustomerDocumentList(), label: "Continue", backgroundColor: config.primaryColor)
                     
                 }
                 DocumentModalView(
@@ -64,11 +80,7 @@ struct CustomerDocument: View {
             }
         }
 }
-    
-
-
-
-
+/*
 struct DocumentModalView<Destination: View>: View {
     @Binding var isVisible: Bool
     @GestureState private var dragState = DragState()
@@ -78,22 +90,27 @@ struct DocumentModalView<Destination: View>: View {
     @State private var isNavigationActive: Bool = false
     @EnvironmentObject var config: AppConfig
     @State private var keyboardHeight: CGFloat = 0
+    @EnvironmentObject var onboardingData: OnboardingData
+    @State private var DropdownExpand = false
+
 
     var body: some View {
         GeometryReader { geometry in
             VStack {
                 Spacer()
                 ZStack {
-                    Rectangle()
+                    RoundedRectangle(cornerRadius: 10)
                         .fill(Color.white)
                         .frame(width: geometry.size.width, height: modalHeight)
                         .cornerRadius(20)
                         .padding(.bottom, keyboardHeight)
+                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+
 
                     VStack(spacing: 16) {
                         titleBar
+                        QuestionWithDropdownModalDocument(question: "Type Of ID", DropdownExpand: $DropdownExpand, options: ["Driving License", "Passport","National ID "], selectedOption: $onboardingData.IDtype)
                         uploadButton
-                        fileList
                         continueButton
                     }
                     .padding()
@@ -129,7 +146,12 @@ struct DocumentModalView<Destination: View>: View {
     }
 
     private var modalHeight: CGFloat {
-        UIScreen.main.bounds.height * 0.3
+        if DropdownExpand {
+            return UIScreen.main.bounds.height * 0.5
+        }
+        else{
+       return UIScreen.main.bounds.height * 0.3
+        }
     }
 
     private struct DragState { }
@@ -139,40 +161,41 @@ struct DocumentModalView<Destination: View>: View {
     }
 
     private var titleBar: some View {
-        HStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(LinearGradient(gradient: Gradient(colors: [Color.gray.opacity(0.5), Color.gray.opacity(0.1)]), startPoint: .leading, endPoint: .trailing))
-                .frame(width: 80, height: 20)
-                .padding(.vertical, 8)
-                .overlay(
                     Capsule()
                         .fill(Color.gray.opacity(0.8))
                         .frame(width: 30, height: 6)
-                )
-        }
+                
+        
     }
 
     public var uploadButton: some View {
         FilePicker(
             types: [.item],
             allowMultiple: false,
-            title: "Upload Files",
+            title: "Upload Document        ",
             onPicked: { urls in
                 if let url = urls.first {
                     // File picked successfully, handle the selected URL
                     print("Selected file URL: \(url)")
                     selectedFileURLs = [url]
+                    documentHandler.addDocuments(selectedFileURLs)
+                    isNavigationActive = true
+
+
                 } else {
                     // File picking was canceled or failed
                     print("File picking was canceled or failed.")
                 }
             }
         )
-        .foregroundColor(.white)
+        .foregroundColor(.black)
         .padding()
-        .background(Color.blue)
+        .background(Color.gray.opacity(0.3))
         .cornerRadius(8)
     }
+    
+    
+    
 
 
     // Define a custom button style for the FilePicker
@@ -200,7 +223,7 @@ struct DocumentModalView<Destination: View>: View {
             Text("Continue")
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height:40)
+                .frame(height:50)
                 .background(config.primaryColor) // Gray background when profileImage is nil
                 .cornerRadius(8)
                 .padding(.horizontal)
@@ -234,5 +257,332 @@ struct DocumentModalView<Destination: View>: View {
         func documentPicker(_ controller: UIDocumentPickerViewController, didFailWithError error: Error) {
             print("Document picker failed with error: \(error.localizedDescription)")
         }
+    }
+}
+*/
+
+struct DocumentModalView<Destination: View>: View {
+    @Binding var isVisible: Bool
+    @GestureState private var dragState = DragState()
+    @State private var selectedOptions: [String: URL] = [:] // Dictionary to store selected options and their corresponding file URLs
+    var destinationView: () -> Destination
+    var documentHandler: DocumentHandling
+    @State private var isNavigationActive: Bool = false
+    @EnvironmentObject var config: AppConfig
+    @State private var keyboardHeight: CGFloat = 0
+    @EnvironmentObject var onboardingData: OnboardingData
+    @State private var DropdownExpand = false
+
+    var body: some View {
+        GeometryReader { geometry in
+            VStack {
+                Spacer()
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.white)
+                        .frame(width: geometry.size.width, height: modalHeight)
+                        .cornerRadius(20)
+                        .padding(.bottom, keyboardHeight)
+                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+
+                    VStack(spacing: 16) {
+                        titleBar
+                        QuestionWithDropdownModalDocument(question: "Type Of ID", DropdownExpand: $DropdownExpand, options: ["Driving License", "Passport", "National ID"], selectedOption: $onboardingData.idType)
+                        uploadButton
+                        continueButton
+                    }
+                    .padding()
+                    
+                    NavigationLink(destination: destinationView(), isActive: $isNavigationActive) {
+                        EmptyView()  // Invisible view for programmatic navigation
+                    }
+                }
+            }
+            .offset(y: isVisible ? 0 : geometry.size.height)
+            .animation(.easeInOut(duration: isVisible ? 0.3 : 0))
+            .gesture(
+                DragGesture()
+                    .updating($dragState) { value, state, _ in
+                        state = DragState()
+                    }
+                    .onEnded { value in
+                        if value.translation.height > geometry.size.height * 0.2 {
+                            isVisible = false
+                        }
+                    }
+            )
+            .edgesIgnoringSafeArea(.all)
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
+                if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                    keyboardHeight = keyboardFrame.height
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                keyboardHeight = 0
+            }
+        }
+    }
+
+    private var modalHeight: CGFloat {
+        if DropdownExpand {
+            return UIScreen.main.bounds.height * 0.5
+        } else {
+            return UIScreen.main.bounds.height * 0.3
+        }
+    }
+
+    private struct DragState { }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    private var titleBar: some View {
+        Capsule()
+            .fill(Color.gray.opacity(0.8))
+            .frame(width: 30, height: 6)
+    }
+
+    public var uploadButton: some View {
+        FilePicker(
+            types: [.item],
+            allowMultiple: false,
+            title: "Upload Document        ",
+            onPicked: { urls in
+                if let url = urls.first {
+                    // File picked successfully, handle the selected URL
+                    print("Selected file URL: \(url)")
+                    if let selectedOption = onboardingData.idType {
+                        selectedOptions[selectedOption] = url // Link selected option with file URL
+                    }
+                    documentHandler.addDocuments([url])
+                    isNavigationActive = true
+                } else {
+                    // File picking was canceled or failed
+                    print("File picking was canceled or failed.")
+                }
+            }
+        )
+        .foregroundColor(.black)
+        .padding()
+        .background(Color.gray.opacity(0.3))
+        .cornerRadius(8)
+    }
+
+    private var continueButton: some View {
+        Button(action: {
+            isVisible = false
+            documentHandler.addDocuments(selectedOptions.values.compactMap { $0 })
+            isNavigationActive = true
+        }) {
+            Text("Continue")
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height:50)
+                .background(config.primaryColor) // Gray background when profileImage is nil
+                .cornerRadius(8)
+                .padding(.horizontal)
+        }
+    }
+
+    class Coordinator: NSObject, UIDocumentPickerDelegate {
+        var parent: DocumentModalView
+
+        init(_ parent: DocumentModalView) {
+            self.parent = parent
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            print("Document picker selected URLs: \(urls)")
+            if let selectedOption = parent.onboardingData.idType {
+                parent.selectedOptions[selectedOption] = urls.first // Link selected option with file URL
+            }
+        }
+
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+            print("Document picker was cancelled.")
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didFailToPickDocumentAt url: URL, error: Error?) {
+            if let error = error {
+                print("Document picker failed to pick document at \(url.absoluteString) with error: \(error.localizedDescription)")
+            } else {
+                print("Document picker failed to pick document at \(url.absoluteString) with an unknown error.")
+            }
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didFailWithError error: Error) {
+            print("Document picker failed with error: \(error.localizedDescription)")
+        }
+    }
+
+    private func availableOptions() -> [String] {
+        guard let selectedOption = onboardingData.idType else {
+            return ["Driving License", "Passport", "National ID"]
+        }
+        var options = ["Driving License", "Passport", "National ID"]
+        options.removeAll { $0 == selectedOption } // Remove selected option
+        return options
+    }
+}
+
+
+struct DocumentModalView2: View {
+    @Binding var isVisible: Bool
+    @GestureState private var dragState = DragState()
+    @State private var selectedOptions: [String: URL] = [:] // Dictionary to store selected options and their corresponding file URLs
+    var documentHandler: DocumentHandling
+    //@State private var isNavigationActive: Bool = false
+    @EnvironmentObject var config: AppConfig
+    @State private var keyboardHeight: CGFloat = 0
+    @EnvironmentObject var onboardingData: OnboardingData
+    @State private var DropdownExpand = false
+
+    var body: some View {
+        GeometryReader { geometry in
+            VStack {
+                Spacer()
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.white)
+                        .frame(width: geometry.size.width, height: modalHeight)
+                        .cornerRadius(20)
+                        .padding(.bottom, keyboardHeight)
+                        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
+
+                    VStack(spacing: 16) {
+                        titleBar
+                        QuestionWithDropdownModalDocument(question: "Type Of ID", DropdownExpand: $DropdownExpand, options: ["Driving License", "Passport", "National ID"], selectedOption: $onboardingData.idType)
+                        uploadButton
+                        continueButton
+                    }
+                    .padding()
+                    
+                }
+            }
+            .offset(y: isVisible ? 0 : geometry.size.height)
+            .animation(.easeInOut(duration: isVisible ? 0.3 : 0))
+            .gesture(
+                DragGesture()
+                    .updating($dragState) { value, state, _ in
+                        state = DragState()
+                    }
+                    .onEnded { value in
+                        if value.translation.height > geometry.size.height * 0.2 {
+                            isVisible = false
+                        }
+                    }
+            )
+            .edgesIgnoringSafeArea(.all)
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
+                if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+                    keyboardHeight = keyboardFrame.height
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                keyboardHeight = 0
+            }
+        }
+    }
+
+    private var modalHeight: CGFloat {
+        if DropdownExpand {
+            return UIScreen.main.bounds.height * 0.5
+        } else {
+            return UIScreen.main.bounds.height * 0.3
+        }
+    }
+
+    private struct DragState { }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    private var titleBar: some View {
+        Capsule()
+            .fill(Color.gray.opacity(0.8))
+            .frame(width: 30, height: 6)
+    }
+
+    public var uploadButton: some View {
+        FilePicker(
+            types: [.item],
+            allowMultiple: false,
+            title: "Upload Documentssss        ",
+            onPicked: { urls in
+                if let url = urls.first {
+                    // File picked successfully, handle the selected URL
+                    print("Selected file URL: \(url)")
+                    if let selectedOption = onboardingData.idType {
+                        selectedOptions[selectedOption] = url // Link selected option with file URL
+                    }
+                    //documentHandler.addDocuments([url])
+                } else {
+                    // File picking was canceled or failed
+                    print("File picking was canceled or failed.")
+                }
+            }
+        )
+        .foregroundColor(.black)
+        .padding()
+        .background(Color.gray.opacity(0.3))
+        .cornerRadius(8)
+    }
+
+    private var continueButton: some View {
+        Button(action: {
+            isVisible = false
+            documentHandler.addDocuments(selectedOptions.values.compactMap { $0 })
+            //isNavigationActive = true
+        }) {
+            Text("Continue")
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height:50)
+                .background(config.primaryColor) // Gray background when profileImage is nil
+                .cornerRadius(8)
+                .padding(.horizontal)
+        }
+    }
+
+    class Coordinator: NSObject, UIDocumentPickerDelegate {
+        var parent: DocumentModalView2
+
+        init(_ parent: DocumentModalView2) {
+            self.parent = parent
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+            print("Document picker selected URLs: \(urls)")
+            if let selectedOption = parent.onboardingData.idType {
+                parent.selectedOptions[selectedOption] = urls.first // Link selected option with file URL
+            }
+        }
+
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+            print("Document picker was cancelled.")
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didFailToPickDocumentAt url: URL, error: Error?) {
+            if let error = error {
+                print("Document picker failed to pick document at \(url.absoluteString) with error: \(error.localizedDescription)")
+            } else {
+                print("Document picker failed to pick document at \(url.absoluteString) with an unknown error.")
+            }
+        }
+
+        func documentPicker(_ controller: UIDocumentPickerViewController, didFailWithError error: Error) {
+            print("Document picker failed with error: \(error.localizedDescription)")
+        }
+    }
+
+    private func availableOptions() -> [String] {
+        guard let selectedOption = onboardingData.idType else {
+            return ["Driving License", "Passport", "National ID"]
+        }
+        var options = ["Driving License", "Passport", "National ID"]
+        options.removeAll { $0 == selectedOption } // Remove selected option
+        return options
     }
 }

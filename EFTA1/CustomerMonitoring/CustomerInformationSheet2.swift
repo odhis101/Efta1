@@ -16,6 +16,8 @@ struct CustomerInformationSheet2: View {
 
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
     
+    @Environment(\.presentationMode) var presentationMode
+    
     let bulletedQuestions1 = ["Promoting or partaking in unethical or antisocial activities","Partaking in forced compulsory labor;employing anyone lessthan 18 years of age;showing evidence of discrimination onrejecting employee unions","Having health & safety incidents or lacking health & safetyequipment"]
     let bulletedQuestions2 = ["Evading legal and regulatory requirements","In conflict of interest with EFTA or any of our present customers","Conducting dishonest or disreputable practices either within the broader community or with our past and present customers"]
     var body: some View {
@@ -24,8 +26,7 @@ struct CustomerInformationSheet2: View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Customer information sheet",description: "Kindly complete the following details") // Pass progress as a binding
-                    .padding(.trailing,20)
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Customer information sheet",description: "Kindly complete the following details") // Pass progress as a binding
                     .padding(.bottom,10)
 
                 ScrollView{
@@ -45,6 +46,7 @@ struct CustomerInformationSheet2: View {
                     
                 }
                 Spacer ()
+                /*
                 NavigationLink(destination: CustomerMonitioringDocument()){
 
                 Text("Continue")
@@ -56,6 +58,8 @@ struct CustomerInformationSheet2: View {
                     .padding(.horizontal)
 
                 }
+                */
+                CustomNavigationButton(destination: ImpactReportingCustomerMonitoring(), label: "Continue", backgroundColor: config.primaryColor)
             }
             }
             
@@ -74,10 +78,10 @@ struct ImpactReportingButton: View {
     var body: some View {
         
         RoundedRectangle(cornerRadius: 8)
-            .fill(Color.gray.opacity(0.3))
+            .fill(Color(hex: "#F9F9F9"))
             .padding(.horizontal)
             .frame(maxWidth:.infinity)
-            .frame(height:50)
+            .frame(height:60)
             .overlay(
                 HStack{
                     Image(systemName: "document")
@@ -86,14 +90,29 @@ struct ImpactReportingButton: View {
                     RoundedRectangle(cornerRadius: 8)
                         .fill(config.primaryColor.opacity(0.3))
                         .frame(width:geometry.size.width*0.3)
-                        .frame(height:30)
+                        .frame(height:40)
                         .overlay(
-                            Text("View Report")
-                                .foregroundColor(config.primaryColor)
+                            Button( action: {
+                                print("hello world")
+                            }){
+                                Text("View Report")
+                                    .foregroundColor(config.primaryColor)
+                            }
                         
                         )
                 }
+                    .padding(.horizontal)
             )
       
+    }
+}
+
+struct CustomerInformationSheet2_Previews: PreviewProvider {
+    static var previews: some View {
+        GeometryReader{ geometry in
+            ImpactReportingButton(geometry: geometry)
+                .environmentObject(AppConfig(region: .efken))
+                .environmentObject(PinHandler())
+        }
     }
 }

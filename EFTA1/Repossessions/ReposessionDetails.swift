@@ -25,33 +25,42 @@ struct ReposessionDetails: View {
 
     var body: some View {
         GeometryReader { geometry in
-
         VStack{
-        
-            QuickIntro(title: "Alex Mwangi", description: "Kindly proceed to appraise the customer after confirming their details")
+            VStack{
+            QuickIntro(title: "Alex Mwangiss", description: "Kindly proceed to appraise the customer after confirming their details")
             ZStack{
                 MapComponent(geometry: geometry)
                 CustomerDetailsReceiptBox(items: receiptItems,geometry: geometry)
                     .padding(.bottom,200)
                 
             }
-            Spacer()
-         
+            }
+            .padding(.top, -50)
 
+            
+            Spacer()
+
+   
+
+/*
                 NavigationLink(destination: RepossesionPickUp()){
                 Text("Continue")
                     .foregroundColor(.white)
                     .cornerRadius(8)
-                    .frame(maxWidth: .infinity)
                     .frame(height:30)
+                    .frame(width:geometry.size.width * 0.8)
                     .padding()
-                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
+                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabledx
                     .cornerRadius(20)
-                    .padding(.bottom,100)
-                
-            }
-                .padding(.top,-50)
+
+                    
+                }
+ */
             
+            CustomNavigationButton(destination: RepossesionPickUp(), label: "Continue", backgroundColor: config.primaryColor)
+            
+
+
             
             
             }
@@ -61,8 +70,11 @@ struct ReposessionDetails: View {
             
             
         }
+      
+        
+        
     }
-    
+
 }
 
 

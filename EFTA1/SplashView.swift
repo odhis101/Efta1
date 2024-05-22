@@ -17,7 +17,7 @@ struct SplashView: View {
                         Image(config.splashImageName)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(maxWidth: .infinity)
+                            .frame(width:geometry.size.width * 0.5)
                             .onAppear {
                                 checkTokenStatus()
                             }

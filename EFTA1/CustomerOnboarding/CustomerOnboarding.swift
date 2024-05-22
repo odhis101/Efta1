@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct CustomerOnboarding: View {
-    @State private var progress: CGFloat = 0.2 // Initial progress
+    @State private var progress: CGFloat = 0.14 // Initial progress
+    @Environment(\.presentationMode) var presentationMode
 
 
     var body: some View {
             GeometryReader { geometry in
                 VStack {
-                    ProgressBar(geometry: geometry, progress: $progress,title:"Customer onboarding",description: "Kindly collect the following information from the customer")
-                        .padding(.trailing, 20)
+                    ProgressBar(geometry: geometry, progress: $progress, presentationMode: presentationMode, title: "Customer onboarding", description: "Kindly collect the following information from the customer")
+                    
+                    
 
 
                     VStack{
@@ -26,8 +28,8 @@ struct CustomerOnboarding: View {
                     RectangleOptions(imageIcon:"groupIcon" ,geometry: geometry,title:"Partnership", variable: 3)
                     RectangleOptions(imageIcon:"verified-user" ,geometry: geometry,title:"Trustees", variable: 4)
 
-                    RectangleOptions(imageIcon:"groupOfUsers" ,geometry: geometry,title:"groups or Amcos", variable: 5)
-                    RectangleOptions(imageIcon:"corporate" ,geometry: geometry,title:"Limmid Company", variable: 6)
+                    RectangleOptions(imageIcon:"groupOfUsers" ,geometry: geometry,title:"Groups or Amcos", variable: 5)
+                    RectangleOptions(imageIcon:"corporate" ,geometry: geometry,title:"Limited Company", variable: 6)
                         }
                     }
                     .padding(.trailing, 25)
@@ -38,47 +40,65 @@ struct CustomerOnboarding: View {
 
                 
             }
-        }
+                
+            }
+           
+        
 
     }
+        
 }
 
 struct ProgressBar: View {
     let geometry: GeometryProxy
     @Binding var progress: CGFloat // Binding for dynamic progress
     @EnvironmentObject var config: AppConfig
+    @Binding var presentationMode: PresentationMode // Binding for navigation
+    
+    @State private var showAlert = false // State for showing the alert
+
 
     let title:String
     
     let description:String
-    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
+        VStack{
         HStack {
             Button(action: {
-                   self.presentationMode.wrappedValue.dismiss()
-                print("pressed back")
-               }) {
-                   Image(systemName: "arrow.left")
-                       .font(.system(size: 20))
-                       .padding(.leading, 10)
-               }
+                print("pressed")
+                self.presentationMode.dismiss()
+                //self.showAlert = true // Set showAlert to true to show the alert
+
+            }) {
+                Image("Leading-icon-button")
+                    .font(.system(size: 20))
+                    .foregroundColor(Color(hex: "#49454F"))
+                    .padding(.leading, 10)
+            }
+            
+            .alert(isPresented: $showAlert) {
+                          Alert(title: Text("Button Pressed"), message: nil, dismissButton: .default(Text("OK")))
+                      }
             ZStack(alignment: .leading) {
                 Rectangle()
-                    .frame(width: geometry.size.width - 40, height: 20) // Adjusted width to account for padding
-                    .foregroundColor(.gray)
+                    .frame(width: geometry.size.width - 60, height: 10) // Adjusted width to account for padding
+                    .foregroundColor(.gray.opacity(0.4))
                     .cornerRadius(10)
                 
                 Rectangle()
-                    .frame(width: (geometry.size.width - 40) * progress, height: 20) // Adjusted width to account for padding
+                    .frame(width: (geometry.size.width - 60) * progress, height: 10) // Adjusted width to account for padding
                     .foregroundColor(config.primaryColor)
                     .cornerRadius(10)
             }
+            .padding(.trailing,30) // changed the progress thing 
         }
-        .frame(width: geometry.size.width * 0.8) // Adjust width as needed
-        .padding(.horizontal, 20) // Add horizontal padding to the HStack
-        .padding(.leading,10)
-        .padding(.top,-50)
+        .frame(width: geometry.size.width * 0.6) // Adjust width as needed
+        .padding(.horizontal,20)
+        .padding(.horizontal, 40)
+
+        //.padding(.horizontal, 20) // Add horizontal padding to the HStack
+        //.padding(.leading,50)
 
         HStack{
         VStack(alignment: .leading){
@@ -94,10 +114,19 @@ struct ProgressBar: View {
             Spacer ()
         }
         .padding(.horizontal)
-        .padding(.top,-20)
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
+            
+
 
     }
+        .padding(.top,10)
+
+    }
+
+               
 }
+
 
 
 
@@ -111,14 +140,17 @@ struct RectangleOptions: View {
     let title:String
     
     let variable:Int
+    
+    @State private var isActive = false // Separate isActive state variable for each instance
+
   
     var body: some View {
-        NavigationLink(destination: destinationView()) {
+        NavigationLink(destination: destinationView(), isActive: $isActive) { // Use separate isActive variable
 
         ZStack {
             RoundedRectangle(cornerRadius: 10)
-                .fill(Color.white)
-                .shadow(color: Color.gray.opacity(0.4), radius: 4, x: 0, y: 2) // Add shadow
+                .fill(Color(hex: "#F6F6F6"))
+                //.shadow(color: Color.gray.opacity(0.4), radius: 4, x: 0, y: 2) // Add shadow
             
             HStack {
                 Image(imageIcon) // Example icon
@@ -128,13 +160,15 @@ struct RectangleOptions: View {
                 Text(title) // Example text
                     .foregroundColor(.black) // Example color
                     .padding()
-                /*
                 Spacer()
+              
                 
-                Image(systemName: "chevron.right") // Example arrow icon
-                    .foregroundColor(.black) // Example color
-                    .padding()
-                 */
+                Image("navigate_next")
+                    .font(.system(size: 12))
+                    .foregroundColor(.gray)
+                    .padding(.horizontal, 10)
+
+                 
             }
         }
         .frame(width: geometry.size.width * 0.9, height: 80) // Adjust width as needed
@@ -149,6 +183,8 @@ struct RectangleOptions: View {
                 IndividualOnboarding()
                     .onAppear {
                         onboardingData.titleForCustomerOnboarding = "Individual"
+                        isActive = false // Reset isActive when navigating
+
                     }
             )
         case 2:
@@ -156,6 +192,8 @@ struct RectangleOptions: View {
                 IndividualOnboarding()
                     .onAppear {
                         onboardingData.titleForCustomerOnboarding = "Sole Proprietor"
+                        isActive = false // Reset isActive when navigating
+
                     }
             )
         case 3:
@@ -163,6 +201,8 @@ struct RectangleOptions: View {
                 IndividualOnboarding()
                     .onAppear {
                         onboardingData.titleForCustomerOnboarding = "Partnership"
+                        isActive = false // Reset isActive when navigating
+
                     }
             )
         case 4:
@@ -170,6 +210,8 @@ struct RectangleOptions: View {
                 IndividualOnboarding()
                     .onAppear {
                         onboardingData.titleForCustomerOnboarding = "Trustees"
+                        isActive = false // Reset isActive when navigating
+
                     }
             )
         case 5:
@@ -177,18 +219,26 @@ struct RectangleOptions: View {
                 IndividualOnboarding()
                     .onAppear {
                         onboardingData.titleForCustomerOnboarding = "Groups or Amcos"
+                        isActive = false // Reset isActive when navigating
+
                     }
             )
         case 6:
             return AnyView(
-                IndividualOnboarding()
+                CompanyOnboarding()
                     .onAppear {
-                        onboardingData.titleForCustomerOnboarding = "Limmid Company"
+                        onboardingData.titleForCustomerOnboarding = "Limited Company"
+                        isActive = false // Reset isActive when navigating
+
                     }
             )
         case 8:
             return AnyView(
                 MyTabView()
+                    .onAppear {
+                        isActive = false // Reset isActive when navigating
+
+                    }
                     
             )
             
@@ -199,3 +249,4 @@ struct RectangleOptions: View {
 
             
 }
+

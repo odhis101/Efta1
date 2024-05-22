@@ -19,7 +19,7 @@ struct CustomerReposessions: View {
             // make this search bar look better and more searchier
             QuestionWithSmallTextField(question: "Search",placeholder: "Search",selectedOption: $Search)
 
-            ToggleableTextComponent(text1: "Text 1", text2: "Text 2", isActiveFirstText: isActiveFirstText) {
+            ToggleableTextComponent(text1: "Pick-Up", text2: "Storage", isActiveFirstText: isActiveFirstText) {
                 // this will allow data to be dynamically gotten here
                 isActiveFirstText.toggle()
                 fetchData()

@@ -6,20 +6,28 @@
 //
 
 import SwiftUI
+import Combine
+import AlertToast
 
 struct Verification: View {
     @State private var timerValue = 10
     @State private var isResendEnabled = false
     @State private var timer: Timer?
     @State private var shouldNavigateToNextPage = false // State variable for navigation
-    @State private var verificationCodes: [String] = Array(repeating: "", count: 5)
+    @State private var verificationCodes: [String] = Array(repeating: "", count: 4)
     @FocusState private var focusedTextField: Int? // Track the focused text field index
     @State private var isNavigationActive = false // State variable to track navigation
     @StateObject private var networkManager = NetworkManager()
     @State private var showAlert = false // State variable to control the alert
     @EnvironmentObject var config: AppConfig
+    @EnvironmentObject var pinHandler: PinHandler
 
+    @State private var keyboardHeight: CGFloat = 0
+
+    @Environment(\.presentationMode) var presentationMode
     
+    @State private var boxesMove = -0.09 // happy with 0.5
+
     var body: some View {
      
             GeometryReader { geometry in
@@ -28,7 +36,7 @@ struct Verification: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: geometry.size.width * 0.4, height: geometry.size.width * 0.4)
-                        .padding(.top, -150)
+                        .padding(.top, geometry.size.height * boxesMove)
 
                     VStack{
                         HStack {
@@ -39,10 +47,14 @@ struct Verification: View {
                                     .foregroundColor(config.primaryColor)
                                 
                                 Text("Just sit back and relax we will verify you")
-                                    .font(.headline)
+                                    .font(.system(size: 16)) // Set the font size to 24 points
                                     .foregroundColor(Color.gray)
                             }
                         }
+                        .toast(isPresenting: $showAlert) {
+                                             AlertToast(displayMode: .hud, type: .error(Color.red), title: "Error", subTitle: "Something went wrong. Please try again.")
+                                         }
+
                      
                             Image("lazyMan")
                                 .resizable()
@@ -66,10 +78,12 @@ struct Verification: View {
                                                 focusedTextField = index + 1
                                             }
                                             else {
+                                                // this might cause problems 
+                                            
+                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                                            
                                                 print(verificationCodes)
-                                                networkManager.sendVerificationRequest(verificationCodes: verificationCodes) { success in
-                                                    if success {
-                                                        
+                                                networkManager.sendVerificationRequest(phoneNumber: pinHandler.phoneNumber, otp: verificationCodes.joined()) { success in                                                    if success {
                                                         // Navigate to the next screen upon receiving a successful response
                                                         isNavigationActive = true
                                                         focusedTextField = nil
@@ -77,9 +91,7 @@ struct Verification: View {
                                                         // Reset focusedTextField to nil if the request fails
                                                         self.verificationCodes = Array(repeating: "", count: verificationCodes.count)
                                                         focusedTextField = nil
-                                                        
                                                         showAlert = true
-
                                                     }
                                                 }
                                             }
@@ -88,11 +100,19 @@ struct Verification: View {
                                     .focused($focusedTextField, equals: index) // Track focused text field
                             }
                         }
+                        .padding(.bottom, keyboardHeight) // Add padding when the keyboard appears
+                        
 
                         
-                        Text("Resend Code ")
+                        
+                        
+                        
+                        
+                        
+                        Text("Resend Code in ")
                             .font(.headline)
                             .foregroundColor(Color.gray)
+                        
                         
                         Text(" \(timerValue) seconds")
                             .font(.headline)
@@ -111,20 +131,21 @@ struct Verification: View {
                                        }
                     
                         // Resend Button
-                    Button(action: {
+                    Button("Resend Code") {
                         self.timerValue = 20
                         self.isResendEnabled = false
                         self.startTimer() // Start or restart the timer when the button is tapped
-                    }) {
-                        Text("Continue")
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(isResendEnabled ? config.primaryColor : Color.gray) // Set background color to green when enabled, gray when disabled
-                            .cornerRadius(8)
-                            .frame(maxWidth: .infinity)
                     }
                     .disabled(!isResendEnabled)
-                    .frame(width: geometry.size.width * 0.8)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                    .frame(width: geometry.size.width * 0.8, height: 30)
+                    .padding()
+                    .background(isResendEnabled ? config.primaryColor : Color.gray.opacity(0.5)) // Use gray with reduced opacity when disabled
+                    .cornerRadius(10)
+                    
+                 
+                
 
                 }
                 .padding()
@@ -136,6 +157,17 @@ struct Verification: View {
                     label: { EmptyView() }
                 )
             )
+            .onTapGesture { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) } // Dismiss the keyboard when tapping outside
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
+                guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+                self.keyboardHeight = keyboardFrame.height
+                
+                boxesMove = -0.5
+                
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                self.keyboardHeight = 0
+            }
             .onReceive(networkManager.$response) { response in
                 // Check if the response is not nil and if its status code is 200
                 if let httpResponse = response, httpResponse.statusCode == 200 {
@@ -143,9 +175,6 @@ struct Verification: View {
                     isNavigationActive = true
                 }
             }
-            .alert(isPresented: $showAlert) {
-                       Alert(title: Text("Verification Failed"), message: Text("The entered verification code is incorrect. Please try again."), dismissButton: .default(Text("OK")))
-                   }
         }
     
     
@@ -166,3 +195,10 @@ struct Verification: View {
     }
 }
 
+struct Verification_Previews: PreviewProvider {
+    static var previews: some View {
+        Verification()
+            .environmentObject(AppConfig(region: .efken))
+            .environmentObject(PinHandler())
+    }
+}

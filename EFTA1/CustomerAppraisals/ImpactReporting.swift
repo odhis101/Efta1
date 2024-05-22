@@ -23,6 +23,7 @@ struct ImpactReporting: View {
 
     @EnvironmentObject var config: AppConfig
 
+    @Environment(\.presentationMode) var presentationMode
 
 
     var body: some View {
@@ -30,8 +31,7 @@ struct ImpactReporting: View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Financial Data",description: "Kindly complete the following details") // Pass progress as a binding
-                    .padding(.trailing,20)
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Financial Data",description: "Kindly complete the following details") // Pass progress as a binding
 
                 ScrollView{
                     QuestionWithSmallTextField(question: "Monthly wages",placeholder:"Enter amount Tzs",selectedOption: $CurrentMonthlyWage)

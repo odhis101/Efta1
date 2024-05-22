@@ -7,22 +7,23 @@ struct PINEntryView: View {
     @EnvironmentObject var pinHandler: PinHandler
     
     @State private var shouldNavigate = false // State variable for navigation
+    @Environment(\.presentationMode) var presentationMode
 
     
     var body: some View {
-        
-        
-    
         GeometryReader { geometry in
-        
         VStack {
-            LogoAndTitleView(geometry: geometry, title: "Create new PIN", subTitle: "Kindly create a 4 digit PIN for your account")
-                .padding(.bottom,60)
+            LogoAndTitleView(geometry: geometry, title: "Create new PIN", subTitle: "Kindly create a 4 digit PIN for your account", presentationMode: presentationMode, goBack: false)
 
             // PIN Keyboard
-            KeyPadView(pinCode: $pinHandler.pinCode,instruction:"enter 4 digit pin")
+            KeyPadView(pinCode: $pinHandler.pinCode,instruction:"Enter 4 digit pin")
                                 .frame(minHeight:  geometry.size.height * 0.3,maxHeight:  geometry.size.height * 0.45)
-                                .padding(.vertical,10)
+                                .padding(.vertical,geometry.size.height * 0.06)
+            
+            Spacer()
+            Spacer()
+
+
             
             NavigationLink(destination: ConfirmPin(), isActive: $shouldNavigate) { // NavigationLink to the next page
                                    EmptyView() // Invisible navigation link
@@ -30,6 +31,8 @@ struct PINEntryView: View {
             
             
         }
+        .navigationBarHidden(true)
+        .navigationBarHidden(true)
     }
         .onChange(of: pinHandler.pinCode) { newValue in
             print("change something changed ")
@@ -45,7 +48,10 @@ struct PINEntryView: View {
             
           
         }
+        .navigationBarHidden(true)
+        .navigationBarHidden(true)
         }
+    
     }
     
 
@@ -66,15 +72,37 @@ struct LogoAndTitleView: View {
     let geometry: GeometryProxy
     var title: String
     var subTitle : String
+    @Binding var presentationMode: PresentationMode // Binding for navigation
+    var goBack : Bool
+    //var goBack  = true
     
     var body: some View {
         VStack {
-            Image(config.splashImageName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: geometry.size.width * 0.3, height: geometry.size.width * 0.2)
-                .padding(.top, -100)
-            
+            HStack{
+                if goBack{
+                    Button(action: {
+                        print("pressed")
+                        //self.presentationMode.dismiss()
+                        //self.showAlert = true // Set showAlert to true to show the alert
+                        
+                    }) {
+                        Image("backButton")
+                    }
+                }
+                else{
+                }
+                Spacer ()
+
+                Image(config.splashImageName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: geometry.size.width * 0.3, height: geometry.size.width * 0.2)
+                    .padding(.top, 0)
+                    .padding(.trailing,55)
+                
+                Spacer ()
+
+            }
             VStack(alignment: .leading) {
                 Text(title)
                     .font(.title)
@@ -88,7 +116,33 @@ struct LogoAndTitleView: View {
             .frame(maxWidth: .infinity, alignment: .leading) // Allow the VStack to expand horizontally
             .padding()
         }
+        .navigationBarHidden(true)
+
+        
     }
+    
+        
 }
 
+/*
+struct LogoAndTitleView_Previews: PreviewProvider {
+    static let goback = false // Make it static
+    @Environment(\.presentationMode) var presentationMode
+
+    static var previews: some View {
+        GeometryReader { geometry in
+            LogoAndTitleView(geometry: geometry, title: "Title", subTitle: "Subtitle", presentationMode: presentationMode, goBack: goback)
+                .environmentObject(AppConfig(region: .efken)) // Provide environment object
+        }
+    }
+}
+*/
+
+struct PINEntryView_Previews: PreviewProvider {
+    static var previews: some View {
+        PINEntryView()
+            .environmentObject(AppConfig(region: .efken))
+            .environmentObject(PinHandler())
+    }
+}
 

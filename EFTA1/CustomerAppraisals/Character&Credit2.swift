@@ -14,15 +14,15 @@ struct Character_Credit2: View {
 
     @EnvironmentObject var config: AppConfig
 
-    
+    @Environment(\.presentationMode) var presentationMode
+
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
     var body: some View {
 
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Character & Credit",description: "Kindly complete the following details") // Pass progress as a binding
-                    .padding(.trailing,20)
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Character & Credit",description: "Kindly complete the following details") // Pass progress as a binding
 
                 ScrollView{
 
@@ -40,6 +40,7 @@ struct Character_Credit2: View {
                 
                 }
                 Spacer ()
+                /*
                 NavigationLink(destination: FinancialData()){
 
                 Text("Continue")
@@ -50,6 +51,8 @@ struct Character_Credit2: View {
                     .cornerRadius(8)
                     .padding(.horizontal)
                     }
+                */
+                CustomNavigationButton(destination: FinancialData(), label: "Continue", backgroundColor: config.primaryColor)
 
                 }
             }

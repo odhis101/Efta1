@@ -13,8 +13,10 @@ struct SiteDetails2: View {
     @State private var capturedImage: UIImage?
 
     @EnvironmentObject var config: AppConfig
+    @EnvironmentObject var customerApraisalData : CustomerApraisalData
 
-    
+    @Environment(\.presentationMode) var presentationMode
+
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
     var body: some View {
  
@@ -22,8 +24,7 @@ struct SiteDetails2: View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Site Details",description: "Kindly collect the following information from the customer") // Pass progress as a binding
-                    .padding(.trailing,20)
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Site Details",description: "Kindly collect the following information from the customer") // Pass progress as a binding
 
                 ScrollView{
                 PhotoCaptureButton(capturedImage: $capturedImage,
@@ -44,11 +45,12 @@ struct SiteDetails2: View {
                 
                 QuestionWithTextField(question: "Does the applicant have enough experience with this kind of machinery before? If not, will they hire experienced people? Did you ask for copies of CVs or driving licenses of their employees, or copies of any relevant employee certificates?")
                 
-                QuestionWithButtons(question: "Did you see any customers on site?")
+                    QuestionWithButtons(question: customerApraisalData.name)
 
                 
                 }
                 Spacer ()
+                /*
                 NavigationLink(destination: Document_Assets()){
 
                 Text("Continue")
@@ -61,6 +63,8 @@ struct SiteDetails2: View {
 
                 
             }
+                 */
+                CustomNavigationButton(destination: Document_Assets(), label: "Continue", backgroundColor: config.primaryColor)
             }
         }
             

@@ -22,16 +22,16 @@ class AppConfig: ObservableObject {
     var splashImageName: String {
         switch currentRegion {
         case .efta:
-            return "splashView"
+            return "Rectangle 1"
         case .efken:
-            return "EFKen_Logo"
+            return "EFKen_Logo 1"
         }
     }
 
     var primaryColor: Color {
         switch currentRegion {
         case .efta:
-            return Color.green // Change as needed
+            return Color(hex: "#2AA241") // Change as needed
         case .efken:
             return Color(hex: "#7FAB4B") // Change as needed
         }
@@ -45,7 +45,14 @@ class AppConfig: ObservableObject {
             return "EFKENDashboard"
         }
     }
+    
+    var user: String {
+        switch currentRegion {
+        case .efta:
+            return "user 1 "
+        case .efken:
+            return "user 2"
+        }
+    }
+    
 }
-
-
-

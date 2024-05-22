@@ -9,13 +9,14 @@ import Combine
 struct LoginOnBoarding: View {
     // Array containing carousel items
     let carouselItems: [(String, [String])] = [
+        ("background3", ["Flexible repayment plan", "To bring a transformative impact to the people "]),
         ("background1", ["Welcome to EFTA", "“When other lenders say no, we often say yes."]),
         ("background2", ["Access Equipment Financing", "For small and medium enterprises across all sectors."]),
-        ("background3", ["Flexible repayment plan", "To bring a transformative impact to the people "]),
     ]
     @State private var isModalVisible = true
 
     @State private var currentIndex = 0
+    @EnvironmentObject var config: AppConfig
 
     var body: some View {
         NavigationView {
@@ -26,7 +27,7 @@ struct LoginOnBoarding: View {
                         Image(carouselItems[index].0)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: geometry.size.width, height: geometry.size.height)
+                            .frame(width: geometry.size.width, height: geometry.size.height + 5 )
                             .opacity(index == currentIndex ? 1 : 0) // Show only the current image
                             .animation(.easeInOut(duration: 1.0)) // Add animation for opacity change
                             .transition(.opacity) // Apply opacity transition
@@ -41,33 +42,42 @@ struct LoginOnBoarding: View {
                             Spacer()
                             
                             HStack(alignment: .center) {
-                                Image("splashView")
+                                Image(config.splashImageName)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: geometry.size.width * 0.5, height: geometry.size.width * 0.3)
                             }
                             .padding(.bottom, geometry.safeAreaInsets.bottom+300) // Adjust the bottom padding as needed
-
-                            ZStack {
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color.black.opacity(0.5)) // Semi-transparent black background
-                                            .padding()
+                            if !isModalVisible{
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.black.opacity(0.5)) // Semi-transparent black background
+                                    .padding()
+                                    .frame(height:geometry.size.height * 0.25)
+                                    .overlay(
+                                
+                                        VStack(alignment: .leading) {
+                                    ForEach(carouselItems[currentIndex].1.indices, id: \.self) { index in
+                                        let text = carouselItems[currentIndex].1[index]
                                         
-                                        VStack {
-                                            ForEach(carouselItems[currentIndex].1.indices, id: \.self) { index in
-                                                let text = carouselItems[currentIndex].1[index]
-                                                
-                                                Text(text)
-                                                    .font(index == 0 ? .title : .headline)
-                                                    .foregroundColor(.white)
-                                                    .fontWeight(index == 0 ? .bold : .regular)
-                                                    .multilineTextAlignment(.leading) // Change alignment to leading (left-aligned)
-                                                    .padding(
-                                                    ) // Apply top padding if index is 0, otherwise apply bottom padding
+                                        Text(text)
+                                            .font(index == 0 ? .title : .headline)
+                                            .foregroundColor(.white)
+                                            .fontWeight(index == 0 ? .bold : .regular)
+                                            .multilineTextAlignment(.leading)
+                                            .padding(.top, index == 0 ? 8 : 8) // Add top padding for the first text
+                                            .padding(.bottom, index == 0 ? 0 : 8) // Add top padding for the first text
 
-                                            }
-                                        }
+                                            .padding(.horizontal)
+
+
                                     }
+                                }
+                            )
+                                                        }
+                            else{
+                                Spacer ()
+                            }
+                           
                             
                             // Buttons Section
                             VStack(spacing: 16) {
@@ -86,7 +96,7 @@ struct LoginOnBoarding: View {
                                         .frame(maxWidth: .infinity)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 8)
-                                                .stroke(Color(hex: "#00ADE8"), lineWidth: 2)
+                                                .stroke(config.primaryColor, lineWidth: 2)
                                         )
                                 }
                                 .padding(.horizontal, 20)
@@ -150,27 +160,27 @@ struct ModalViews: View {
                     VStack(spacing: 16) {
                         // Title
                         HStack {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(LinearGradient(gradient: Gradient(colors: [Color.gray.opacity(0.5), Color.gray.opacity(0.1)]), startPoint: .leading, endPoint: .trailing))
-                                .frame(width: 80, height: 20) // Adjust size as needed
-                                .padding(.vertical, 8)
-                                .overlay(
+                       
                                     Capsule()
                                         .fill(Color.gray.opacity(0.8))
                                         .frame(width: 30, height: 6)
-                                )
+                                
                         }
                         
                         HStack {
-                            VStack {
+                            VStack(alignment: .leading) {
                                 Text("Welcome to Efta")
                                     .font(.title)
                                     .fontWeight(.bold)
                                     .foregroundColor(config.primaryColor)
+                                    .multilineTextAlignment(.leading)
+                                    .padding(.bottom)
                                 
                                 Text("When other lenders say no, we often say yes.")
                                     .font(.headline)
                                     .foregroundColor(Color.gray)
+                                    .multilineTextAlignment(.leading)
+                                    .padding(.bottom)
                             }
                         }
                         // Continue Button
@@ -212,10 +222,10 @@ struct ModalViews: View {
                                          .frame( height: 40 )
                                          .overlay(
                                              HStack {
-                                                 Image(systemName: "phone")
+                                                 Image("help")
                                                      .foregroundColor(.white)
                                                      .padding(.horizontal, 10)
-                                                 Text("Contact us")
+                                                 Text("Help")
                                                      .foregroundColor(.white)
                                                      .padding(.vertical, 10)
                                              }

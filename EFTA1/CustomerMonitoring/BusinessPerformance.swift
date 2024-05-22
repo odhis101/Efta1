@@ -15,13 +15,13 @@ struct BusinessPerformance: View {
     @EnvironmentObject var config: AppConfig
 
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
 
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Equipment",description: "Kindly complete the following details") // Pass progress as a binding
-                    .padding(.trailing,20)
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Equipment",description: "Kindly complete the following details") // Pass progress as a binding
                     .padding(.bottom,10)
 
                 ScrollView{
@@ -41,6 +41,7 @@ struct BusinessPerformance: View {
                 
                 }
                 Spacer ()
+                /*
                 NavigationLink(destination: CustomerInformationSheet()){
 
                 Text("Continue")
@@ -52,6 +53,8 @@ struct BusinessPerformance: View {
                     .padding(.horizontal)
 
                 }
+                */
+                CustomNavigationButton(destination: CustomerInformationSheet(), label: "Continue", backgroundColor: config.primaryColor)
             }
             }
             
@@ -64,3 +67,10 @@ struct BusinessPerformance: View {
 
 
 
+struct BusinessPerformance_Previews: PreviewProvider {
+    static var previews: some View {
+        BusinessPerformance()
+            .environmentObject(AppConfig(region: .efken))
+            .environmentObject(PinHandler())
+    }
+}

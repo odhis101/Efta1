@@ -8,17 +8,18 @@
 import SwiftUI
 
 struct CustomerDocumentList: View {
-    @State private var progress: CGFloat = 0.6
+    @State private var progress: CGFloat = 0.85
     @EnvironmentObject var config: AppConfig
     @EnvironmentObject var onboardingData: OnboardingData
+    @State private var navigateBack = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                ProgressBar(geometry: geometry, progress: $progress, title: "Customer Document List", description: "Kindly complete the following details")
-                    .padding(.trailing,20)
+                ProgressBar(geometry: geometry, progress: $progress, presentationMode: presentationMode, title: "Customer Document List", description: "Kindly complete the following details")
 
-                ScrollView{
+                VStack{
                     ForEach(onboardingData.documentURLs, id: \.self) { documentURL in
                         ListedDocument(documentName: documentURL.lastPathComponent, onDelete: {
                             // Remove document from array
@@ -26,24 +27,54 @@ struct CustomerDocumentList: View {
                                 onboardingData.documentURLs.remove(at: index)
                             }
                         })
+                        
                     }
+                    Button(action: {
+                        navigateBack = true
+                    }){
+                        RoundedRectangle(cornerRadius: 10)
+                            .foregroundColor(config.primaryColor.opacity(0.3))
+                            .frame(width: 200)
+                            .frame(height:60)
+                            .overlay(
+                                HStack{
+                                    Text("+")
+                                        .foregroundColor(config.primaryColor)
+                                    
+                                    Text("Upload Document")
+                                        .foregroundColor(config.primaryColor)
+                                    
+                                    
+                                    
+                                    
+                                    
+                                }
+                                
+                                
+                            )
+                        
+                    }
+                    Spacer ()
+                }
+                .frame(height: geometry.size.height * 1.3)
                     
-                }
-                Spacer ()
-                NavigationLink(destination: CustomerSummary()){
-                    Text("Continue")
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height:40)
-                        .background(config.primaryColor)
-                        .cornerRadius(8)
-                        .padding(.horizontal)
-                }
+                
+               
+                CustomNavigationButton(destination: CustomerSummary(), label: "Continue", backgroundColor: config.primaryColor)
+                
             }
         }
+      
         .onAppear {
             print("Document URLs: \(onboardingData.documentURLs)")
+            
+            
         }
+        DocumentModalView2(
+            isVisible: $navigateBack,
+            documentHandler: onboardingData
+        )
+        
     }
 }
 
@@ -54,50 +85,37 @@ struct ListedDocument: View {
     
     var body: some View {
         VStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.gray.opacity(0.2))
-                .frame(maxWidth: .infinity)
-                .frame(height: 60)
-                .padding()
-                .overlay(
+            Button(action: {}) { // Mimic the style of QuestionWithFileType
+                HStack {
+                    Text(documentName)
+                        .foregroundColor(.black)
+                    Spacer()
                     HStack {
-                        Image("docsIcon")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(config.primaryColor)
-                        
-                        VStack(alignment: .leading) {
-                            Text(documentName)
-                                .font(.headline)
-                            
-                        }
-                        Spacer()
-                        Image(systemName: "checkmark")
-                           .resizable()
-                           .frame(width: 20, height: 20)
-                           .foregroundColor(config.primaryColor)
-                        
-                        Button(action: onDelete) { // Call onDelete closure when button is tapped
+                        Image(systemName: "checkmark.circle")
+                            .foregroundColor(.green)
+                        Button(action: onDelete) {
                             Image(systemName: "trash")
-                                .resizable()
-                                .frame(width: 20, height: 20)
                                 .foregroundColor(.red)
                         }
                     }
-                    .padding()
-                    .overlay(
-                        VStack{
-                        Spacer()
-                        Rectangle()
-                            .frame(height: 3)
-                            .foregroundColor(.green) // Adjust color as needed
-                            .padding(.horizontal)
-                    
-                        }
-                    )
-
-                    
-                )
+                }
+                .padding(.horizontal)
+            }
+            Rectangle()
+                .frame(height: 2)
+                .foregroundColor(config.primaryColor)
+                .padding(.horizontal)
         }
+        .padding(.bottom, 25)
+    }
+}
+struct CustomerDocumentList_Previews: PreviewProvider {
+    static var previews: some View {
+        let config = AppConfig(region: .efken)
+        let onboardingData = OnboardingData()
+        
+        return CustomerDocumentList()
+            .environmentObject(config)
+            .environmentObject(onboardingData)
     }
 }

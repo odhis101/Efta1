@@ -7,30 +7,39 @@ struct CompanyLocation: View {
     @State private var selectedCoordinate: CLLocationCoordinate2D?
     @State private var isSearchExpanded = false
     @State private var progress: CGFloat = 0.9 // Initial progress
+    @Environment(\.presentationMode) var presentationMode
 
     @EnvironmentObject var config: AppConfig
 
     var body: some View {
         GeometryReader { geometry in
         VStack {
-            ProgressBar(geometry: geometry, progress: $progress,title:"Company location",description: "Kindly select the location of the Company ")
+            
+            ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Company location",description: "Kindly select the location of the Company ")
                 .padding(.trailing, 20)
 
 
-            TextField("Where do you currently stay?", text: $searchText, onEditingChanged: { editing in
-                isSearchExpanded = editing
-            }, onCommit: {
-                // Handle the commit action if needed (e.g., user presses return)
-            }).onChange(of: searchText) { newValue in
-                // This will be called every time searchText changes
-                searchForLocations() // Fetch locations as user types each character
-            }
-            .padding()
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .background(Color.white)
-            .cornerRadius(10)
-            .padding(.horizontal)
-            .offset(y: 20) // Adjust the offset as needed
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(hex: "#F2F2F7"))
+                .frame(height: 50)
+                .frame(maxWidth: .infinity)
+                .overlay(
+                    HStack {
+                        Image("magnifyingglass")
+                            .padding(.leading)
+                            
+                        TextField("Where do you currently stay?", text: $searchText,onEditingChanged: { editing in
+                            isSearchExpanded = editing
+                        }, onCommit: {
+                            // Handle the commit action if needed (e.g., user presses return)
+                        }).onChange(of: searchText) { newValue in
+                            // This will be called every time searchText changes
+                            searchForLocations() // Fetch locations as user types each character
+                        }
+                    }
+                )
+                .padding(.horizontal)
+        
             
             
             ZStack {
@@ -73,6 +82,7 @@ struct CompanyLocation: View {
                 }
             }
             Spacer()
+            /*
             NavigationLink(destination: CustomerDocument()) {
 
             Text("Continue")
@@ -83,6 +93,8 @@ struct CompanyLocation: View {
                 .cornerRadius(8)
                 .padding(.horizontal)
             }
+            */
+            CustomNavigationButton(destination: CustomerDocument(), label: "Continue", backgroundColor: config.primaryColor)
          
         }
         .onTapGesture {

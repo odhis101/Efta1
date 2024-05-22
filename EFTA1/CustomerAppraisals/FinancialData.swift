@@ -15,14 +15,16 @@ struct FinancialData: View {
     @EnvironmentObject var config: AppConfig
 
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
 
         GeometryReader { geometry in
             
+            
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Financial Data",description: "Kindly complete the following details") // Pass progress as a binding
-                    .padding(.trailing,20)
-                    .padding(.bottom,30)
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Financial Data",description: "Kindly complete the following details") // Pass progress as a binding
 
                 ScrollView{
 
@@ -44,6 +46,7 @@ struct FinancialData: View {
                 
                 }
                 Spacer ()
+                /*
                 NavigationLink(destination: ImpactReporting1()){
 
                 Text("Continue")
@@ -54,6 +57,8 @@ struct FinancialData: View {
                     .cornerRadius(8)
                     .padding(.horizontal)
                     }
+                */
+                CustomNavigationButton(destination: ImpactReporting1(), label: "Continue", backgroundColor: config.primaryColor)
 
                 }
             }

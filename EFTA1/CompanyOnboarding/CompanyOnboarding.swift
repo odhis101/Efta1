@@ -24,17 +24,18 @@ struct CompanyOnboarding: View {
     @State private var districtOptions: [String] = []
 
     @EnvironmentObject var config: AppConfig
+    @Environment(\.presentationMode) var presentationMode
 
 
     
     var body: some View {
             GeometryReader { geometry in
                 VStack {
-                    ProgressBar(geometry: geometry, progress: $progress,title:"Company onboarding",description: "KKindly collect the following information from the customer")
+                    ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Company onboarding",description: "KKindly collect the following information from the customer")
 
                     QuestionWithSmallTextField(question: "",placeholder:"Company name",selectedOption:$CompanyName)
                     QuestionWithSmallTextField(question: "",placeholder:"TIN",selectedOption:$TIN)
-                    QuestionWithSmallTextField(question: "",placeholder:"VRN",selectedOption:$VRN)
+                    QuestionWithSmallTextField(question: "",placeholder:"VRN (optional)",selectedOption:$VRN)
                     QuestionWithSmallTextField(question: "",placeholder:"Postal Address",selectedOption:$PostalAddress)
 
                     
@@ -55,16 +56,21 @@ struct CompanyOnboarding: View {
                     
                     Spacer()
                     
-                    
-                    NavigationLink(destination: CompanyLocation()) {
+                    /*
+                    NavigationLink(destination: CompanyOnboarding2()) {
                         Text("Continue")
                             .foregroundColor(.white)
-                            .cornerRadius(8)
                             .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
+                            .frame(height:50)
+                            .background(config.primaryColor) // Gray background when profileImage is nil
+                            .cornerRadius(8)
+                            .padding(.horizontal)
+                            .padding(.vertical)
 
                     }
+                     */
+                    
+                    CustomNavigationButton(destination: CompanyOnboarding2(), label: "Continue", backgroundColor: config.primaryColor)
                     
                     
                     

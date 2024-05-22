@@ -6,19 +6,19 @@ struct CustomerLocation: View {
     @State private var searchResults: [MKMapItem] = []
     @State private var selectedCoordinate: CLLocationCoordinate2D?
     @State private var isSearchExpanded = false
-    @State private var progress: CGFloat = 0.8 // Initial progress
+    @State private var progress: CGFloat = 0.7 // Initial progress
     @EnvironmentObject var onboardingData: OnboardingData
     @EnvironmentObject var config: AppConfig
 
+    @Environment(\.presentationMode) var presentationMode
 
     
     var body: some View {
         GeometryReader { geometry in
         VStack {
-            ProgressBar(geometry: geometry, progress: $progress,title:"\(onboardingData.titleForCustomerOnboarding) location",description: "Kindly select the location of the customers ")
-                .padding(.trailing, 20)
+            ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"\(onboardingData.titleForCustomerOnboarding) location",description: "Kindly select the location of the customers ")
 
-
+            /*
             // make this search bar look better and more searchier 
             TextField("Where do you currently stay?", text: $searchText, onEditingChanged: { editing in
                 isSearchExpanded = editing
@@ -34,62 +34,92 @@ struct CustomerLocation: View {
             .cornerRadius(10)
             .padding(.horizontal)
             .offset(y: 20) // Adjust the offset as needed
-
-            
-            
+*/
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(hex: "#F2F2F7"))
+                .frame(height: 50)
+                .frame(maxWidth: .infinity)
+                .overlay(
+                    HStack {
+                        Image("magnifyingglass")
+                            .padding(.leading)
+                            
+                        TextField("Where do you currently stay?", text: $searchText,onEditingChanged: { editing in
+                            isSearchExpanded = editing
+                        }, onCommit: {
+                            // Handle the commit action if needed (e.g., user presses return)
+                        }).onChange(of: searchText) { newValue in
+                            // This will be called every time searchText changes
+                            searchForLocations() // Fetch locations as user types each character
+                        }
+                    }
+                )
+                .padding(.horizontal)
+        
             
                 
             
             ZStack {
                 MapView(coordinate: $onboardingData.selectedCoordinate)
                     .edgesIgnoringSafeArea(.all)
-                    .frame(height: UIScreen.main.bounds.height * 0.5) // Set map height to 50% of the screen height
-                    .padding(.horizontal) // Add horizontal padding
-                    
-                if isSearchExpanded {
-                    ScrollView {
-                        VStack(spacing: 8) {
-                            ForEach(searchResults, id: \.self) { mapItem in
-                                VStack(alignment: .leading) {
-                                    Text(mapItem.placemark.title ?? "")
-                                        .font(.headline)
-                                        .foregroundColor(.primary)
-                                    Text(mapItem.name ?? "")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
-                                }
-                                .padding(.vertical, 8)
-                                .padding(.horizontal)
-                                .background(Color.white)
-                                .cornerRadius(10)
-                                .onTapGesture {
-                                    // Update map view coordinates and text field
-                                    onboardingData.selectedCoordinate = mapItem.placemark.coordinate
-                                    searchText = mapItem.placemark.title ?? ""
-                                    isSearchExpanded = false
+                    .frame(height: UIScreen.main.bounds.height * 0.7)
+                    .frame(width:UIScreen.main.bounds.width * 1)
+                    .padding(.top)
+                VStack {
+                    if isSearchExpanded {
+                        ScrollView {
+                            VStack(spacing: 8) {
+                                ForEach(searchResults, id: \.self) { mapItem in
+                                    VStack(alignment: .leading) {
+                                        Text(mapItem.placemark.title ?? "")
+                                            .font(.headline)
+                                            .foregroundColor(.primary)
+                                        Text(mapItem.name ?? "")
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .padding(.vertical, 8)
+                                    .padding(.horizontal)
+                                    .background(Color.white)
+                                    .cornerRadius(10)
+                                    .onTapGesture {
+                                        // Update map view coordinates and text field
+                                        onboardingData.selectedCoordinate = mapItem.placemark.coordinate
+                                        searchText = mapItem.placemark.title ?? ""
+                                        isSearchExpanded = false
+                                    }
                                 }
                             }
+                            .padding(.horizontal)
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
                         }
+                        .padding(.top, 20) // Adjust the top padding as needed
                         .padding(.horizontal)
-                        .background(Color.white)
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
                     }
-                    .padding(.top, 20) // Adjust the top padding as needed
-                    .padding(.horizontal)
+                    
+                    Spacer()
+                    /*
+                    NavigationLink(destination: CustomerDocument()) {
+                        Text("Continue")
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height:40)
+                            .background(config.primaryColor)
+                            .cornerRadius(8)
+                            .padding(.horizontal)
+                            .padding(.bottom) // Add padding to separate the button from the map
+                    }
+                     */
+                    
+                    CustomNavigationButton(destination: CustomerDocument(), label: "Continue", backgroundColor: config.primaryColor)
+
+                    
+                    
                 }
             }
-            Spacer()
-            NavigationLink(destination: CustomerDocument()) {
 
-            Text("Continue")
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height:40)
-                .background(config.primaryColor) // Gray background when profileImage is nil
-                .cornerRadius(8)
-                .padding(.horizontal)
-            }
          
         }
         .onTapGesture {
@@ -149,6 +179,59 @@ struct MapView: UIViewRepresentable {
         
         init(_ parent: MapView) {
             self.parent = parent
+        }
+    }
+}
+
+
+struct QuestionWithSearchField: View {
+    var placeholder: String
+    @State private var searchResults: [MKMapItem] = []
+    @Binding var selectedOption: String
+    var onCommit: () -> Void // Closure for handling the commit action
+
+    var body: some View {
+        VStack(spacing: 10) {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color(hex: "#F2F2F7"))
+                .frame(height: 40)
+                .frame(maxWidth: .infinity)
+                .overlay(
+                    HStack {
+                        Image("magnifyingglass")
+                        TextField(placeholder, text: $selectedOption, onEditingChanged: { editing in
+                            // Handle editing changed if needed
+                        }, onCommit: {
+                            onCommit() // Call the onCommit closure when the user presses return
+                        })
+                        .padding()
+                        .onChange(of: selectedOption) { newValue in
+                            // This will be called every time selectedOption changes
+                            // You can perform any additional actions here
+                            // For example, fetch data based on the new value
+                            searchForLocations() // Fetch locations as user types each character
+                        }
+                    }
+                )
+                .padding(.horizontal)
+        }
+    }
+
+    private func searchForLocations() {
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = selectedOption // Use selectedOption as the query
+        
+        let search = MKLocalSearch(request: searchRequest)
+        search.start { response, error in
+            guard let response = response else {
+                print("Error searching for locations: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.searchResults = response.mapItems // Access searchResults using self
+                print("Search Results: \(self.searchResults)")
+            }
         }
     }
 }

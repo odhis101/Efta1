@@ -8,24 +8,18 @@
 import SwiftUI
 
 struct CustomerApraisalsSearch: View {
-    @State private var searchText = ""
+    @State private var Search = ""
     @State private var isActiveFirstText = true
     @State private var data: [UserData] = [] // Initialize empty array to hold data
 
 
     var body: some View {
         VStack{
+            
             QuickIntro(title: "Customer Appraisals", description: "kindly select one of the customers you want to appraise")
-            // make this search bar look better and more searchier
-            TextField("Where do you currently stay?", text:$searchText )
-            .padding(.bottom)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .background(Color.white)
-            .cornerRadius(10)
-            .padding(.horizontal)
-            .offset(y: 20) // Adjust the offset as needed
-    
-            ToggleableTextComponent(text1: "Text 1", text2: "Text 2", isActiveFirstText: isActiveFirstText) {
+            QuestionWithSmallTextField(question: "Search",placeholder: "Search",selectedOption: $Search)
+
+            ToggleableTextComponent(text1: "Upcoming schedules", text2: "All Customers", isActiveFirstText: isActiveFirstText) {
                 // this will allow data to be dynamically gotten here
                 isActiveFirstText.toggle()
                 fetchData()
@@ -69,8 +63,9 @@ struct QuickIntro: View {
     var body: some View {
         VStack(alignment: .leading){
             Text(title)
-                .bold()
-            
+                .font(.title3)
+                .fontWeight(.semibold)
+                .foregroundColor(Color.black)
             Text(description)
                 .font(.headline)
                 .foregroundColor(Color.gray)
@@ -97,6 +92,9 @@ struct DataListComponent: View {
                         
                         VStack(alignment: .leading) {
                             Text("Name: \(item.name)")
+                                .foregroundColor(.gray)
+
+                            
                             Text("Phone: \(item.phoneNumber)")
                                 .font(.subheadline)
                                 .foregroundColor(.gray)

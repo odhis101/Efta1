@@ -22,7 +22,7 @@ struct CreateSchedule: View {
         QuestionWithTime(question: "Schedule Time ")
             Spacer ()
             
-            NavigationLink(destination: Dashboard()) {
+            NavigationLink(destination: MyTabView()) {
                 Text("Continue")
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)

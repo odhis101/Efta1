@@ -12,10 +12,11 @@ struct EFTA1App: App {
     @StateObject var SiteQuestionData = SiteQuestionDataHandler()
     //@StateObject var documentHandler = DocumentHandler() // Instantiate your DocumentHandler
     @StateObject var CustomerOnboardingData = OnboardingData() // Instantiate your DocumentHandler
-    @StateObject var config = AppConfig(region: .efta)
+    @StateObject var config = AppConfig(region: .efken)
     @StateObject var pinHandlesr = PinHandler()
+    @StateObject var customerApraisal = CustomerApraisalData()
 
-
+//efken 
 
     var body: some Scene {
         WindowGroup {
@@ -24,7 +25,10 @@ struct EFTA1App: App {
                 //.environmentObject(documentHandler)
                 .environmentObject(CustomerOnboardingData)
                 .environmentObject(config)
-                //.environmentObject(pinHandler)
+                .environmentObject(pinHandlesr)
+                .environmentObject(customerApraisal)
+                .environment(\.font, Font.custom("Inter", size: 16)) // Set default font globally
+
 
 
 

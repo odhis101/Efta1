@@ -24,31 +24,40 @@ struct EquipmentDeliveryDetails: View {
 
     var body: some View {
         GeometryReader { geometry in
-
         VStack{
-        
-            QuickIntro(title: "Alex Mwangi", description: "Kindly proceed to appraise the customer after confirming their details")
+            VStack{
+            QuickIntro(title: "Alex Mwangiss", description: "Kindly proceed to appraise the customer after confirming their details")
             ZStack{
                 MapComponent(geometry: geometry)
                 CustomerDetailsReceiptBox(items: receiptItems,geometry: geometry)
                     .padding(.bottom,200)
                 
             }
-                Spacer()
-         
+            }
+            .padding(.top, -50)
+
+            
+            Spacer()
+
+  /*
 
                 NavigationLink(destination: EquipmentDeliveryItems()){
-                Text("Continue")
+                Text("Start")
                     .foregroundColor(.white)
                     .cornerRadius(8)
-                    .frame(maxWidth: .infinity)
+                    .frame(width:geometry.size.width * 0.8)
                     .frame(height:30)
                     .padding()
-                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabled
+                    .background(config.primaryColor) // Set background color to green when enabled, gray when disabledx
                     .cornerRadius(20)
-                    .padding(.top,-50)
-            }
-            
+
+                    
+                }
+         */
+            CustomNavigationButton(destination: EquipmentDeliveryItems(), label: "Start", backgroundColor: config.primaryColor)
+          
+
+
             
             
             }
@@ -58,8 +67,11 @@ struct EquipmentDeliveryDetails: View {
             
             
         }
+      
+        
+        
     }
-    
+
 }
 
 

@@ -13,13 +13,14 @@ struct CompanyDocument: View {
     @State private var isModalVisible = false
     @State private var selectedFiles: [URL] = []
     @EnvironmentObject var config: AppConfig
+    @Environment(\.presentationMode) var presentationMode
 
 
     var body: some View {
 
             GeometryReader { geometry in
                 VStack{
-                    ProgressBar(geometry: geometry, progress: $progress,title:"Company document",description: "Kindly upload the Company documents ")
+                    ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Company document",description: "Kindly upload the Company documents ")
                         .padding(.trailing,20)
                     
                     Spacer()
@@ -39,21 +40,26 @@ struct CompanyDocument: View {
                         .frame(width: 280)
                         .frame(height:60)
                         .background(config.primaryColor) // Gray background when profileImage is nil
-                        .opacity(0.5)
                         .cornerRadius(8)
                         .padding(.horizontal)
                     }
                     Spacer()
-                    NavigationLink(destination: CustomerSummary()) {
+                    /*
+                    NavigationLink(destination: CompanySummary()) {
 
                     Text("Continue")
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height:40)
-                        .background(config.primaryColor) // Gray background when profileImage is nil
-                        .cornerRadius(8)
-                        .padding(.horizontal)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height:50)
+                            .background(config.primaryColor) // Gray background when profileImage is nil
+                            .cornerRadius(8)
+                            .padding(.horizontal)
+                            .padding(.vertical)
                     }
+                     */
+                    
+                    CustomNavigationButton(destination: CompanySummary(), label: "Continue", backgroundColor: config.primaryColor)
+                    
                     
                 }
                 /*

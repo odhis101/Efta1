@@ -15,13 +15,15 @@ struct Market2: View {
     @EnvironmentObject var config: AppConfig
 
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
 
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Market",description: "Kindly complete the following details") // Pass progress as a binding
-                    .padding(.trailing,20)
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Market",description: "Kindly complete the following details") // Pass progress as a binding
 
                 ScrollView{
 
@@ -38,6 +40,7 @@ struct Market2: View {
                 
                 }
                 Spacer ()
+                /*
                 NavigationLink(destination: Market3()){
                 Text("Continue")
                     .foregroundColor(.white)
@@ -49,6 +52,9 @@ struct Market2: View {
                     
                 
                 }
+                */
+                
+                CustomNavigationButton(destination: Market3(), label: "Continue", backgroundColor: config.primaryColor)
                 }
             }
             

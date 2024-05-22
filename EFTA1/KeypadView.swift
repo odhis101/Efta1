@@ -69,9 +69,13 @@ struct KeyPadView:View{
                 //0 ,Clear
                 HStack{
                     //NumberView(number: 7,state: $state)
+                    
                     Spacer()
                     Spacer()
                     NumberView(number: 0,state: $state)
+                        .padding(.leading, 10.0)
+
+                    
                     Spacer()
                     ClearButtonView(state: $state)
                 }
@@ -131,6 +135,7 @@ struct NumberView: View {
                 Text(numberString)
                     .foregroundColor(Color.black)
                     .font(.title)
+                    .bold()
             }
         }
         .frame(width: 64, height: 64)
@@ -145,7 +150,7 @@ struct ClearButtonView:View{
     
     var body: some View{
         //Image(systemName: "xmark.diamond.fill")
-        Image(systemName: "chevron.left")
+        Image("arrow-back-keypad")
             .font(.title)
             .foregroundColor(Color.black)
             .frame(width: 64,height: 64)

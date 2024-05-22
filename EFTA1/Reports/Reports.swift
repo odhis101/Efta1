@@ -6,20 +6,40 @@
 //
 
 import SwiftUI
+import SwiftUICharts  // Import the SwiftUICharts library
+
 
 struct Reports: View {
-
     @EnvironmentObject var config: AppConfig
+    
+    // Create an instance of PieChartData
+    @StateObject var pieChartData: PieChartData = {
+        // Define your data sets, metadata, and chart style here
+        let dataSets = PieDataSet(dataPoints: [
+            PieChartDataPoint(value: 50.0, description: "Green: 50%", colour: .green),
+            PieChartDataPoint(value: 30.0, description: "Orange: 30%", colour: .orange),
+            PieChartDataPoint(value: 20.0, description: "Brown: 20%", colour: .brown)
+        ], legendTitle: "legent title here")
+        
+        let metadata = ChartMetadata(title: "Pie Chart", subtitle: "Your Report Status")
+        let chartStyle = PieChartStyle()
+        
+        return PieChartData(dataSets: dataSets, metadata: metadata, chartStyle: chartStyle)
+    }()
 
     var body: some View {
 
         VStack {
             QuickIntro(title: "Reports", description: "Here is your current report status based on your recent activities")
-                    let data = [
-                        PieSliceData(startAngle: .degrees(0), endAngle: .degrees(180), color: .green, label: "Green: 50%"),
-                        PieSliceData(startAngle: .degrees(180), endAngle: .degrees(288), color: .orange, label: "Orange: 30%"),
-                        PieSliceData(startAngle: .degrees(288), endAngle: .degrees(360), color: .brown, label: "Brown: 20%")
+                   
+            
+            let datas = [
+                        PieSliceData(startAngle: .degrees(0), endAngle: .degrees(180), color: .green, label: "Cusomer Apraisla: 60%"),
+                        PieSliceData(startAngle: .degrees(180), endAngle: .degrees(288), color: .orange, label: "Customer monitoring : 30%"),
+                        PieSliceData(startAngle: .degrees(288), endAngle: .degrees(360), color: .brown, label: "Customer on boarding : 20%")
                     ]
+            
+          
             ScrollView{
                 VStack {
                         Text("Overall report")
@@ -27,11 +47,11 @@ struct Reports: View {
                         Text("Below is a representation of your current report status")
                             .font(.caption)
                             .foregroundColor(.gray)
-                        PieChartView(slices: data)
-                            .padding()
-                            .frame(width: 300, height: 300)
+                    PieChart(chartData: pieChartData)
+                                   .padding()
+                                   .frame(width: 300, height: 300)
                         
-                        LegendView(slices: data)
+                        LegendView(slices: datas)
                             .padding()
                     }
                     .padding()
@@ -45,9 +65,9 @@ struct Reports: View {
             VStack(alignment: .leading){
                 Text("Breakdown of your report")
                     .foregroundColor(config.primaryColor)
-                DynamicProgressComponent(icon: "star.fill", text: "Complete the task", numerator: 6, denominator: 10, progressColor: .green)
-                DynamicProgressComponent(icon: "star.fill", text: "Complete the task", numerator: 3, denominator: 10, progressColor: .orange)
-                DynamicProgressComponent(icon: "star.fill", text: "Complete the task", numerator: 1, denominator: 10, progressColor: .red)
+                DynamicProgressComponent(icon: "appraisal", text: "Customer Appraisal", numerator: 6, denominator: 10, progressColor: .green)
+                DynamicProgressComponent(icon: "monitoring-system", text: "Customer Monitoring", numerator: 3, denominator: 10, progressColor: .orange)
+                DynamicProgressComponent(icon: "visit", text: "Customer Onboarding", numerator: 1, denominator: 10, progressColor: .red)
                
                 
                 
@@ -58,6 +78,7 @@ struct Reports: View {
             Spacer()
             
                 }
+
 
     }
 }
@@ -76,13 +97,12 @@ struct DynamicProgressComponent: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Image(systemName: icon)
+                Image(icon)
                     .foregroundColor(.blue) // You can make this dynamic too if needed
                 Text(text)
                 Spacer()
                 Text("\(numerator)/\(denominator)")
             }
-            .padding(.horizontal)
             
             Rectangle()
                 .frame(height: 4)

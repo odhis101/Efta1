@@ -11,6 +11,7 @@ struct RepossesionsStorage: View {
     @State private var progress: CGFloat = 0.5 // Initial progress
     
     @EnvironmentObject var config: AppConfig
+    @Environment(\.presentationMode) var presentationMode
 
     
     @State private var capturedImage: UIImage?
@@ -19,7 +20,7 @@ struct RepossesionsStorage: View {
             GeometryReader { geometry in
                 
                 VStack{
-                    ProgressBar(geometry: geometry, progress: $progress,title:"Reposessions Storage",description: "Kindly complete the following details") // Pass progress as a binding
+                    ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Reposessions Storage",description: "Kindly complete the following details") // Pass progress as a binding
                         .padding(.trailing,20)
                         .padding(.bottom,10)
 
@@ -40,7 +41,8 @@ struct RepossesionsStorage: View {
                     
                     }
                     Spacer ()
-                    NavigationLink(destination: Dashboard()){
+                    /*
+                    NavigationLink(destination: MyTabView()){
 
                     Text("Continue")
                         .foregroundColor(.white)
@@ -51,6 +53,11 @@ struct RepossesionsStorage: View {
                         .padding(.horizontal)
                         
                     }
+                     
+                     */
+                    CustomNavigationButton(destination: MyTabView(), label: "Continue", backgroundColor: config.primaryColor)
+                    
+                    
 
                     }
 

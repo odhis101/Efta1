@@ -13,6 +13,8 @@ struct EquipmentDeliveryForm2: View {
     @State private var navigateToDashboard = false
 
     @State private var showingConfirmation = false // State for showing the confirmation dialog
+    
+    @Environment(\.presentationMode) var presentationMode
 
     let receiptItems: [(String, String)] = [
             ("Equipment name & model:", "Trailer"),
@@ -27,7 +29,7 @@ struct EquipmentDeliveryForm2: View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Equipments for delivery",description: "Kindly select one of the equipments to fulfill delivery") // Pass progress as a binding
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Equipments for delivery",description: "Kindly select one of the equipments to fulfill delivery") // Pass progress as a binding
                     .padding(.trailing,20)                
                 ScrollView{
                     QuestionWithFileType()
@@ -45,7 +47,7 @@ struct EquipmentDeliveryForm2: View {
                     
 
                     
-                    NavigationLink(destination: Dashboard(), isActive: $navigateToDashboard) {
+                    NavigationLink(destination: MyTabView(), isActive: $navigateToDashboard) {
                                         EmptyView()
                     }
                     
@@ -54,7 +56,7 @@ struct EquipmentDeliveryForm2: View {
                 }
                 Spacer()
                 
-                
+                /*
                     Button("Continue") {
                         showingConfirmation = true
                     }
@@ -64,6 +66,9 @@ struct EquipmentDeliveryForm2: View {
                     .background(config.primaryColor)
                     .cornerRadius(20)
                     .padding()
+                 */
+                
+                CustomNavigationButton(destination: MyTabView(), label: "Continue", backgroundColor: config.primaryColor)
 
                 
 

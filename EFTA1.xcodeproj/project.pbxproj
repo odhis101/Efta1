@@ -39,20 +39,20 @@
 		4242D9B62BD14595004AF3F3 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4242D9B52BD14595004AF3F3 /* AuthManager.swift */; };
 		4242D9B82BD14BB5004AF3F3 /* ImpactReporting1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4242D9B72BD14BB4004AF3F3 /* ImpactReporting1.swift */; };
 		4242D9BA2BD2659D004AF3F3 /* CustomerDocumentList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4242D9B92BD2659C004AF3F3 /* CustomerDocumentList.swift */; };
-		425A5EC02BCFB8FD00C520B5 /* SwiftUIDigitalSignature in Frameworks */ = {isa = PBXBuildFile; productRef = 425A5EBF2BCFB8FD00C520B5 /* SwiftUIDigitalSignature */; };
 		425A5EC32BCFF47D00C520B5 /* Statements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425A5EC22BCFF47D00C520B5 /* Statements.swift */; };
 		425A5EC52BCFF6B000C520B5 /* CustomerStatements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425A5EC42BCFF6B000C520B5 /* CustomerStatements.swift */; };
 		425A5EC72BD0FC3C00C520B5 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425A5EC62BD0FC3B00C520B5 /* Config.swift */; };
-		426F81552BD6592F002A6D6A /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 426F81542BD6592F002A6D6A /* FilePicker */; };
+		4281A70D2BE3903700743423 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4281A70C2BE3903600743423 /* Buttons.swift */; };
+		428DF96A2BD8F79A00873E90 /* CompanyOnboarding2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428DF9692BD8F79A00873E90 /* CompanyOnboarding2.swift */; };
 		429BB8F42BBBEB3200A323A2 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BB8F32BBBEB3100A323A2 /* Images.swift */; };
 		429BB8F62BBC09DC00A323A2 /* CustomerLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429BB8F52BBC09DB00A323A2 /* CustomerLocation.swift */; };
 		429BB8FA2BBC0E8300A323A2 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 429BB8F92BBC0E8300A323A2 /* MapKit.framework */; };
 		429BB8FD2BBC0E9B00A323A2 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 429BB8FC2BBC0E9B00A323A2 /* HealthKit.framework */; };
+		42A2F3B82BD69815008125F6 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42A2F3B72BD69815008125F6 /* Launch Screen.storyboard */; };
 		42B5EC4F2BCD0AF100D5418C /* EquipmentUserPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC4E2BCD0AF100D5418C /* EquipmentUserPage.swift */; };
 		42B5EC512BCD0EF400D5418C /* EquipmentDeliveryDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC502BCD0EF400D5418C /* EquipmentDeliveryDetails.swift */; };
 		42B5EC532BCD109C00D5418C /* EquipmentDeliveryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC522BCD109C00D5418C /* EquipmentDeliveryItems.swift */; };
 		42B5EC552BCD13DE00D5418C /* EquipmentDeliveryForm1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC542BCD13DE00D5418C /* EquipmentDeliveryForm1.swift */; };
-		42B5EC582BCD1D2D00D5418C /* FormTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC572BCD1D2D00D5418C /* FormTypes.swift */; };
 		42B5EC5A2BCD23D300D5418C /* EquipmentDeliveryForm2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC592BCD23D200D5418C /* EquipmentDeliveryForm2.swift */; };
 		42B5EC5C2BCD29B200D5418C /* DataForCustomerOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC5B2BCD29B200D5418C /* DataForCustomerOnboarding.swift */; };
 		42B5EC5E2BCD556D00D5418C /* IndividualOnboarding2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC5D2BCD556D00D5418C /* IndividualOnboarding2.swift */; };
@@ -92,6 +92,14 @@
 		42ECA2C72BC704F700FB4B43 /* Equipment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ECA2C62BC704F700FB4B43 /* Equipment.swift */; };
 		42ECA2C92BC7CC0300FB4B43 /* BusinessPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ECA2C82BC7CC0200FB4B43 /* BusinessPerformance.swift */; };
 		42ECA2CB2BC7CF1A00FB4B43 /* CustomerInformationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ECA2CA2BC7CF1A00FB4B43 /* CustomerInformationSheet.swift */; };
+		42FE89302BFAE4950046F172 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 42FE892F2BFAE4950046F172 /* AlertToast */; };
+		42FE89322BFAE49B0046F172 /* SwiftUIDigitalSignature in Frameworks */ = {isa = PBXBuildFile; productRef = 42FE89312BFAE49B0046F172 /* SwiftUIDigitalSignature */; };
+		42FE89342BFAE4A80046F172 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 42FE89332BFAE4A80046F172 /* SwiftUICharts */; };
+		42FE89362BFAE4AD0046F172 /* FilePicker in Frameworks */ = {isa = PBXBuildFile; productRef = 42FE89352BFAE4AD0046F172 /* FilePicker */; };
+		6E1FB8252BF253BD00677D28 /* FormTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1FB8242BF253BD00677D28 /* FormTypes.swift */; };
+		6E1FB8522BF7E9AC00677D28 /* ImpactReportingCustomerMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1FB8512BF7E9AB00677D28 /* ImpactReportingCustomerMonitoring.swift */; };
+		6E1FB8542BF7EF6200677D28 /* ImpactReportingCustomerMonitoring2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E1FB8532BF7EF6200677D28 /* ImpactReportingCustomerMonitoring2.swift */; };
+		6ED5303A2BEB9EAE00280B6C /* CustomerApraisalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED530392BEB9EAE00280B6C /* CustomerApraisalData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,17 +158,19 @@
 		425A5EC22BCFF47D00C520B5 /* Statements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statements.swift; sourceTree = "<group>"; };
 		425A5EC42BCFF6B000C520B5 /* CustomerStatements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerStatements.swift; sourceTree = "<group>"; };
 		425A5EC62BD0FC3B00C520B5 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		4281A70C2BE3903600743423 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
+		428DF9692BD8F79A00873E90 /* CompanyOnboarding2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyOnboarding2.swift; sourceTree = "<group>"; };
 		429BB8F32BBBEB3100A323A2 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		429BB8F52BBC09DB00A323A2 /* CustomerLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerLocation.swift; sourceTree = "<group>"; };
 		429BB8F72BBC0E8300A323A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		429BB8F92BBC0E8300A323A2 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		429BB8FB2BBC0E9B00A323A2 /* EFTA1.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EFTA1.entitlements; sourceTree = "<group>"; };
 		429BB8FC2BBC0E9B00A323A2 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		42A2F3B72BD69815008125F6 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		42B5EC4E2BCD0AF100D5418C /* EquipmentUserPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentUserPage.swift; sourceTree = "<group>"; };
 		42B5EC502BCD0EF400D5418C /* EquipmentDeliveryDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentDeliveryDetails.swift; sourceTree = "<group>"; };
 		42B5EC522BCD109C00D5418C /* EquipmentDeliveryItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentDeliveryItems.swift; sourceTree = "<group>"; };
 		42B5EC542BCD13DE00D5418C /* EquipmentDeliveryForm1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentDeliveryForm1.swift; sourceTree = "<group>"; };
-		42B5EC572BCD1D2D00D5418C /* FormTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTypes.swift; sourceTree = "<group>"; };
 		42B5EC592BCD23D200D5418C /* EquipmentDeliveryForm2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentDeliveryForm2.swift; sourceTree = "<group>"; };
 		42B5EC5B2BCD29B200D5418C /* DataForCustomerOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataForCustomerOnboarding.swift; sourceTree = "<group>"; };
 		42B5EC5D2BCD556D00D5418C /* IndividualOnboarding2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualOnboarding2.swift; sourceTree = "<group>"; };
@@ -200,6 +210,10 @@
 		42ECA2C62BC704F700FB4B43 /* Equipment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Equipment.swift; sourceTree = "<group>"; };
 		42ECA2C82BC7CC0200FB4B43 /* BusinessPerformance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessPerformance.swift; sourceTree = "<group>"; };
 		42ECA2CA2BC7CF1A00FB4B43 /* CustomerInformationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerInformationSheet.swift; sourceTree = "<group>"; };
+		6E1FB8242BF253BD00677D28 /* FormTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTypes.swift; sourceTree = "<group>"; };
+		6E1FB8512BF7E9AB00677D28 /* ImpactReportingCustomerMonitoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpactReportingCustomerMonitoring.swift; sourceTree = "<group>"; };
+		6E1FB8532BF7EF6200677D28 /* ImpactReportingCustomerMonitoring2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpactReportingCustomerMonitoring2.swift; sourceTree = "<group>"; };
+		6ED530392BEB9EAE00280B6C /* CustomerApraisalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerApraisalData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,10 +221,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				426F81552BD6592F002A6D6A /* FilePicker in Frameworks */,
-				425A5EC02BCFB8FD00C520B5 /* SwiftUIDigitalSignature in Frameworks */,
+				42FE89362BFAE4AD0046F172 /* FilePicker in Frameworks */,
+				42FE89302BFAE4950046F172 /* AlertToast in Frameworks */,
 				429BB8FA2BBC0E8300A323A2 /* MapKit.framework in Frameworks */,
+				42FE89322BFAE49B0046F172 /* SwiftUIDigitalSignature in Frameworks */,
 				429BB8FD2BBC0E9B00A323A2 /* HealthKit.framework in Frameworks */,
+				42FE89342BFAE4A80046F172 /* SwiftUICharts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +285,7 @@
 				429BB8FB2BBC0E9B00A323A2 /* EFTA1.entitlements */,
 				429BB8F72BBC0E8300A323A2 /* Info.plist */,
 				421400812BB554FD003E5A85 /* EFTA1App.swift */,
+				42A2F3B72BD69815008125F6 /* Launch Screen.storyboard */,
 				421400832BB554FD003E5A85 /* ContentView.swift */,
 				421400AB2BB5555A003E5A85 /* SplashView.swift */,
 				42E822022BD1125B003D59CF /* Register */,
@@ -360,8 +377,9 @@
 		42B5EC562BCD1D0100D5418C /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				6E1FB8242BF253BD00677D28 /* FormTypes.swift */,
 				429BB8F32BBBEB3100A323A2 /* Images.swift */,
-				42B5EC572BCD1D2D00D5418C /* FormTypes.swift */,
+				4281A70C2BE3903600743423 /* Buttons.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -418,6 +436,7 @@
 			isa = PBXGroup;
 			children = (
 				42ECA29C2BC54D1300FB4B43 /* CompanyOnboarding.swift */,
+				428DF9692BD8F79A00873E90 /* CompanyOnboarding2.swift */,
 				42ECA29E2BC54F2E00FB4B43 /* CompanyLocation.swift */,
 				42ECA2A02BC54F7E00FB4B43 /* CompanyDocument.swift */,
 				42ECA2A22BC54FF400FB4B43 /* CompanySummary.swift */,
@@ -441,6 +460,7 @@
 				42ECA2BD2BC6FDEE00FB4B43 /* FinancialData.swift */,
 				4242D9B72BD14BB4004AF3F3 /* ImpactReporting1.swift */,
 				42ECA2BF2BC6FE8400FB4B43 /* ImpactReporting.swift */,
+				6ED530392BEB9EAE00280B6C /* CustomerApraisalData.swift */,
 			);
 			path = CustomerAppraisals;
 			sourceTree = "<group>";
@@ -463,6 +483,8 @@
 				42ECA2C82BC7CC0200FB4B43 /* BusinessPerformance.swift */,
 				42ECA2CA2BC7CF1A00FB4B43 /* CustomerInformationSheet.swift */,
 				4202105C2BC808C800FB24B4 /* CustomerInformationSheet2.swift */,
+				6E1FB8512BF7E9AB00677D28 /* ImpactReportingCustomerMonitoring.swift */,
+				6E1FB8532BF7EF6200677D28 /* ImpactReportingCustomerMonitoring2.swift */,
 				420210622BC81C2200FB24B4 /* CustomerMonitioringDocument.swift */,
 				420210662BC8244000FB24B4 /* CustomerMonitoringDocumentList.swift */,
 			);
@@ -486,8 +508,10 @@
 			);
 			name = EFTA1;
 			packageProductDependencies = (
-				425A5EBF2BCFB8FD00C520B5 /* SwiftUIDigitalSignature */,
-				426F81542BD6592F002A6D6A /* FilePicker */,
+				42FE892F2BFAE4950046F172 /* AlertToast */,
+				42FE89312BFAE49B0046F172 /* SwiftUIDigitalSignature */,
+				42FE89332BFAE4A80046F172 /* SwiftUICharts */,
+				42FE89352BFAE4AD0046F172 /* FilePicker */,
 			);
 			productName = EFTA1;
 			productReference = 4214007E2BB554FD003E5A85 /* EFTA1.app */;
@@ -564,6 +588,11 @@
 			packageReferences = (
 				425A5EBE2BCFB8FD00C520B5 /* XCRemoteSwiftPackageReference "swiftui-digital-signature" */,
 				426F81532BD6592E002A6D6A /* XCRemoteSwiftPackageReference "FilePicker" */,
+				42F4ED202BE4CBE100816668 /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
+				6E1FB8352BF3B5B100677D28 /* XCRemoteSwiftPackageReference "AlertToast" */,
+				42F1452B2BFA5016005F27CC /* XCRemoteSwiftPackageReference "AlertToast" */,
+				42F1452E2BFA507E005F27CC /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
+				42F145312BFADE22005F27CC /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
 			);
 			productRefGroup = 4214007F2BB554FD003E5A85 /* Products */;
 			projectDirPath = "";
@@ -581,6 +610,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42A2F3B82BD69815008125F6 /* Launch Screen.storyboard in Resources */,
 				421400892BB5550E003E5A85 /* Preview Assets.xcassets in Resources */,
 				421400862BB5550E003E5A85 /* Assets.xcassets in Resources */,
 			);
@@ -610,6 +640,7 @@
 				42E822062BD12386003D59CF /* ConfirmPin.swift in Sources */,
 				42B5EC552BCD13DE00D5418C /* EquipmentDeliveryForm1.swift in Sources */,
 				425A5EC32BCFF47D00C520B5 /* Statements.swift in Sources */,
+				4281A70D2BE3903700743423 /* Buttons.swift in Sources */,
 				42ECA2C02BC6FE8400FB4B43 /* ImpactReporting.swift in Sources */,
 				42B5EC532BCD109C00D5418C /* EquipmentDeliveryItems.swift in Sources */,
 				4242D9B82BD14BB5004AF3F3 /* ImpactReporting1.swift in Sources */,
@@ -626,6 +657,7 @@
 				42DDB66F2BBB65450038D1CA /* CapturePhoto.swift in Sources */,
 				420210702BC9611100FB24B4 /* RepossesionsStorage.swift in Sources */,
 				425A5EC52BCFF6B000C520B5 /* CustomerStatements.swift in Sources */,
+				6E1FB8542BF7EF6200677D28 /* ImpactReportingCustomerMonitoring2.swift in Sources */,
 				42ECA29D2BC54D1300FB4B43 /* CompanyOnboarding.swift in Sources */,
 				4202106C2BC95F1300FB24B4 /* ReposessionDetails.swift in Sources */,
 				421400C02BB57F28003E5A85 /* LoginOnBoarding.swift in Sources */,
@@ -644,11 +676,12 @@
 				429BB8F62BBC09DC00A323A2 /* CustomerLocation.swift in Sources */,
 				4242D9B62BD14595004AF3F3 /* AuthManager.swift in Sources */,
 				42ECA2B22BC6FA4C00FB4B43 /* Document&Assets.swift in Sources */,
-				42B5EC582BCD1D2D00D5418C /* FormTypes.swift in Sources */,
 				422557D92BC3480400FA14EF /* CustomerSummary.swift in Sources */,
 				421400AE2BB55564003E5A85 /* OnBoard.swift in Sources */,
+				428DF96A2BD8F79A00873E90 /* CompanyOnboarding2.swift in Sources */,
 				4242D9B42BD13F17004AF3F3 /* keychainAcess.swift in Sources */,
 				42B5EC682BCE718000D5418C /* PieChart.swift in Sources */,
+				6ED5303A2BEB9EAE00280B6C /* CustomerApraisalData.swift in Sources */,
 				42B5EC5A2BCD23D300D5418C /* EquipmentDeliveryForm2.swift in Sources */,
 				42ECA2A32BC54FF400FB4B43 /* CompanySummary.swift in Sources */,
 				42ECA2B42BC6FB4700FB4B43 /* Market.swift in Sources */,
@@ -656,10 +689,12 @@
 				421400822BB554FD003E5A85 /* EFTA1App.swift in Sources */,
 				42ECA2C32BC7003600FB4B43 /* CustomerMonitoringSearch.swift in Sources */,
 				42ECA2BC2BC6FD8C00FB4B43 /* Character&Credit2.swift in Sources */,
+				6E1FB8252BF253BD00677D28 /* FormTypes.swift in Sources */,
 				42ECA2A12BC54F7E00FB4B43 /* CompanyDocument.swift in Sources */,
 				42B5EC6A2BCE78BC00D5418C /* NetworkManager.swift in Sources */,
 				42B5EC5C2BCD29B200D5418C /* DataForCustomerOnboarding.swift in Sources */,
 				42ECA2BA2BC6FD1C00FB4B43 /* Character&Credit.swift in Sources */,
+				6E1FB8522BF7E9AC00677D28 /* ImpactReportingCustomerMonitoring.swift in Sources */,
 				42B5EC632BCE6D4100D5418C /* CreateSchedule.swift in Sources */,
 				4242D9BA2BD2659D004AF3F3 /* CustomerDocumentList.swift in Sources */,
 				421400B62BB55588003E5A85 /* KeypadView.swift in Sources */,
@@ -1029,15 +1064,65 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		42F1452B2BFA5016005F27CC /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		42F1452E2BFA507E005F27CC /* XCRemoteSwiftPackageReference "SwiftUICharts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/willdale/SwiftUICharts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		42F145312BFADE22005F27CC /* XCRemoteSwiftPackageReference "SwiftUICharts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/willdale/SwiftUICharts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		42F4ED202BE4CBE100816668 /* XCRemoteSwiftPackageReference "SwiftUICharts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/willdale/SwiftUICharts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		6E1FB8352BF3B5B100677D28 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/elai950/AlertToast";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.9;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		425A5EBF2BCFB8FD00C520B5 /* SwiftUIDigitalSignature */ = {
+		42FE892F2BFAE4950046F172 /* AlertToast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6E1FB8352BF3B5B100677D28 /* XCRemoteSwiftPackageReference "AlertToast" */;
+			productName = AlertToast;
+		};
+		42FE89312BFAE49B0046F172 /* SwiftUIDigitalSignature */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 425A5EBE2BCFB8FD00C520B5 /* XCRemoteSwiftPackageReference "swiftui-digital-signature" */;
 			productName = SwiftUIDigitalSignature;
 		};
-		426F81542BD6592F002A6D6A /* FilePicker */ = {
+		42FE89332BFAE4A80046F172 /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42F1452E2BFA507E005F27CC /* XCRemoteSwiftPackageReference "SwiftUICharts" */;
+			productName = SwiftUICharts;
+		};
+		42FE89352BFAE4AD0046F172 /* FilePicker */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 426F81532BD6592E002A6D6A /* XCRemoteSwiftPackageReference "FilePicker" */;
 			productName = FilePicker;

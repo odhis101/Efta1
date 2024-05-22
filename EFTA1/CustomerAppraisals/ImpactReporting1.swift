@@ -18,6 +18,7 @@ struct ImpactReporting1: View {
     @State private var showingConfirmation = false // State for showing the confirmation dialog
     @State private var navigateToDashboard = false
 
+    @Environment(\.presentationMode) var presentationMode
 
     @EnvironmentObject var config: AppConfig
 
@@ -28,8 +29,7 @@ struct ImpactReporting1: View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Impact Reporting ",description: "Kindly complete the following details") // Pass progress as a binding
-                    .padding(.trailing,20)
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Impact Reporting ",description: "Kindly complete the following details") // Pass progress as a binding
 
                 ScrollView{
                     QuestionWithSmallTextField(question: "Number of emploees",placeholder:"Enter Number",selectedOption: $CurrentMonthlyWage)
@@ -50,7 +50,7 @@ struct ImpactReporting1: View {
                     
                 Spacer ()
 
-             
+                        /*
                     Button("Continue") {
                         navigateToDashboard = true
                     }
@@ -60,6 +60,9 @@ struct ImpactReporting1: View {
                     .background(config.primaryColor)
                     .cornerRadius(20)
                     .padding()
+                         
+                         */
+                    CustomNavigationButton(destination: ImpactReporting(), label: "Continue", backgroundColor: config.primaryColor)
 
                 }
             }

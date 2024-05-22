@@ -13,11 +13,12 @@ struct CustomerMonitioringDocument: View {
     @State private var selectedFiles: [URL] = []
     //@StateObject var documentHandler = DocumentHandler() // Use @ObservedObject if passed from parent view
     @EnvironmentObject var config: AppConfig
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         GeometryReader { geometry in
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Company document",description: "Kindly upload the Company documents ")
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Company document",description: "Kindly upload the Company documents ")
                     .padding(.trailing,20)
                 
                 Spacer()
@@ -37,11 +38,11 @@ struct CustomerMonitioringDocument: View {
                     .frame(width: 280)
                     .frame(height:60)
                     .background(config.primaryColor) // Gray background when profileImage is nil
-                    .opacity(0.5)
                     .cornerRadius(8)
                     .padding(.horizontal)
                 }
                 Spacer()
+                /*
                 NavigationLink(destination: CustomerSummary()) {
 
                 Text("Continue")
@@ -52,6 +53,8 @@ struct CustomerMonitioringDocument: View {
                     .cornerRadius(8)
                     .padding(.horizontal)
                 }
+                */
+                CustomNavigationButton(destination: CustomerMonitioringDocument(), label: "Continue", backgroundColor: config.primaryColor)
                 
             }
             /*

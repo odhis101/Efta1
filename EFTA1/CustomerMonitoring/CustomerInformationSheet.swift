@@ -13,6 +13,7 @@ struct CustomerInformationSheet: View {
     @State private var capturedImage: UIImage?
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
     @EnvironmentObject var config: AppConfig
+    @Environment(\.presentationMode) var presentationMode
 
     
     let bulletedQuestions1 = ["Disrupting or destroying biodiversity", "Leading to harmful or high levels of emissions, hazardous waste products or other pollution", "Contribution to or partaking in unacceptable non-renewable resource extraction or degradation"]
@@ -20,8 +21,7 @@ struct CustomerInformationSheet: View {
     var body: some View {
             GeometryReader { geometry in
                 VStack {
-                    ProgressBar(geometry: geometry, progress: $progress, title: "Customer Information Sheet", description: "Kindly complete the following details")
-                        .padding(.trailing, 20)
+                    ProgressBar(geometry: geometry, progress: $progress, presentationMode: presentationMode, title: "Customer Information Sheet", description: "Kindly complete the following details")
                         .padding(.bottom, 10)
                     
                     ScrollView {
@@ -32,7 +32,7 @@ struct CustomerInformationSheet: View {
                     }
                     
                     Spacer()
-                    
+                    /*
                     NavigationLink(destination: CustomerInformationSheet2()) {
                         Text("Continue")
                             .foregroundColor(.white)
@@ -42,6 +42,8 @@ struct CustomerInformationSheet: View {
                             .cornerRadius(8)
                             .padding(.horizontal)
                     }
+                   */
+                    CustomNavigationButton(destination: CustomerInformationSheet2(), label: "Continue", backgroundColor: config.primaryColor)
                 }
             }
        
@@ -68,4 +70,11 @@ extension Array {
 
 
 
+struct CustomerInformationSheet_Previews: PreviewProvider {
+    static var previews: some View {
+        CustomerInformationSheet()
+            .environmentObject(AppConfig(region: .efken))
+            .environmentObject(PinHandler())
+    }
+}
 

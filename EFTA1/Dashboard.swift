@@ -10,10 +10,11 @@ import SwiftUI
 struct Dashboard: View {
     var body: some View {
         GeometryReader { geometry in
-        VStack{
-            
+            VStack(){
+            ScrollView {
+
             TopDashboardComponent()
-                .padding()
+                    .padding()
             PointsView(geometry: geometry)
 
            
@@ -21,33 +22,45 @@ struct Dashboard: View {
             HStack{
                 
             Text("What would you like to do")
+                    .font(.system(size: 16)) // Adjust font size and weight as needed
+                    .foregroundColor(/*@START_MENU_TOKEN@*/.black/*@END_MENU_TOKEN@*/)
                     .bold()
-                    .padding()
+                    
                 Spacer()
 
             }
+            .padding(.top,10)   
+            .padding()
             
-            ScrollView {
-                      LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 5) {
-                          CustomComponent(iconName: "visit", text: "New Customer",variable: 1)
-                          CustomComponent(iconName: "appraisal", text: "Customer Appraisal",variable: 2)
-                          CustomComponent(iconName: "delivery1", text: "Equipment Delivery",variable: 3)
-                          CustomComponent(iconName: "monitoring-system", text: "Customer Monitoring",variable: 4)
-                          CustomComponent(iconName: "tow-truck", text: "Customer Repossession",variable: 5)
-                          CustomComponent(iconName: "clipboard", text: "Reports",variable: 6)
-                          CustomComponent(iconName: "fileFast", text: "Customer Statements",variable:7)
+         
+                      LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+                          CustomComponent(iconName: "visit 1", text: "New          Customer",variable: 1)
+                          CustomComponent(iconName: "appraisal 1", text: "Customer Appraisal",variable: 2)
+                          CustomComponent(iconName: "delivery 1", text: "Equipment Delivery",variable: 3)
+                          CustomComponent(iconName: "monitoring-system 2", text: "Customer Monitoring",variable: 4)
+                          CustomComponent(iconName: "towing-vehicle 1", text: "Customer Repossession",variable: 5)
+                          CustomComponent(iconName: "clipboard_1273337 1", text: "Reports",variable: 6)
+                          CustomComponent(iconName: "file_10900273 1", text: "Customer Statements",variable:7)
                       }
+                      .padding()
         
         
             }
-            .padding()
+         
+
              
             }
+
+
         .navigationBarHidden(true)
         }
         .navigationBarHidden(true)
+        .navigationBarHidden(true)
+
 
     }
+
+
 
 }
 
@@ -59,127 +72,249 @@ struct PointsView: View {
 
     let geometry: GeometryProxy
     
+    @State private var navigateToApprasial = false
+    @State private var navigateToMonitoring = false
+    
     var body: some View {
-        VStack {
-            ZStack(alignment: .topLeading) {
+        VStack() {
+            ZStack() {
                 Image(config.dashboardColor)
-                    //.frame(height: geometry.size.height * 0.3)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(height:200)
-                    .frame(width: geometry.size.width * 0.90)
-                    .foregroundColor(.purple)
-                    .padding(.horizontal)
-                
-
-                VStack{
-                    Text("Task Summary ")
-                            .foregroundColor(.white)
-
-                    .padding(.top,30)
-                    .padding(.bottom,10)
-                    
-                    
-                RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(height: 50)
+                    .frame(height: 220)
                     .frame(width: geometry.size.width * 0.95)
-                    .padding(.leading,10)
-                    .overlay(
-                        VStack(spacing: 0) {
-                            HStack {
-                        Image("appraisal")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 20, height: 20)
+                    .foregroundColor(.purple)
+                    .cornerRadius(20)
+                
+                VStack{
+                    HStack{
+                        Text("Task Summary ")
                             .foregroundColor(.white)
-
-                        
-                        Text("Customer appraisal")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding(.horizontal)
-
+                            .padding(.top,30)
+                            .padding(.bottom,10)
+                            .padding(.leading,30)
                         Spacer()
-                                Circle()
-                                    .foregroundColor(.green) // Set the circle color to green
-                                    .frame(width: 20, height: 20) // Adjust size as needed
-                                    .overlay(
-                                        Text("2")
-                                            .foregroundColor(.white) // Set the text color to white
-                                            .font(.system(size: 16, weight: .bold)) // Adjust font size and weight as needed
-                                    )
-
-                                Image(systemName: "arrow.right")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.white)
-                                .padding()
-                            
                     }
-                    .padding()
+                    .padding(.horizontal)
                     
-             
-                }
+                    VStack(alignment: .center){
+                        
+                        Button(action: {
+                            // Navigate to the desired view
+                            navigateToApprasial = true
+                        }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.gray.opacity(0.5))
+                            .frame(height:50)
+                            .frame(width:geometry.size.width * 0.84)
+                            .padding(.bottom,10)
+                            .overlay(
+                                VStack(alignment: .center) {
+                                    HStack {
+                                        Image("appraisal 2")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 20, height: 20)
+                                            .foregroundColor(.white)
 
+                                        Text("Customer appraisal")
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal)
+
+                                        Spacer()
+
+                                        Circle()
+                                            .foregroundColor(.green) // Set the circle color to green
+                                            .frame(width: 15, height: 15) // Adjust size as needed
+                                            
+                                        
+                                            .overlay(
+                                                Text("2")
+                                                    .foregroundColor(.white) // Set the text color to white
+                                                    .font(.system(size: 12)) // Adjust font size and weight as needed
+                                            )
+
+                                        Image("icon-1")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .padding(.leading,2)
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(.white)
+                                        
+                                    }
+                                    .padding(.top,-5)
+                                    .padding()
+                                }
                             )
-                    
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.3))
-                        .frame(height: 50)
-                        .frame(width: geometry.size.width * 0.95)
-                        .padding(.top,10)
-                        .padding(.leading,10)
-                        .overlay(
-                            VStack(spacing: 0) {
-                                HStack {
-                            Image("appraisal")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.white)
+                        }
+                        Button(action: {
+                            // Navigate to the desired view
+                            navigateToMonitoring = true
+                        }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.gray.opacity(0.5))
+                            .frame(height:50)
+                            .frame(width:geometry.size.width * 0.84)
+                            .padding(.bottom,10)
+                            .overlay(
+                                VStack(alignment: .center) {
+                                    HStack {
+                                        Image("monitoring-system 1")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 20, height: 20)
+                                            .foregroundColor(.white)
 
-                            
-                            Text("Customer appraisal")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .padding(.horizontal)
+                                        Text("Customer monitoring")
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal)
 
-                            Spacer()
-                                    Circle()
-                                        .foregroundColor(.green) // Set the circle color to green
-                                        .frame(width: 20, height: 20) // Adjust size as needed
-                                        .overlay(
-                                            Text("2")
-                                                .foregroundColor(.white) // Set the text color to white
-                                                .font(.system(size: 16, weight: .bold)) // Adjust font size and weight as needed
-                                        )
-                                Image(systemName: "arrow.right")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 20, height: 20)
-                                .foregroundColor(.white)
-                                .padding()
-                                .foregroundColor(.white)
+                                        Spacer()
+                                        Circle()
+                                            .foregroundColor(.green) // Set the circle color to green
+                                            .frame(width: 15, height: 15) // Adjust size as needed
+                                            
+                                        
+                                            .overlay(
+                                                Text("2")
+                                                    .foregroundColor(.white) // Set the text color to white
+                                                    .font(.system(size: 12)) // Adjust font size and weight as needed
+                                            )
+                                        Image("icon-1")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .padding(.leading,2)
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(.white)
+
+                                            
+                                    }
+                                    .padding(.top,-5)
+                                    .padding()
+                                }
+                            )
+
                             
                         }
-                        .padding()
                         
-                 
+                        
+                        
+                        
+                        
+                        
+                    }
+                    .padding(.top,5)
+
+                    
+                    Spacer()
+
+                    
+                    
+                    
+                    
+                    /*
+                    Button(action: {
+                        // Navigate to the desired view
+                        navigateToApprasial = true
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.gray.opacity(0.3))
+                            .frame(height: 40)
+                            .frame(width: geometry.size.width * 0.95)
+                            .padding(.leading, 10)
+                            .overlay(
+                                VStack(spacing: 0) {
+                                    HStack {
+                                        Image("appraisal")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 20, height: 20)
+                                            .foregroundColor(.white)
+
+                                        Text("Customer appraisal")
+                                            .font(.headline)
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal)
+
+                                        Spacer()
+
+                                        Circle()
+                                            .foregroundColor(.green) // Set the circle color to green
+                                            .frame(width: 20, height: 20) // Adjust size as needed
+                                            .padding()
+                                            .overlay(
+                                                Text("2")
+                                                    .foregroundColor(.white) // Set the text color to white
+                                                    .font(.system(size: 15)) // Adjust font size and weight as needed
+                                            )
+
+                                        Image(systemName: "arrow.right")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 15, height: 15)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                    }
+                                    .padding()
+                                }
+                            )
                     }
 
-                                )
-                    
-                    
+                    Button(action: {
+                        // Navigate to the desired view
+                        navigateToMonitoring = true
+                    }) {
+
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.gray.opacity(0.3))
+                            .frame(height: 40)
+                            .frame(width: geometry.size.width * 0.95)
+                            .padding(.top,10)
+                            .padding(.leading,10)
+                            .overlay(
+                                VStack(spacing: 0) {
+                                    HStack {
+                                        Image("monitoring-system")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 20, height: 20)
+                                            .foregroundColor(.white)
+
+                                        Text("Customer monitoring")
+                                            .font(.headline)
+                                            .foregroundColor(.white)
+                                            .padding(.horizontal)
+
+                                        Spacer()
+                                        Circle()
+                                            .foregroundColor(.green) // Set the circle color to green
+                                            .frame(width: 20, height: 20) // Adjust size as needed
+                                            .padding()
+                                            .overlay(
+                                                Text("2")
+                                                    .foregroundColor(.white) // Set the text color to white
+                                                    .font(.system(size: 15)) // Adjust font size and weight as needed
+                                            )
+                                        Image(systemName: "arrow.right")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 15, height: 15)
+                                            .foregroundColor(.white)
+                                            .padding()
+                                    }
+                                    .padding()
+                                }
+                            )
+                    }
+                    */
+                    NavigationLink(destination: CustomerApraisalsSearch(), isActive: $navigateToApprasial) { EmptyView() }
+                    NavigationLink(destination: CustomerMonitoringSearch(), isActive: $navigateToMonitoring) { EmptyView() }
                 }
- 
             }
         }
-
-    }
+    
 }
-
+}
 
 struct CustomComponent: View {
     var iconName: String
@@ -191,26 +326,32 @@ struct CustomComponent: View {
             VStack(alignment: .leading ){
                 HStack() {
                     Image(iconName)
-                        .font(.system(size: 20))
+                        .font(.system(size: 14))
                         .padding(.leading, 10)
+                        .padding(.horizontal, 10)
+                        .padding(.top,5)
+
                       
 
                     Spacer()
-                    Image(systemName: "arrow.right")
+                    Image("navigate_next")
                         .font(.system(size: 12))
                         .foregroundColor(.gray)
+                        .padding(.horizontal, 10)
+
                 }
                 .padding(.bottom, 10)
                 
                 
                 Text(text)
+                    .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true) // Allow text to wrap and grow vertically
-                    .foregroundColor(.black)
+                    .foregroundColor(Color(hex: "#343E25"))
                     .font(.headline)
-                    .padding(.leading, 10)
+                    .padding(.horizontal, 10)
                 
             }
-            .frame(width: UIScreen.main.bounds.width * 0.45, height: UIScreen.main.bounds.width * 0.25)
+            .frame(width: UIScreen.main.bounds.width * 0.43, height: UIScreen.main.bounds.width * 0.30)
             .background(Color(hex: "#E1E2E2").opacity(0.5))
             .cornerRadius(10)
         }
@@ -259,6 +400,10 @@ struct TopDashboardComponent: View {
                 
             Text("Good Morning, Nuhu")
                     .fontWeight(.bold)
+                    .foregroundColor(.black)
+                    .font(.title2)
+                    
+
             Text("last login: 04:00pm")
                     .font(.headline)
                     .foregroundColor(Color.gray)

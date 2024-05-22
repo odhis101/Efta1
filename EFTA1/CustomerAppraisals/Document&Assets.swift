@@ -16,13 +16,13 @@ struct Document_Assets: View {
 
     @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
     
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Documentation & Assets",description: "Kindly complete the following details") // Pass progress as a binding
-                    .padding(.trailing,20)
-                    .padding(.bottom,30)
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Documentation & Assets",description: "Kindly complete the following details") // Pass progress as a binding
 
                 ScrollView{
                 PhotoCaptureButton(capturedImage: $capturedImage,
@@ -47,6 +47,7 @@ struct Document_Assets: View {
                 
                 }
                 Spacer ()
+                /*
                 NavigationLink(destination: Market()){
 
                 Text("Continue")
@@ -57,6 +58,8 @@ struct Document_Assets: View {
                     .cornerRadius(8)
                     .padding(.horizontal)
                     }
+                */
+                CustomNavigationButton(destination: Market(), label: "Continue", backgroundColor: config.primaryColor)
 
                 }
             }

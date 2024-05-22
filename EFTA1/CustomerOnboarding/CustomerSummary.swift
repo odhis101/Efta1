@@ -13,23 +13,28 @@ struct CustomerSummary: View {
     @State private var showingConfirmation = false // State for showing the confirmation dialog
     @State private var  navigateToDashboard = false
     @EnvironmentObject var config: AppConfig
+    @Environment(\.presentationMode) var presentationMode
+    @State private var navigateToCustomerDetails = false // State to handle navigation to CustomerName
+    @State private var navigateToCustomerDetails2 = false // State to handle navigation to CustomerName
+
+
 
     var receiptItems: [(String, String)] {
           [
-              ("Customer name", onboardingData.name),
-              ("TIN", onboardingData.TIN),
+              ("Customer name", onboardingData.customerName),
+              ("TIN", onboardingData.tin),
               ("Postal address", onboardingData.postalAddress),
-              ("Region", onboardingData.selectedRegion ?? ""),
-              ("District", onboardingData.selectedDistrict ?? ""), // Assuming there's a selectedDistrict property
+              ("Region", onboardingData.region ?? ""),
+              ("District", onboardingData.district ?? ""), // Assuming there's a selectedDistrict property
               ("Ward", onboardingData.ward)
           ]
       }
     var receiptItems2: [(String, String)] {
           [
               ("Ward", onboardingData.ward),
-              ("Nationality", onboardingData.nationalityState ?? "" ),
-              ("Email address", onboardingData.EmailAddress),
-              ("Phone Number", onboardingData.PhoneNumber ?? ""),
+              ("Nationality", onboardingData.nationality ?? "" ),
+              ("Email address", onboardingData.emailAddress),
+              ("Phone Number", onboardingData.phoneNumber ?? ""),
               ("Type of lease ", "Agriculture "), // Assuming there's a selectedDistrict property
               ("Ward", onboardingData.ward)
           ]
@@ -39,24 +44,37 @@ struct CustomerSummary: View {
         GeometryReader { geometry in
             
             VStack{
-                ProgressBar(geometry: geometry, progress: $progress,title:"Summary",description: "Kindly review the information collected")
-                .padding(.trailing,20)
+                ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Summary",description: "Kindly review the information collected")
 
                 ScrollView{
 
-                    ReceiptBox(items: receiptItems,geometry: geometry,size: 0.5)
-                
-                    ReceiptBox(items: receiptItems2,geometry: geometry,size: 0.5)
-                    
-                    DocumentContainerView(title: "Document Title")
-
+                    ReceiptBox(items: receiptItems, geometry: geometry, size: 0.5) {
+                        navigateToCustomerDetails = true
+                    }
+                    ReceiptBox(items: receiptItems2, geometry: geometry, size: 0.5) {
+                        navigateToCustomerDetails2 = true
+                    }
+                    VStack{
+                        ForEach(onboardingData.documentURLs, id: \.self) { documentURL in
+                            ListedDocument(documentName: documentURL.lastPathComponent, onDelete: {
+                                // Remove document from array
+                                if let index = onboardingData.documentURLs.firstIndex(of: documentURL) {
+                                    onboardingData.documentURLs.remove(at: index)
+                                }
+                            })
+                            
+                        }
+                    }
 
 
                 
     
                     }
                 Spacer()
-                NavigationLink(destination: Dashboard(), isActive: $navigateToDashboard) {
+                NavigationLink(destination: IndividualOnboarding(), isActive: $navigateToCustomerDetails) {
+                                    EmptyView()
+            }
+                NavigationLink(destination: IndividualOnboarding2(), isActive: $navigateToCustomerDetails2) {
                                     EmptyView()
             }
                 Button("Continue") {
@@ -93,35 +111,44 @@ struct CustomerSummary: View {
 
 
 
-struct ReceiptBox: View {
-    let items: [(String, String)]
-    let geometry: GeometryProxy
-    let size: Double
 
-    
+struct ReceiptBox: View {
+    var items: [(String, String)]
+    var geometry: GeometryProxy
+    var size: CGFloat
+    var onEdit: () -> Void // Closure to handle the edit action
+    @EnvironmentObject var config : AppConfig
+
     var body: some View {
-        VStack(spacing: 10) {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.gray.opacity(0.2))
-                .frame(maxWidth: .infinity)
-                .frame(height: geometry.size.height * size)
-                .padding()
-                .overlay(
-                    VStack(spacing: 0) {
-                        ForEach(items, id: \.0) { item in
-                            HStack {
-                                Text(item.0)
-                                    .padding(.leading,30)
-                                Spacer()
-                                Text(item.1)
-                                    .padding(.trailing,30)
-                            }
-                            .padding(.vertical, 5)
-                            Divider()
-                        }
-                    }
-                )
+        VStack(alignment: .leading, spacing: 10) {
+            ForEach(items, id: \.0) { item in
+                HStack {
+                    Text(item.0)
+                        .font(.headline)
+                    Spacer()
+                    Text(item.1)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                .padding(.horizontal)
+            }
+            HStack{
+                Spacer ()
+                Button(action: {
+                    onEdit()
+                }) {
+                    Text("Edit")
+                        .foregroundColor(config.primaryColor)
+                    
+                }
+            }
         }
+        .padding()
+        .frame(width: geometry.size.width * size)
+        .background(Color(UIColor.systemBackground))
+        .cornerRadius(10)
+        .shadow(radius: 5)
+        .padding(.vertical, 10)
     }
 }
 
@@ -169,5 +196,13 @@ struct DocumentContainerView: View {
      
         }
         )
+    }
+}
+
+struct CustomerSummary_Previews: PreviewProvider {
+    static var previews: some View {
+        CustomerSummary()
+            .environmentObject(OnboardingData()) // Provide a dummy OnboardingData object
+            .environmentObject(AppConfig(region: .efken)) // Provide a dummy AppConfig object
     }
 }

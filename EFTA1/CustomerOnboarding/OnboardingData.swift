@@ -10,34 +10,38 @@ protocol DocumentHandling: AnyObject {
     func clearDocuments()
 }
 
-// OnboardingData class now explicitly conforms to DocumentHandling
+
+
 class OnboardingData: ObservableObject, DocumentHandling {
     @Published var selectedQuestionIndex = 0
     @Published var isExpanded: Bool = false
-    @Published var selectedRegion: String? = nil
-    @Published var selectedDistrict: String? = nil
-    @Published var gender: String? = nil
-    @Published var maritalStatus: String? = nil
-    @Published var idNumber: String = ""
-    @Published var name: String = ""
-    @Published var postalAddress: String = ""
-    @Published var ward: String = ""
+
+    @Published var customerType: Int? = nil // CustomerType:<integer>
+    @Published var customerName: String = "" // CustomerName:<string>
+    @Published var idType: String? = nil // IdType:<integer>
+    @Published var idNumber: String = "" // IdNumber:<string>
+    @Published var passportNumber: String = "" // PassportNumber:<string>
+    @Published var gender: String? = nil // Gender:<integer>
+    @Published var maritalStatus: String? = nil // MaritalStatus:<integer>
+    @Published var postalAddress: String = "" // PostalAddress:<string>
+    @Published var region: String? = nil // Region:<string>
+    @Published var district: String? = nil // District:<string>
+    @Published var ward: String = "" // Ward:<string>
+    @Published var nationality: String? = nil // Nationality:<string>
+    @Published var emailAddress: String = "" // EmailAddress:<string>
+    @Published var phoneNumber: String = "" // PhoneNumber:<string>
+    @Published var tin: String = "" // TIN:<string>
+    @Published var typeOfEquipment: String = "" // TypeOfEquipment:<string>
+    @Published var priceOfEquipment: String = "" // PriceOfEquipment:<string>
+    @Published var profileImage: UIImage? = nil
+    @Published var selectedCoordinate: CLLocationCoordinate2D? = nil // CustomerLocation
     @Published var districtOptions: [String] = []
-    @Published var nationalityState: String? = nil
-    @Published var EmailAddress: String = ""
-    @Published var PhoneNumber: String = ""
-    @Published var TIN: String = ""
-    @Published var TypesOfEquipments: String = ""
-    @Published var Equipmentprice: String = ""
-    @Published var profileImage: UIImage?
-    @Published var selectedCoordinate: CLLocationCoordinate2D?
     @Published var titleForCustomerOnboarding: String = ""
+
+    // UI related states
     @Published var isPickerPresented = false
     @Published var sourceType: UIImagePickerController.SourceType = .photoLibrary
-    
-    @Published var TypesOfEquimpments: String = ""
 
-    @Published var IDtype: String? = nil
     @Published var documentURLs: [URL] = []  // This property is part of DocumentHandling
 
     // Implement DocumentHandling protocol methods
