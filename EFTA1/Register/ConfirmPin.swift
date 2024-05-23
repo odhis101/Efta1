@@ -14,8 +14,6 @@ struct ConfirmPin: View {
 
     var body: some View {
         
-        
-      
         GeometryReader { geometry in
         
         VStack {

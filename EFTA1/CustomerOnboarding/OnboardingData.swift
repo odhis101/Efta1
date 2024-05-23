@@ -4,9 +4,9 @@ import SwiftUI
 import MapKit
 
 // Define the DocumentHandling protocol if not already defined
-protocol DocumentHandling: AnyObject {
-    var documentURLs: [URL] { get set }
-    func addDocuments(_ documents: [URL])
+protocol DocumentHandling {
+    var documentURLs: [String: [URL]] { get set }  // Dictionary to store document URLs indexed by ID type
+    func addDocument(_ document: URL, forIDType idType: String)
     func clearDocuments()
 }
 
@@ -42,12 +42,17 @@ class OnboardingData: ObservableObject, DocumentHandling {
     @Published var isPickerPresented = false
     @Published var sourceType: UIImagePickerController.SourceType = .photoLibrary
 
-    @Published var documentURLs: [URL] = []  // This property is part of DocumentHandling
+    @Published var documentURLs: [String: [URL]] = [:]
 
     // Implement DocumentHandling protocol methods
-    func addDocuments(_ documents: [URL]) {
-        documentURLs.append(contentsOf: documents)
-    }
+       func addDocument(_ document: URL, forIDType idType: String) {
+           if var existingDocuments = documentURLs[idType] {
+               existingDocuments.append(document)
+               documentURLs[idType] = existingDocuments
+           } else {
+               documentURLs[idType] = [document]
+           }
+       }
 
     func clearDocuments() {
         documentURLs.removeAll()

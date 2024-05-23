@@ -183,6 +183,10 @@ struct ModalView: View {
     @EnvironmentObject var pinHandler: PinHandler
     @State private var isLoading = false
     @State private var navigationActive = false
+    @State private var navigateToLogin = false
+    @State private var navigateToSecurityQuestions = false
+
+
     @EnvironmentObject var config: AppConfig
     @State private var modalMove: CGFloat = 0
     @State var showAlert = false
@@ -288,6 +292,12 @@ struct ModalView: View {
             .background(
                           NavigationLink(destination: Verification(), isActive: $navigationActive) { EmptyView() }
                       )
+            .background(
+                          NavigationLink(destination: SecurityQuestions(), isActive: $navigateToSecurityQuestions) { EmptyView() }
+                      )
+            .background(
+                          NavigationLink(destination: Login(), isActive: $navigateToLogin) { EmptyView() }
+                      )
             .onTapGesture {
                             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                         }
@@ -313,19 +323,35 @@ struct ModalView: View {
     }
     
     private func sendStaffDetails() {
-          isLoading = true
-        NetworkManager.shared.sendStaffDetails(staffNumber: pinHandler.staffNumber, phoneNumber: pinHandler.phoneNumber) { success, error in
-              isLoading = false
-            print("staff number",pinHandler.staffNumber)
-              if success {
-                  navigationActive = true
-              } else {
-                  // Handle error, show an alert or message to the user
-                  print(error?.localizedDescription ?? "Unknown error")
-                  self.showAlert = true
-              }
-          }
-     }
+        isLoading = true
+        NetworkManager.shared.sendStaffDetails(staffNumber: pinHandler.staffNumber, phoneNumber: pinHandler.phoneNumber) { success, isPastAccLookUp, hasSetPin, hasSetSecurityQuestions, error in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                print("staff number", self.pinHandler.staffNumber)
+                if success {
+                    if isPastAccLookUp == true && hasSetPin == true && hasSetSecurityQuestions == true  {
+                        self.navigateToLogin = true
+                        print("On Boarding Conditions  met: isPastAccLookUp: \(isPastAccLookUp), hasSetPin: \(hasSetPin), hasSetSecurityQuestions: \(hasSetSecurityQuestions)")
+
+                    }
+                    if isPastAccLookUp && hasSetPin && !hasSetSecurityQuestions {
+                        self.navigateToSecurityQuestions = true
+                        print("On Boarding Conditions not met but pin has been set : isPastAccLookUp: \(isPastAccLookUp), hasSetPin: \(hasSetPin), hasSetSecurityQuestions: \(hasSetSecurityQuestions)")
+
+                        
+                    }
+                    if !isPastAccLookUp || !hasSetPin || !hasSetSecurityQuestions {
+                        print("On Boarding Conditions not met: isPastAccLookUp: \(isPastAccLookUp), hasSetPin: \(hasSetPin), hasSetSecurityQuestions: \(hasSetSecurityQuestions)")
+                    }
+               
+                } else {
+                    // Handle error, show an alert or message to the user
+                    print(error?.localizedDescription ?? "Unknown error")
+                    self.showAlert = true
+                }
+            }
+        }
+    }
 }
 
 struct CustomTextField: View {
@@ -477,17 +503,27 @@ struct ModalViewStatement: View {
     }
     
     private func sendStaffDetails() {
-          isLoading = true
-        NetworkManager.shared.sendStaffDetails(staffNumber: pinHandler.staffNumber, phoneNumber: pinHandler.phoneNumber) { success, error in
-              isLoading = false
-              if success {
-                  navigationActive = true
-              } else {
-                  // Handle error, show an alert or message to the user
-                  print(error?.localizedDescription ?? "Unknown error")
-              }
-          }
-     }
+        isLoading = true
+        NetworkManager.shared.sendStaffDetails(staffNumber: pinHandler.staffNumber, phoneNumber: pinHandler.phoneNumber) { success, isPastAccLookUp, hasSetPin, hasSetSecurityQuestions, error in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                print("staff number", self.pinHandler.staffNumber)
+                if success {
+                    if isPastAccLookUp && hasSetPin && hasSetSecurityQuestions {
+                        self.navigationActive = true
+                    } else {
+                        // Handle the case where not all conditions are met
+                        print("Conditions not met: isPastAccLookUp: \(isPastAccLookUp), hasSetPin: \(hasSetPin), hasSetSecurityQuestions: \(hasSetSecurityQuestions)")
+                       // self.showAlert = true
+                    }
+                } else {
+                    // Handle error, show an alert or message to the user
+                    print(error?.localizedDescription ?? "Unknown error")
+                    //self.showAlert = true
+                }
+            }
+        }
+    }
 }
 struct OnBoard_Previews: PreviewProvider {
     static var previews: some View {

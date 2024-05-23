@@ -55,14 +55,15 @@ struct CustomerSummary: View {
                         navigateToCustomerDetails2 = true
                     }
                     VStack{
-                        ForEach(onboardingData.documentURLs, id: \.self) { documentURL in
-                            ListedDocument(documentName: documentURL.lastPathComponent, onDelete: {
-                                // Remove document from array
-                                if let index = onboardingData.documentURLs.firstIndex(of: documentURL) {
-                                    onboardingData.documentURLs.remove(at: index)
-                                }
-                            })
-                            
+                        ForEach(onboardingData.documentURLs.keys.sorted(), id: \.self) { idType in
+                            ForEach(onboardingData.documentURLs[idType]!, id: \.self) { documentURL in
+                                ListedDocument(documentName: documentURL.lastPathComponent, onDelete: {
+                                    // Remove document from array
+                                    if let index = onboardingData.documentURLs[idType]?.firstIndex(of: documentURL) {
+                                        onboardingData.documentURLs[idType]?.remove(at: index)
+                                    }
+                                })
+                            }
                         }
                     }
 
@@ -94,7 +95,10 @@ struct CustomerSummary: View {
                 title: Text("Confirm Submission"),
                 message: Text("You are about to submit customer details. Are you sure you want to proceed?"),
                 primaryButton: .destructive(Text("Submit"), action: {
-                    navigateToDashboard = true
+                    
+                    let url = URL(string: "\(baseURL)/Mobile/individualcustomer")!
+                    NetworkManager().uploadData(url: url, onboardingData: onboardingData)
+                    
                 }),
                 secondaryButton: .cancel({
                     // Optional: Handle cancellation

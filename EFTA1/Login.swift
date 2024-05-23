@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import AlertToast
+
 
 struct Login: View {
     @State private var enteredPIN: String = ""
@@ -16,6 +18,10 @@ struct Login: View {
     @State var showError = false 
     @EnvironmentObject var pinHandler: PinHandler
     let goback = true // Make it static
+    @State var showAlert = false
+    @State var errorMessage = ""
+
+    
 
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
@@ -25,7 +31,10 @@ struct Login: View {
             VStack{
                 
                 LogoAndTitleView(geometry: geometry, title: "Login", subTitle: "Kindly provide your PIN to access your account", presentationMode: presentationMode, goBack: goback)
-                 
+                
+                    .toast(isPresenting: $showAlert) {
+                                         AlertToast(displayMode: .hud, type: .error(Color.red), title: "Error", subTitle: "Login Error" + errorMessage)
+                                     }
         
         // PIN Keyboard
         KeyPadView(pinCode: $pinCode,instruction:"Enter Pin")
@@ -87,6 +96,8 @@ struct Login: View {
                 if success {
                     shouldNavigate = true // Navigate to the next screen
                 } else {
+                    errorMessage = error?.localizedDescription ?? "Unknown error"
+                    showAlert = true
                     shouldNavigate = true // Navigate to the next screen
                     //showError = true // Show error alert
                     print("Login error: \(error?.localizedDescription ?? "Unknown error")")

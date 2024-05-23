@@ -26,7 +26,7 @@ struct Verification: View {
 
     @Environment(\.presentationMode) var presentationMode
     
-    @State private var boxesMove = -0.09 // happy with 0.5
+    @State private var boxesMove = -0.05 // happy with 0.5
 
     var body: some View {
      
@@ -89,6 +89,8 @@ struct Verification: View {
                                                         focusedTextField = nil
                                                     } else {
                                                         // Reset focusedTextField to nil if the request fails
+                                                      
+
                                                         self.verificationCodes = Array(repeating: "", count: verificationCodes.count)
                                                         focusedTextField = nil
                                                         showAlert = true
@@ -175,6 +177,7 @@ struct Verification: View {
                     isNavigationActive = true
                 }
             }
+            .navigationBarBackButtonHidden(true)
         }
     
     

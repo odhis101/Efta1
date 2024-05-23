@@ -1,7 +1,7 @@
 import Foundation
 import Foundation
 import UIKit
-
+import CoreLocation
 enum NetworkManagerError: Error {
     case unauthorized
 }
@@ -11,14 +11,16 @@ class NetworkManager: ObservableObject {
     
     @Published var response: HTTPURLResponse?
     private let baseURL: String = Constants.baseURL
+    @Published var documentURLs: [URL] = [] // Documents to be handled separately
+
     static let shared = NetworkManager()  // Singleton instance
 
     // account look up
-    func sendStaffDetails(staffNumber: String, phoneNumber: String, completion: @escaping (Bool, Error?) -> Void) {
+    func sendStaffDetails(staffNumber: String, phoneNumber: String, completion: @escaping (Bool, Bool, Bool, Bool, Error?) -> Void) {
         // Prepare the request to check the staff account
         guard let url = URL(string: "\(baseURL)/auth/staffaccountlookup") else {
             // If the URL is invalid, call the completion handler with an error
-            completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
+            completion(false, false, false, false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
         }
 
@@ -28,7 +30,7 @@ class NetworkManager: ObservableObject {
         
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
             // If there's an error creating JSON data, call the completion handler with an error
-            completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Error creating JSON"]))
+            completion(false, false, false, false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Error creating JSON"]))
             return
         }
 
@@ -42,21 +44,21 @@ class NetworkManager: ObservableObject {
             if let error = error {
                 // If there's a networking error, call the completion handler with the error
                 print("Network error: \(error.localizedDescription)")
-                completion(false, error)
+                completion(false, false, false, false, error)
                 return
             }
 
             guard let httpResponse = response as? HTTPURLResponse else {
                 // If the response is not an HTTP response, call the completion handler with an error
                 print("Invalid response: \(String(describing: response))")
-                completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response"]))
+                completion(false, false, false, false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response"]))
                 return
             }
 
             guard httpResponse.statusCode == 200 else {
                 // If the response status code is not 200, call the completion handler with an error
                 print("Invalid status code: \(httpResponse.statusCode)")
-                completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid status code \(httpResponse.statusCode)"]))
+                completion(false, false, false, false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid status code \(httpResponse.statusCode)"]))
                 return
             }
 
@@ -64,7 +66,7 @@ class NetworkManager: ObservableObject {
             guard let responseData = data else {
                 // If no data is received, call the completion handler with an error
                 print("No data received")
-                completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"]))
+                completion(false, false, false, false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"]))
                 return
             }
             
@@ -96,7 +98,7 @@ class NetworkManager: ObservableObject {
                     } else {
                         print("Data not found or invalid")
                     }
-                    completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response format or status"]))
+                    completion(false, false, false, false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response format or status"]))
                     return
                 }
                 
@@ -110,19 +112,24 @@ class NetworkManager: ObservableObject {
                 print("Expected last 9 digits: \(providedLast9Digits)")
                 print("Retrieved last 9 digits: \(last9Digits)")
                 
+                // Extract additional fields
+                let isPastAccLookUp = data["isPastAccLookUp"] as? Bool ?? false
+                let hasSetPin = data["hasSetPin"] as? Bool ?? false
+                let hasSetSecurityQuestions = data["hasSetSecurityQuestions"] as? Bool ?? false
+                
                 // Check if the last 9 digits of the retrieved phone number match the provided phone number
                 if last9Digits == providedLast9Digits {
                     // If the phone numbers match, call the completion handler with success
-                    completion(true, nil)
+                    completion(true, isPastAccLookUp, hasSetPin, hasSetSecurityQuestions, nil)
                 } else {
                     // If the phone numbers do not match, log the mismatch and call the completion handler with an error
                     print("Phone number mismatch: Expected \(providedLast9Digits), got \(last9Digits)")
-                    completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid phone number"]))
+                    completion(false, false, false, false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid phone number"]))
                 }
             } catch {
                 // If there's an error parsing the response data, log the error and call the completion handler with the error
                 print("JSON parsing error: \(error.localizedDescription)")
-                completion(false, error)
+                completion(false, false, false, false, error)
             }
         }.resume()
     }
@@ -332,7 +339,14 @@ class NetworkManager: ObservableObject {
             }
         }.resume()
     }
-
+    func formatPhoneNumber(_ phoneNumber: String) -> String {
+        if phoneNumber.hasPrefix("07") {
+            // Replace the "07" prefix with "+2547"
+            let formattedNumber = "+254" + phoneNumber.dropFirst(1)
+            return formattedNumber
+        }
+        return phoneNumber
+    }
 
     func submitSecurityQuestions(answers: [(answer: String, question: String)], phoneNumber: String, completion: @escaping (Bool, Error?) -> Void) {
         // Prepare the URL
@@ -342,14 +356,27 @@ class NetworkManager: ObservableObject {
             return
         }
         
+        
+        // Deconstruct the array of answers
+        let answer1 = answers.count > 0 ? answers[0].answer : ""
+        let answer2 = answers.count > 1 ? answers[1].answer : ""
+        let answer3 = answers.count > 2 ? answers[2].answer : ""
+        let question1 = answers.count > 0 ? answers[0].question : ""
+        let question2 = answers.count > 1 ? answers[1].question : ""
+        let question3 = answers.count > 2 ? answers[2].question : ""
+        
+        let formattedPhoneNumber = formatPhoneNumber(phoneNumber)
+
+        
         // Construct the request body
         let requestBody: [String: Any] = [
-            "answers": answers.map { ["answer": $0.answer, "question": $0.question] },
-            "phonenumber": phoneNumber
+            "answers": [
+                ["answer": answer1, "question": question1],
+                ["answer": answer2, "question": question2],
+                ["answer": answer3, "question": question3]
+            ],
+            "phonenumber": formattedPhoneNumber
         ]
-        
-        // Print the request body for debugging purposes
-        print("Request Body: \(requestBody)")
         
         // Convert request body to JSON
         guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
@@ -358,13 +385,18 @@ class NetworkManager: ObservableObject {
             return
         }
         
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
         
-        // Print the constructed URLRequest for debugging purposes
-        print("Constructed URLRequest: \(request)")
+        // Print the request body for debugging purposes
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            print("Request Body: \(jsonString)")
+        } else {
+            print("Error: Failed to convert JSON data to string")
+        }
         
         // Send the request
         URLSession.shared.dataTask(with: request) { data, response, error in
@@ -437,170 +469,21 @@ class NetworkManager: ObservableObject {
         }.resume()
     }
 
-
-
-
-
-    func sendPinData(pinData: PinHandler, completion: @escaping (Bool, String?) -> Void) {
-        guard let url = URL(string: "\(baseURL)/sendPinData") else {
-            completion(false, nil)
-            return
-        }
-
-        let body: [String: Any] = [
-            "pinCode": pinData.pinCode,
-            "selectedQuestion1": pinData.selectedQuestion1 ?? "",
-            "selectedQuestion2": pinData.selectedQuestion2 ?? "",
-            "selectedQuestion3": pinData.selectedQuestion3 ?? "",
-            "answer1": pinData.answer1,
-            "answer2": pinData.answer2,
-            "answer3": pinData.answer3
-        ]
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: body, options: []) else {
-            completion(false, nil)
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data, let jsonResponse = try? JSONSerialization.jsonObject(with: data) as? [String: Any], let token = jsonResponse["token"] as? String else {
-                completion(false, nil)
-                return
-            }
-
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                completion(false, nil)
-                return
-            }
-
-            completion(true, token)
-        }.resume()
-    }
-
-    // send otp request
-
-
-
-    // Function to register a user
-    func RegisterEndpoint( phoneNumber: String, staffNumber: String, pin: String, confirmPin: String, completion: @escaping (Bool) -> Void) {
-        // Construct the full URL for the register endpoint
-        guard let url = URL(string: "\(baseURL)/register") else {
-            completion(false)
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let requestData: [String: Any] = [
-            "phoneNumber": phoneNumber,
-            "pin": pin,
-            "confirmPin": confirmPin,
-        ]
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: requestData) else {
-            completion(false)
-            return
-        }
-        
-        request.httpBody = jsonData
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let httpResponse = response as? HTTPURLResponse {
-                if httpResponse.statusCode == 200 {
-                    completion(true)
-                } else {
-                    print("failed device verification")
-                    completion(false)
-                }
-            } else {
-                print("failed device verification")
-                completion(false)
-            }
-        }
-        
-        task.resume()
-    }
-    
-    // Function to handle user login
-    func login(phoneNumber: String, password: String, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let url = URL(string: "\(baseURL)/login") else {
-            return completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
-        }
-        
-        let parameters: [String: Any] = [
-            "password": password,
-            "phone_number": phoneNumber
-        ]
-        
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: parameters, options: [])
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpBody = jsonData
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    completion(.failure(NSError(domain: "Invalid response", code: -1, userInfo: nil)))
-                    return
-                }
-                
-                switch httpResponse.statusCode {
-                case 200...299:
-                                if let data = data,
-                                   let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                                   let token = json["token"] as? String {
-                                    // Save token to UserDefaults
-                                    print(token)
-                                    UserDefaults.standard.set(token, forKey: "AuthToken")
-                                    completion(.success(()))
-                                } else {
-                                    completion(.failure(NSError(domain: "Token not found in response", code: -1, userInfo: nil)))
-                                }
-                case 401:
-                    completion(.failure(NetworkManagerError.unauthorized))
-                default:
-                    completion(.failure(NSError(domain: "Unknown error", code: httpResponse.statusCode, userInfo: nil)))
-                }
-            }.resume()
-        } catch {
-            completion(.failure(error))
-        }
-    }
-    
-    
     func mobileAppLogin(phoneNumber: String, pin: String, completion: @escaping (Bool, Error?) -> Void) {
         guard let url = URL(string: "\(baseURL)/auth/mobileapplogin") else {
             completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             return
         }
-
-        // Construct the request body
+        let formattedPhoneNumber = formatPhoneNumber(phoneNumber)
         let requestBody: [String: Any] = [
-            "phonenumber": phoneNumber,
+            "phonenumber": formattedPhoneNumber,
             "pin": pin
         ]
 
-        // Convert the request body to JSON data
         guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
             completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Error creating JSON"]))
             return
         }
-
-        // Log the request body
-        print("Request Body:", requestBody)
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -618,156 +501,129 @@ class NetworkManager: ObservableObject {
                 return
             }
 
-            // Log the response body if available
             if let data = data, let responseBody = String(data: data, encoding: .utf8) {
                 print("Response Body:", responseBody)
             }
 
-            // Parse the response data if available
             if let data = data {
                 do {
                     if let responseObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                        // Handle the response based on the parsed JSON object
-                        if let status = responseObject["status"] as? String {
-                            if status == "00" {
-                                // Successful response
-                                completion(true, nil)
-                            } else {
-                                // Unsuccessful response
-                                completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to log in"]))
-                            }
+                        if let status = responseObject["status"] as? String, status == "00",
+                           let data = responseObject["data"] as? [String: Any],
+                           let token = data["token"] as? String,
+                           let userId = data["userId"] as? String {
+                            
+                            // Save the token and user ID
+                            AuthManager.shared.saveToken(token)
+                            AuthManager.shared.saveUserId(userId)
+                            
+                            completion(true, nil)
                         } else {
-                            // Unable to extract status from response
-                            completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response format"]))
+                            completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to log in"]))
                         }
                     } else {
-                        // Unable to parse JSON response
                         completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON response"]))
                     }
                 } catch {
-                    // Error parsing JSON
                     completion(false, error)
                 }
             } else {
-                // No data received
                 completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"]))
             }
         }.resume()
     }
-
     
+    // send customer onboarding
     
-    func getTotal(completion: @escaping (Result<Data?, Error>) -> Void) {
-            // Construct the full URL for the "total" endpoint
-            guard let url = URL(string: "\(baseURL)/total") else {
-                return completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
-            }
-            
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            
-            URLSession.shared.dataTask(with: request) { data, response, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                guard let httpResponse = response as? HTTPURLResponse else {
-                    completion(.failure(NSError(domain: "Invalid response", code: -1, userInfo: nil)))
-                    return
-                }
-                
-                switch httpResponse.statusCode {
-                case 200...299:
-                    completion(.success(data))
-                case 401:
-                    completion(.failure(NetworkManagerError.unauthorized))
-                default:
-                    completion(.failure(NSError(domain: "Unknown error", code: httpResponse.statusCode, userInfo: nil)))
-                }
-            }.resume()
-        }
-    
-    func updateProfile(name: String, emailAddress: String, username: String, selectedDate: Date, profileImage: UIImage?, completion: @escaping (Bool) -> Void) {
-        // Convert UIImage to Data (JPEG format with compression quality 0.8)
-        var imageData: Data? = nil
-        if let profileImage = profileImage {
-            imageData = profileImage.jpegData(compressionQuality: 0.8)
-        }
+    private func appendToData(_ data: inout Data, string: String) {
+           if let stringData = string.data(using: .utf8) {
+               data.append(stringData)
+           }
+       }
 
-        // Construct the full URL for the update profile endpoint
-        guard let url = URL(string: "\(baseURL)/updateProfile") else {
-            completion(false)
-            return
-        }
 
+    func uploadData(url: URL, onboardingData: OnboardingData) {
+        let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
-        // Construct the request body with the profile data
-        let profileData: [String: Any] = [
-            "name": name,
-            "emailAddress": emailAddress,
-            "username": username,
-            "selectedDate": selectedDate.timeIntervalSince1970, // Convert Date to Unix timestamp
-            // Add any other profile data fields as needed
+        let parameters: [String: Any] = [
+            "CustomerType": onboardingData.customerType,
+            "CustomerName": onboardingData.customerName,
+            "IdType": onboardingData.idType,
+            "IdNumber": onboardingData.idNumber,
+            "PassportNumber": onboardingData.passportNumber,
+            "Gender": onboardingData.gender,
+            "MaritalStatus": onboardingData.maritalStatus,
+            "PostalAddress": onboardingData.postalAddress,
+            "Region": onboardingData.region ?? "",
+            "District": onboardingData.district ?? "",
+            "Ward": onboardingData.ward,
+            "Nationality": onboardingData.nationality ?? "",
+            "EmailAddress": onboardingData.emailAddress,
+            "PhoneNumber": onboardingData.phoneNumber,
+            "TIN": onboardingData.tin,
+            "TypeOfEquipment": onboardingData.typeOfEquipment,
+            "PriceOfEquipment": onboardingData.priceOfEquipment,
+            "CustomerLocation.Latitude": onboardingData.selectedCoordinate?.latitude ?? 0.0,
+            "CustomerLocation.Longitude": onboardingData.selectedCoordinate?.longitude ?? 0.0
         ]
 
-        if let imageData = imageData {
-            let boundary = UUID().uuidString
-            request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        var files: [(data: Data, fieldName: String, fileName: String, mimeType: String)] = []
 
-            request.httpBody = createFormDataBody(with: profileData, imageData: imageData, boundary: boundary)
-        } else {
-            request.httpBody = try? JSONSerialization.data(withJSONObject: profileData)
+        if let profileImage = onboardingData.profileImage, let imageData = profileImage.jpegData(compressionQuality: 0.8) {
+            files.append((data: imageData, fieldName: "profileImage", fileName: "profile.jpg", mimeType: "image/jpeg"))
         }
 
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        // Assuming onboardingData.documentURLs is a dictionary where keys are the ID types and values are arrays of URLs
+        for documentURL in onboardingData.documentURLs {
+              if let documentData = try? Data(contentsOf: documentURL) {
+                  let fileName = documentURL.lastPathComponent
+                  let fieldName = "documents[\(onboardingData.idType)]" // Assuming the ID type is the same for all documents; adjust if needed
+                  files.append((data: documentData, fieldName: fieldName, fileName: fileName, mimeType: "application/octet-stream"))
+              }
+          }
+        
+
+        let body = createMultipartFormData(boundary: boundary, parameters: parameters, files: files)
+        request.httpBody = body
+
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("Error: \(error.localizedDescription)")
-                completion(false)
+                print("Error uploading data: \(error)")
                 return
             }
-
-            guard let httpResponse = response as? HTTPURLResponse else {
-                completion(false)
+            guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                print("Server error")
                 return
             }
-
-            if httpResponse.statusCode == 200 {
-                completion(true) // Profile updated successfully
-            } else {
-                completion(false) // Failed to update profile
-            }
-        }.resume()
+            print("Data uploaded successfully: \(data)")
+        }
+        task.resume()
     }
 
-    private func createFormDataBody(with parameters: [String: Any], imageData: Data, boundary: String) -> Data {
+    func createMultipartFormData(boundary: String, parameters: [String: Any], files: [(data: Data, fieldName: String, fileName: String, mimeType: String)]) -> Data {
         var body = Data()
 
+        // Add parameters
         for (key, value) in parameters {
-            if let stringValue = value as? String,
-               let stringData = stringValue.data(using: .utf8) {
-                body.append("--\(boundary)\r\n".data(using: .utf8)!)
-                body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8)!)
-                body.append(stringData)
-                body.append("\r\n".data(using: .utf8)!)
-            }
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n".data(using: .utf8)!)
+            body.append("\(value)\r\n".data(using: .utf8)!)
         }
 
-        body.append("--\(boundary)\r\n".data(using: .utf8)!)
-        body.append("Content-Disposition: form-data; name=\"profileImage\"; filename=\"image.jpeg\"\r\n".data(using: .utf8)!)
-        body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
-        body.append(imageData)
-        body.append("\r\n".data(using: .utf8)!)
+        // Add files
+        for file in files {
+            body.append("--\(boundary)\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"\(file.fieldName)\"; filename=\"\(file.fileName)\"\r\n".data(using: .utf8)!)
+            body.append("Content-Type: \(file.mimeType)\r\n\r\n".data(using: .utf8)!)
+            body.append(file.data)
+            body.append("\r\n".data(using: .utf8)!)
+        }
 
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
 
         return body
     }
-
-
-
-    
-}
+   }
