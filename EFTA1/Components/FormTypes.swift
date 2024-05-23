@@ -795,7 +795,7 @@ struct PhotoCaptureButton: View {
                                 // Clear the captured image
                                 imageStorage.wrappedValue = nil
                             }) {
-                                Image(systemName: "xmark.circle.fill")
+                                Image("camera")
                                     .foregroundColor(.red)
                             }
                         }

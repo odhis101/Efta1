@@ -87,10 +87,10 @@ struct Verification: View {
                                                         // Navigate to the next screen upon receiving a successful response
                                                         isNavigationActive = true
                                                         focusedTextField = nil
+                                                        AuthManager.shared.savePhoneNumber(pinHandler.phoneNumber)
+
                                                     } else {
                                                         // Reset focusedTextField to nil if the request fails
-                                                      
-
                                                         self.verificationCodes = Array(repeating: "", count: verificationCodes.count)
                                                         focusedTextField = nil
                                                         showAlert = true

@@ -91,14 +91,25 @@ struct Login: View {
   
 }
     private func loginWithPasscode(passcode: String) {
-        NetworkManager.shared.mobileAppLogin(phoneNumber: pinHandler.phoneNumber, pin: passcode) { success, error in
+        // Retrieve phone number from Keychain
+        //shouldNavigate = true // Navigate to the next screen
+
+        guard let phoneNumber = AuthManager.shared.loadPhoneNumber() else {
+            print("Phone number not found in Keychain")
+            
+            return
+        }
+        print("this the first request asking for number ", phoneNumber)
+
+        NetworkManager.shared.mobileAppLogin(phoneNumber: phoneNumber, pin: passcode) { success, error in
             DispatchQueue.main.async {
                 if success {
                     shouldNavigate = true // Navigate to the next screen
                 } else {
+                    print(phoneNumber)
                     errorMessage = error?.localizedDescription ?? "Unknown error"
                     showAlert = true
-                    shouldNavigate = true // Navigate to the next screen
+                    //shouldNavigate = true // Navigate to the next screen
                     //showError = true // Show error alert
                     print("Login error: \(error?.localizedDescription ?? "Unknown error")")
                     pinCode = "" // Reset PIN code

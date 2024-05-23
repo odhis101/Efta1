@@ -51,9 +51,12 @@ struct CustomerSummary: View {
                     ReceiptBox(items: receiptItems, geometry: geometry, size: 0.5) {
                         navigateToCustomerDetails = true
                     }
+                    .padding(.horizontal)
                     ReceiptBox(items: receiptItems2, geometry: geometry, size: 0.5) {
                         navigateToCustomerDetails2 = true
                     }
+                    .padding(.horizontal)
+
                     VStack{
                         ForEach(onboardingData.documentURLs.keys.sorted(), id: \.self) { idType in
                             ForEach(onboardingData.documentURLs[idType]!, id: \.self) { documentURL in
@@ -96,8 +99,8 @@ struct CustomerSummary: View {
                 message: Text("You are about to submit customer details. Are you sure you want to proceed?"),
                 primaryButton: .destructive(Text("Submit"), action: {
                     
-                    let url = URL(string: "\(baseURL)/Mobile/individualcustomer")!
-                    NetworkManager().uploadData(url: url, onboardingData: onboardingData)
+                    //let url = URL(string: "\(baseURL)/Mobile/individualcustomer")!
+                    NetworkManager().uploadData(onboardingData: onboardingData)
                     
                 }),
                 secondaryButton: .cancel({
@@ -128,11 +131,11 @@ struct ReceiptBox: View {
             ForEach(items, id: \.0) { item in
                 HStack {
                     Text(item.0)
-                        .font(.headline)
+                        .font(.caption)
                     Spacer()
                     Text(item.1)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
+                        .font(.caption)
+                        .bold()
                 }
                 .padding(.horizontal)
             }
@@ -143,16 +146,16 @@ struct ReceiptBox: View {
                 }) {
                     Text("Edit")
                         .foregroundColor(config.primaryColor)
+                        .padding(.horizontal)
                     
                 }
             }
         }
+        //.frame(width:geometry.size.width * size * 1.2)
         .padding()
-        .frame(width: geometry.size.width * size)
-        .background(Color(UIColor.systemBackground))
+        .background(Color(hex:"#F6F6F6"))
         .cornerRadius(10)
-        .shadow(radius: 5)
-        .padding(.vertical, 10)
+        //.shadow(radius: 5)
     }
 }
 

@@ -30,7 +30,8 @@ struct SiteDetails: View {
 
                 ScrollView{
                     
-                    QuestionWithSmallTextField(question: "Customer name", placeholder: "Customer name", selectedOption: $customerApraisalData.name)
+                //QuestionWithSmallTextField(question: "Customer name", placeholder: "Customer name", selectedOption: $customerApraisalData.name)
+                
                 PhotoCaptureButton(capturedImage: $capturedImage,
                                    SiteQuestionData: siteQuestionData,
                                    question: "Has a full description of the site been noted (number of buildings / warehouses / acreage etc)?",

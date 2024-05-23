@@ -11,6 +11,8 @@ class NetworkManager: ObservableObject {
     
     @Published var response: HTTPURLResponse?
     private let baseURL: String = Constants.baseURL
+    private let baseURLData: String = Constants.baseURLData
+
     @Published var documentURLs: [URL] = [] // Documents to be handled separately
 
     static let shared = NetworkManager()  // Singleton instance
@@ -116,6 +118,8 @@ class NetworkManager: ObservableObject {
                 let isPastAccLookUp = data["isPastAccLookUp"] as? Bool ?? false
                 let hasSetPin = data["hasSetPin"] as? Bool ?? false
                 let hasSetSecurityQuestions = data["hasSetSecurityQuestions"] as? Bool ?? false
+                AuthManager.shared.savePhoneNumber(retrievedPhoneNumber)
+
                 
                 // Check if the last 9 digits of the retrieved phone number match the provided phone number
                 if last9Digits == providedLast9Digits {
@@ -479,7 +483,8 @@ class NetworkManager: ObservableObject {
             "phonenumber": formattedPhoneNumber,
             "pin": pin
         ]
-
+        
+        print("this is formatted number", formattedPhoneNumber)
         guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
             completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Error creating JSON"]))
             return
@@ -489,6 +494,8 @@ class NetworkManager: ObservableObject {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
+        
+        print ("Request Body for login: \(requestBody)")
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
@@ -516,6 +523,8 @@ class NetworkManager: ObservableObject {
                             // Save the token and user ID
                             AuthManager.shared.saveToken(token)
                             AuthManager.shared.saveUserId(userId)
+                            AuthManager.shared.savePhoneNumber(formattedPhoneNumber)
+
                             
                             completion(true, nil)
                         } else {
@@ -542,20 +551,32 @@ class NetworkManager: ObservableObject {
        }
 
 
-    func uploadData(url: URL, onboardingData: OnboardingData) {
+    func uploadData(onboardingData: OnboardingData) {
+        print("Starting data upload...")
+        
+        let url = URL(string: "\(baseURL)/Mobile/individualcustomer")!
+        print("Request URL: \(url)")
+        
         let boundary = "Boundary-\(UUID().uuidString)"
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
+        var StaffUserId = ""
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-
+        
+        if let staffuserId = AuthManager.shared.loadUserId() {
+            StaffUserId = staffuserId
+        } else {
+            print("No phone number found in Keychain")
+        }
+        
         let parameters: [String: Any] = [
-            "CustomerType": onboardingData.customerType,
+            "CustomerType": onboardingData.customerType ?? "",
             "CustomerName": onboardingData.customerName,
-            "IdType": onboardingData.idType,
+            "IdType": onboardingData.idType ?? "",
             "IdNumber": onboardingData.idNumber,
-            "PassportNumber": onboardingData.passportNumber,
-            "Gender": onboardingData.gender,
-            "MaritalStatus": onboardingData.maritalStatus,
+            "PassportNumber": onboardingData.passportNumber ?? "",
+            "Gender": onboardingData.gender ?? "",
+            "MaritalStatus": onboardingData.maritalStatus ?? "",
             "PostalAddress": onboardingData.postalAddress,
             "Region": onboardingData.region ?? "",
             "District": onboardingData.district ?? "",
@@ -563,42 +584,75 @@ class NetworkManager: ObservableObject {
             "Nationality": onboardingData.nationality ?? "",
             "EmailAddress": onboardingData.emailAddress,
             "PhoneNumber": onboardingData.phoneNumber,
-            "TIN": onboardingData.tin,
+            "TIN": onboardingData.tin ?? "",
             "TypeOfEquipment": onboardingData.typeOfEquipment,
             "PriceOfEquipment": onboardingData.priceOfEquipment,
             "CustomerLocation.Latitude": onboardingData.selectedCoordinate?.latitude ?? 0.0,
-            "CustomerLocation.Longitude": onboardingData.selectedCoordinate?.longitude ?? 0.0
+            "CustomerLocation.Longitude": onboardingData.selectedCoordinate?.longitude ?? 0.0,
+            "StaffUserId": StaffUserId
         ]
-
-        var files: [(data: Data, fieldName: String, fileName: String, mimeType: String)] = []
-
-        if let profileImage = onboardingData.profileImage, let imageData = profileImage.jpegData(compressionQuality: 0.8) {
-            files.append((data: imageData, fieldName: "profileImage", fileName: "profile.jpg", mimeType: "image/jpeg"))
-        }
-
-        // Assuming onboardingData.documentURLs is a dictionary where keys are the ID types and values are arrays of URLs
-        for documentURL in onboardingData.documentURLs {
-              if let documentData = try? Data(contentsOf: documentURL) {
-                  let fileName = documentURL.lastPathComponent
-                  let fieldName = "documents[\(onboardingData.idType)]" // Assuming the ID type is the same for all documents; adjust if needed
-                  files.append((data: documentData, fieldName: fieldName, fileName: fileName, mimeType: "application/octet-stream"))
-              }
-          }
         
-
+        print("these are the parameters", parameters)
+        
+        print("Adding parameters to request...")
+        
+        var files: [(data: Data, fieldName: String, fileName: String, mimeType: String)] = []
+        
+        if let profileImage = onboardingData.profileImage,
+           let imageData = profileImage.jpegData(compressionQuality: 0.8) {
+            files.append((data: imageData, fieldName: "999", fileName: "profile.jpg", mimeType: "image/jpeg"))
+        }
+        
+        print("Adding profile image to files...")
+        
+        for (_, urls) in onboardingData.documentURLs {
+            for documentURL in urls {
+                if let documentData = try? Data(contentsOf: documentURL) {
+                    let fileName = documentURL.lastPathComponent
+                    let fieldName = "documents[\(onboardingData.idType ?? "")]"  // Unwrapped idType here
+                    files.append((data: documentData, fieldName: fieldName, fileName: fileName, mimeType: "application/octet-stream"))
+                }
+            }
+        }
+        
+        print("Adding document URLs to files...")
+        
         let body = createMultipartFormData(boundary: boundary, parameters: parameters, files: files)
         request.httpBody = body
-
+        
+        print("this is from creating the body ", body)
+        
+        // Log request details
+        logRequest(request)
+        
+        print("Request body:")
+        
+        print("Starting data task...")
+        
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("Error uploading data: \(error)")
                 return
             }
             guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                print("Server error")
+                if let httpResponse = response as? HTTPURLResponse {
+                    print("Server error: \(httpResponse.statusCode)")
+                    if let responseData = data, let responseBody = String(data: responseData, encoding: .utf8) {
+                        print("Response body: \(responseBody)")
+                    }
+                } else {
+                    print("Server error")
+                }
                 return
             }
-            print("Data uploaded successfully: \(data)")
+            
+            print("Response status code: \(response.statusCode)")
+            print("Response body:")
+            if let responseBody = String(data: data, encoding: .utf8) {
+                print(responseBody)
+            } else {
+                print("Unable to convert response data to string")
+            }
         }
         task.resume()
     }
@@ -625,5 +679,20 @@ class NetworkManager: ObservableObject {
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
 
         return body
+    }
+    
+    func logRequest(_ request: URLRequest) {
+        print("Request: \(request.httpMethod ?? "NO METHOD") \(request.url?.absoluteString ?? "NO URL")")
+        print("Headers: \(request.allHTTPHeaderFields ?? [:])")
+
+        if let body = request.httpBody {
+            if let bodyString = String(data: body, encoding: .utf8) {
+                print("Body: \(bodyString)")
+            } else {
+                print("Body: (binary data)")
+            }
+        } else {
+            print("Body: None")
+        }
     }
    }

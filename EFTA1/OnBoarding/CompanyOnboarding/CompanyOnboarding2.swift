@@ -11,7 +11,7 @@ struct CompanyOnboarding2: View {
     let questions = ["What is your favorite color?", "What is your pet's name?", "Where were you born?"]
         @State private var selectedQuestionIndex = 0
         @State private var isExpanded: Bool = false
-        @State private var progress: CGFloat = 0.5 // Initial progress
+        @State private var progress: CGFloat = 0.4 // Initial progress
         @State private var CompanyName:String=""
         @State private var TIN:String=""
         @State private var VRN:String=""
@@ -23,7 +23,8 @@ struct CompanyOnboarding2: View {
     @State var stateOfEquipment:String? = nil
     @State private var TypesOfEquimpments:String=""
     @State private var Equipmentprice:String=""
-    
+    @EnvironmentObject var onboardingData: CompanyOnboardingData
+
 
     @State private var selectedRegion: String? = nil
     @State private var selectedDistrict: String? = nil
@@ -33,6 +34,7 @@ struct CompanyOnboarding2: View {
 
     @EnvironmentObject var config: AppConfig
     @Environment(\.presentationMode) var presentationMode
+    let nationality : [String] = createNationalities()
 
 
     
@@ -40,29 +42,22 @@ struct CompanyOnboarding2: View {
             GeometryReader { geometry in
                 VStack {
                     ScrollView{
-                        ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Company onboarding",description: "KKindly collect the following information from the customer")
+                        ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Company onboarding",description: "Kindly collect the following information from the customer")
 
-                    QuestionWithSmallTextField(question: "",placeholder:"Contact person name",selectedOption:$CompanyName)
-                    QuestionWithDropdown(question: "Type Of ID", options: ["Driving License", "Passport","National ID "], selectedOption: $IDtype)
-                    QuestionWithSmallTextField(question: "Enter IDNumber", placeholder: "ID Number", selectedOption: $idNumber)
-                    QuestionWithSmallTextField(question: "Phone Number", placeholder: "Phone Number", selectedOption: $phoneNumber)
-                    QuestionWithSmallTextField(question: "Email Address", placeholder: "Email Address", selectedOption: $emailAddress)
-                    
+                        QuestionWithSmallTextField(question: "",placeholder:"Contact person name",selectedOption:$onboardingData.contactPersonName)
+                        
+                        QuestionWithDropdown(question: "Type Of ID", options: ["Driving License", "Passport", "National ID"], selectedOption: $onboardingData.idType)
+                        
+                        QuestionWithSmallTextField(question: "Enter ID Number", placeholder: "ID Number", selectedOption: $onboardingData.idNumber)
+                        QuestionWithSmallTextField(question: "Phone Number",placeholder:"Phone Number",selectedOption:$onboardingData.phoneNumber)
+                        QuestionWithSmallTextField(question: "Email",placeholder:"Email address",selectedOption:$onboardingData.emailAddress)
 
-                    
-                    QuestionWithDropdown(question: "Nationality ", options: locationData.map { $0.region }, selectedOption: $selectedRegion)
-                                        .onChange(of: selectedRegion) { newValue in
-                                            if let region = newValue, let data = locationData.first(where: { $0.region == region }) {
-                                                districtOptions = data.districts
-                                            } else {
-                                                districtOptions = []
-                                            }
-                                            selectedDistrict = nil // Reset district when region changes
-                                        }
-                                    
-                    QuestionWithSmallTextField(question: "Types Of Equipment",placeholder:"types of equipment",selectedOption:$TypesOfEquimpments)
-                    QuestionWithSmallTextField(question: "Equipment price",placeholder:"Equipment price",selectedOption:$Equipmentprice)
 
+                    QuestionWithDropdown(question: "Nationality ", options: nationality,selectedOption:$onboardingData.nationality)
+
+                        QuestionWithSmallTextField(question: "Types Of Equipment",placeholder:"types of equipment",selectedOption:$onboardingData.typeOfEquipment)
+                        
+                        QuestionWithSmallTextField(question: "Equipment price",placeholder:"Equipment price",selectedOption:$onboardingData.priceOfEquipment)
                     }
                     Spacer()
                     

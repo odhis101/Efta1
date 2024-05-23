@@ -9,11 +9,13 @@ import SwiftUI
 import UIKit
 
 struct CompanyDocument: View {
-    @State private var progress: CGFloat = 0.9 // Initial progress
+    @State private var progress: CGFloat = 0.8 // Initial progress
     @State private var isModalVisible = false
     @State private var selectedFiles: [URL] = []
     @EnvironmentObject var config: AppConfig
     @Environment(\.presentationMode) var presentationMode
+    @EnvironmentObject var onboardingData: CompanyOnboardingData  // Use the shared onboarding data
+
 
 
     var body: some View {
@@ -62,12 +64,11 @@ struct CompanyDocument: View {
                     
                     
                 }
-                /*
-                .overlay(
-                    DocumentModalView(isVisible: $isModalVisible, destinationTitle: "Company Onboarding", documentHandler: CustomerMonitoringDocumentHandler())
-                    .animation(.easeInOut)
-                 )
-                 */
+                DocumentModalView(
+                    isVisible: $isModalVisible,
+                    destinationView: { CompanyDocumentList()},
+                    documentHandler: onboardingData
+                )
 
             }
         }

@@ -168,9 +168,15 @@ struct PageControl: View {
         HStack {
             ForEach(0..<numberOfPages) { page in
                 Circle()
-                    .fill(page == currentPage ? config.primaryColor : Color.gray)
+                    .fill(page == currentPage ? config.primaryColor : Color.white)
                     .frame(width: 10, height: 10)
                     .padding(5)
+                    .overlay(
+                        Circle()
+                            .stroke(Color.white)
+                            .frame(width: 10, height: 10)
+                    
+                    )
             }
         }
     }

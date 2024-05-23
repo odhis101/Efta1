@@ -45,6 +45,7 @@ struct SplashView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {  // Delay for splash screen duration
             if let _ = AuthManager.shared.loadToken() {
                 destinationView = AnyView(LoginOnBoarding())  // Set to login view if token exists
+                print("this is auth manager",AuthManager.shared.loadPhoneNumber())
             } else {
                 destinationView = AnyView(OnBoard())  // Set to initial onboarding if no token
             }

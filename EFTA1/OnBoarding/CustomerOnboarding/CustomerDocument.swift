@@ -58,17 +58,6 @@ struct CustomerDocument: View {
                     
                     }
                     Spacer()
-                    /*
-                    NavigationLink( destination: CustomerDocumentList()){
-                    Text("Continue")
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height:40)
-                        .background(config.primaryColor) // Gray background when profileImage is nil
-                        .cornerRadius(8)
-                        .padding(.horizontal)
-                    }
-                     */
                     CustomNavigationButton(destination: CustomerDocumentList(), label: "Continue", backgroundColor: config.primaryColor)
                     
                 }
@@ -109,6 +98,7 @@ struct DocumentModalView<Destination: View>: View {
     @State private var DropdownExpand = false
     @State private var documentTypes: [String] = [] // Array to store document names
 
+    @State private var selectedOption: String? = nil // Local state variable for selected option
 
     var body: some View {
         GeometryReader { geometry in
@@ -124,7 +114,7 @@ struct DocumentModalView<Destination: View>: View {
 
                     VStack(spacing: 16) {
                         titleBar
-                        QuestionWithDropdownModalDocument(question: "Type Of ID", DropdownExpand: $DropdownExpand, options: documentTypes, selectedOption: $onboardingData.idType)
+                        QuestionWithDropdownModalDocument(question: "Type Of ID", DropdownExpand: $DropdownExpand, options: documentTypes, selectedOption: $selectedOption)
                         uploadButton
                         continueButton
                     }
@@ -135,6 +125,9 @@ struct DocumentModalView<Destination: View>: View {
                     }
                 }
             }
+            .onAppear {
+                           fetchDocumentTypes() // Call fetchDocumentTypes when the view appears
+                       }
             .offset(y: isVisible ? 0 : geometry.size.height)
             .animation(.easeInOut(duration: isVisible ? 0.3 : 0))
             .gesture(
@@ -181,48 +174,48 @@ struct DocumentModalView<Destination: View>: View {
     }
 
     private var uploadButton: some View {
-           FilePicker(
-               types: [.item],
-               allowMultiple: false,
-               title: "Upload Document        ",
-               onPicked: { urls in
-                   if let url = urls.first {
-                       // File picked successfully, handle the selected URL
-                       print("Selected file URL: \(url)")
-                       if let selectedOption = onboardingData.idType {
-                           documentHandler.addDocument(url, forIDType: selectedOption) // Add the document with the selected ID type
-                       }
-                       isNavigationActive = true
-                   } else {
-                       // File picking was canceled or failed
-                       print("File picking was canceled or failed.")
-                   }
-               }
-           )
-           .foregroundColor(.black)
-           .padding()
-           .background(Color.gray.opacity(0.3))
-           .cornerRadius(8)
-       }
-    private var continueButton: some View {
-        Button(action: {
-            if let selectedOption = onboardingData.idType, let urls = selectedOptions[selectedOption] {
-                documentHandler.addDocument(urls, forIDType: selectedOption)
-                //selectedOptions.removeValue(forKey: selectedOption) // Clear selected options for the ID type
+        FilePicker(
+            types: [.item],
+            allowMultiple: false,
+            title: "Upload Document        ",
+            onPicked: { urls in
+                if let url = urls.first {
+                    // File picked successfully, handle the selected URL
+                    print("Selected file URL: \(url)")
+                    if let selectedOption = selectedOption {
+                        documentHandler.addDocument(url, forIDType: selectedOption) // Add the document with the selected ID type
+                    }
+                    isNavigationActive = true
+                } else {
+                    // File picking was canceled or failed
+                    print("File picking was canceled or failed.")
+                }
             }
-            isVisible = false
-            isNavigationActive = true
-        }) {
-            Text("Continue")
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height:50)
-                .background(config.primaryColor) // Gray background when profileImage is nil
-                .cornerRadius(8)
-                .padding(.horizontal)
-        }
+        )
+        .foregroundColor(.black)
+        .padding()
+        .background(Color.gray.opacity(0.3))
+        .cornerRadius(8)
     }
 
+    private var continueButton: some View {
+           Button(action: {
+               if let selectedOption = selectedOption, let urls = selectedOptions[selectedOption] {
+                   documentHandler.addDocument(urls, forIDType: selectedOption)
+                   //selectedOptions.removeValue(forKey: selectedOption) // Clear selected options for the ID type
+               }
+               isVisible = false
+               isNavigationActive = true
+           }) {
+               Text("Continue")
+                   .foregroundColor(.white)
+                   .frame(maxWidth: .infinity)
+                   .frame(height: 50)
+                   .background(config.primaryColor) // Gray background when profileImage is nil
+                   .cornerRadius(8)
+                   .padding(.horizontal)
+           }
+       }
     class Coordinator: NSObject, UIDocumentPickerDelegate {
         var parent: DocumentModalView
 
@@ -314,11 +307,14 @@ struct DocumentModalView2: View {
     @GestureState private var dragState = DragState()
     @State private var selectedOptions: [String: URL] = [:] // Dictionary to store selected options and their corresponding file URLs
     var documentHandler: DocumentHandling
-    //@State private var isNavigationActive: Bool = false
+    @State private var isNavigationActive: Bool = false
     @EnvironmentObject var config: AppConfig
     @State private var keyboardHeight: CGFloat = 0
     @EnvironmentObject var onboardingData: OnboardingData
     @State private var DropdownExpand = false
+    @State private var documentTypes: [String] = [] // Array to store document names
+    @State private var selectedOption: String? = nil // Local state variable for selected option
+
 
     var body: some View {
         GeometryReader { geometry in
@@ -334,7 +330,7 @@ struct DocumentModalView2: View {
 
                     VStack(spacing: 16) {
                         titleBar
-                        QuestionWithDropdownModalDocument(question: "Type Of ID", DropdownExpand: $DropdownExpand, options: ["Driving License", "Passport", "National ID"], selectedOption: $onboardingData.idType)
+                        QuestionWithDropdownModalDocument(question: "Type Of ID", DropdownExpand: $DropdownExpand, options: documentTypes, selectedOption: $selectedOption)
                         uploadButton
                         continueButton
                     }
@@ -342,6 +338,10 @@ struct DocumentModalView2: View {
                     
                 }
             }
+            .onAppear {
+                           fetchDocumentTypes() // Call fetchDocumentTypes when the view appears
+                       }
+
             .offset(y: isVisible ? 0 : geometry.size.height)
             .animation(.easeInOut(duration: isVisible ? 0.3 : 0))
             .gesture(
@@ -387,36 +387,38 @@ struct DocumentModalView2: View {
             .frame(width: 30, height: 6)
     }
 
-    public var uploadButton: some View {
-        FilePicker(
-            types: [.item],
-            allowMultiple: false,
-            title: "Upload Documentssss        ",
-            onPicked: { urls in
-                if let url = urls.first {
-                    // File picked successfully, handle the selected URL
-                    print("Selected file URL: \(url)")
-                    if let selectedOption = onboardingData.idType {
-                        selectedOptions[selectedOption] = url // Link selected option with file URL
-                    }
-                    //documentHandler.addDocuments([url])
-                } else {
-                    // File picking was canceled or failed
-                    print("File picking was canceled or failed.")
-                }
-            }
-        )
-        .foregroundColor(.black)
-        .padding()
-        .background(Color.gray.opacity(0.3))
-        .cornerRadius(8)
-    }
-
+    private var uploadButton: some View {
+           FilePicker(
+               types: [.item],
+               allowMultiple: false,
+               title: "Upload Document        ",
+               onPicked: { urls in
+                   if let url = urls.first {
+                       // File picked successfully, handle the selected URL
+                       print("Selected file URL: \(url)")
+                       if let selectedOption = selectedOption {
+                                              documentHandler.addDocument(url, forIDType: selectedOption) // Add the document with the selected ID type
+                                          }
+                       isNavigationActive = true
+                   } else {
+                       // File picking was canceled or failed
+                       print("File picking was canceled or failed.")
+                   }
+               }
+           )
+           .foregroundColor(.black)
+           .padding()
+           .background(Color.gray.opacity(0.3))
+           .cornerRadius(8)
+       }
     private var continueButton: some View {
         Button(action: {
+            if let selectedOption = selectedOption, let urls = selectedOptions[selectedOption] {
+                          documentHandler.addDocument(urls, forIDType: selectedOption)
+                          //selectedOptions.removeValue(forKey: selectedOption) // Clear selected options for the ID type
+                      }
             isVisible = false
-            //documentHandler.addDocuments(selectedOptions.values.compactMap { $0 })
-            //isNavigationActive = true
+            isNavigationActive = true
         }) {
             Text("Continue")
                 .foregroundColor(.white)
@@ -467,4 +469,46 @@ struct DocumentModalView2: View {
         options.removeAll { $0 == selectedOption } // Remove selected option
         return options
     }
+    
+    private func fetchDocumentTypes() {
+        // Dummy data representing the response from the server
+        let dummyData = """
+        {
+          "status": "00",
+          "message": "Documents Fetched Successfully.",
+          "data": [
+            {
+              "id": 3,
+              "type": "Identification",
+              "name": "National ID - TAN",
+              "dateCreated": null,
+              "countryId": 2
+            },
+            {
+              "id": 4,
+              "type": "Identification",
+              "name": "Passport - TAN",
+              "dateCreated": null,
+              "countryId": 2
+            },
+            {
+              "id": 6,
+              "type": "Tax Document",
+              "name": "TRA",
+              "dateCreated": null,
+              "countryId": 2
+            }
+          ]
+        }
+        """.data(using: .utf8)!
+        
+        do {
+            let decoder = JSONDecoder()
+            let response = try decoder.decode(DocumentTypesResponse.self, from: dummyData)
+            self.documentTypes = response.data.map { $0.name }
+        } catch {
+            print("Error decoding JSON: \(error.localizedDescription)")
+        }
+    }
+
 }

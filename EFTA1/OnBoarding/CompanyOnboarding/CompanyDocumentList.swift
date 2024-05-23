@@ -20,14 +20,18 @@ struct CustomerDocumentList: View {
                 ProgressBar(geometry: geometry, progress: $progress, presentationMode: presentationMode, title: "Customer Document List", description: "Kindly complete the following details")
 
                 VStack{
-                    ForEach(onboardingData.documentURLs, id: \.self) { documentURL in
-                        ListedDocument(documentName: documentURL.lastPathComponent, onDelete: {
-                            // Remove document from array
-                            if let index = onboardingData.documentURLs.firstIndex(of: documentURL) {
-                                onboardingData.documentURLs.remove(at: index)
-                            }
-                        })
-                        
+                    ForEach(Array(onboardingData.documentURLs.values.enumerated()), id: \.element) { index, documentURLs in
+                        ForEach(documentURLs, id: \.self) { documentURL in
+                            ListedDocument(documentName: documentURL.lastPathComponent, onDelete: {
+                                // Remove document from array
+                                if let dictIndex = onboardingData.documentURLs.firstIndex(where: { $0.value == documentURLs }) {
+                                    // Use the dictIndex to access and modify the dictionary
+                                    var updatedURLs = documentURLs
+                                    updatedURLs.remove(at: index)
+                                    onboardingData.documentURLs[onboardingData.documentURLs.keys[dictIndex]] = updatedURLs
+                                }
+                            })
+                        }
                     }
                     Button(action: {
                         navigateBack = true

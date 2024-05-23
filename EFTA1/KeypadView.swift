@@ -101,8 +101,14 @@ struct CircleView: View {
         HStack(spacing: 10) {
             ForEach(0..<4) { index in
                 Circle()
-                    .foregroundColor(index < self.name.count ? config.primaryColor : .gray.opacity(0.5))
+                    .foregroundColor(index < self.name.count ? config.primaryColor : Color.white)
                     .frame(width: 20, height: 20)
+                    .overlay(
+                        Circle()
+                            .stroke(config.primaryColor)
+                            .frame(width: 20, height: 20)
+                    
+                    )
                 /*
                  .overlay(
                  Text(index < self.name.count ? String(self.name[self.name.index(self.name.startIndex, offsetBy: index)]) : "")

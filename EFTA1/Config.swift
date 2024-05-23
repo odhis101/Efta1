@@ -49,7 +49,7 @@ class AppConfig: ObservableObject {
     var user: String {
         switch currentRegion {
         case .efta:
-            return "user 1 "
+            return "user 1"
         case .efken:
             return "user 2"
         }

@@ -15,7 +15,6 @@ protocol DocumentHandling {
 class OnboardingData: ObservableObject, DocumentHandling {
     @Published var selectedQuestionIndex = 0
     @Published var isExpanded: Bool = false
-
     @Published var customerType: Int? = nil // CustomerType:<integer>
     @Published var customerName: String = "" // CustomerName:<string>
     @Published var idType: String? = nil // IdType:<integer>
