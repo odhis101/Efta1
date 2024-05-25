@@ -12,6 +12,7 @@ struct CustomNavigationButton<Destination>: View where Destination: View {
     var destination: Destination
     var label: String
     var backgroundColor: Color
+    @EnvironmentObject var config: AppConfig
 
     var body: some View {
         NavigationLink(destination: destination) {
@@ -23,6 +24,9 @@ struct CustomNavigationButton<Destination>: View where Destination: View {
                 .cornerRadius(10)
                 .padding(.horizontal)
                 .padding(.vertical)
+                .disabled(backgroundColor != config.primaryColor) // Disable if the color is not the primary color
+
+            
         }
     }
 }

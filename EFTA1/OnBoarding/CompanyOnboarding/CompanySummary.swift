@@ -16,12 +16,13 @@ struct CompanySummary: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var navigateToCustomerDetails = false // State to handle navigation to CustomerName
     @State private var navigateToCustomerDetails2 = false // State to handle navigation to CustomerName
+    @EnvironmentObject var StolenonboardingData: OnboardingData
 
 
 
     var receiptItems: [(String, String)] {
           [
-              ("Company name", onboardingData.companyName),
+              ("\(StolenonboardingData.titleForCustomerOnboarding) name", onboardingData.companyName),
               ("Type of ID ", onboardingData.idType ?? ""),
               ("Postal address", onboardingData.postalAddress),
               ("Region", onboardingData.region ?? ""),

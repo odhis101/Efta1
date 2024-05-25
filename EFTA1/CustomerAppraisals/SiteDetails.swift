@@ -15,8 +15,6 @@ struct SiteDetails: View {
     @EnvironmentObject var config: AppConfig
 
     @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
-    
-    
     @Environment(\.presentationMode) var presentationMode
     
 

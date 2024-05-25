@@ -15,14 +15,14 @@ struct CompanyDocument: View {
     @EnvironmentObject var config: AppConfig
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var onboardingData: CompanyOnboardingData  // Use the shared onboarding data
-
+    @EnvironmentObject var StolenonboardingData: OnboardingData
 
 
     var body: some View {
 
             GeometryReader { geometry in
                 VStack{
-                    ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Company document",description: "Kindly upload the Company documents ")
+                    ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"\(StolenonboardingData.titleForCustomerOnboarding) document",description: "Kindly upload the Company documents ")
                         .padding(.trailing,20)
                     
                     Spacer()

@@ -13,11 +13,12 @@ struct CompanyDocumentList: View {
     @EnvironmentObject var onboardingData: CompanyOnboardingData
     @State private var navigateBack = false
     @Environment(\.presentationMode) var presentationMode
-    
+    @EnvironmentObject var StolenonboardingData: OnboardingData
+
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                ProgressBar(geometry: geometry, progress: $progress, presentationMode: presentationMode, title: "Company Document List", description: "Kindly complete the following details")
+                ProgressBar(geometry: geometry, progress: $progress, presentationMode: presentationMode, title: "\(StolenonboardingData.titleForCustomerOnboarding) Document List", description: "Kindly complete the following details")
 
                 VStack{
                     ForEach(Array(onboardingData.documentURLs.values.enumerated()), id: \.element) { index, documentURLs in

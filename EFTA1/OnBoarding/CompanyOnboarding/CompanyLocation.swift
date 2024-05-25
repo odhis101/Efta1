@@ -10,6 +10,7 @@ struct CompanyLocation: View {
     @EnvironmentObject var onboardingData: CompanyOnboardingData
     @EnvironmentObject var config: AppConfig
     @StateObject private var locationManager = LocationManager()
+    @EnvironmentObject var StolenonboardingData: OnboardingData
 
     @Environment(\.presentationMode) var presentationMode
 
@@ -17,7 +18,7 @@ struct CompanyLocation: View {
     var body: some View {
         GeometryReader { geometry in
         VStack {
-            ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:" users location",description: "Kindly select the location of the customers ")
+            ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"\(StolenonboardingData.titleForCustomerOnboarding) location",description: "Kindly select the location of the customers ")
 
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color(hex: "#F2F2F7"))
