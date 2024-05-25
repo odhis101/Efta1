@@ -14,7 +14,6 @@ struct BusinessPerformance: View {
 
     @EnvironmentObject var config: AppConfig
 
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
 
@@ -26,10 +25,10 @@ struct BusinessPerformance: View {
 
                 ScrollView{
 
-                    QuestionWithButtons(question: "The end products or services are consistent with the appraisal")
-                    QuestionWithTextField(question: "Comments")
-                    QuestionWithButtons(question: "There is sufficient customer demand.")
-                    QuestionWithTextField(question: "Comments")
+                   // QuestionWithButtons(question: "The end products or services are consistent with the appraisal")
+                    //QuestionWithTextField(question: "Comments")
+                 //   QuestionWithButtons(question: "There is sufficient customer demand.")
+                    //QuestionWithTextField(question: "Comments")
 
         
 

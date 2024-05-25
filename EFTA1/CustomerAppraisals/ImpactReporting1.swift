@@ -10,7 +10,7 @@ import SwiftUI
 struct ImpactReporting1: View {
     @State private var progress: CGFloat = 1 // Initial progress
     @State private var capturedImage: UIImage?
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
     @State private var CurrentMonthlyWage:String=""
     @State private var CurrentDailyWage:String=""
     @State private var RevenueLastMonth:String=""
@@ -32,15 +32,16 @@ struct ImpactReporting1: View {
                 ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Impact Reporting ",description: "Kindly complete the following details") // Pass progress as a binding
 
                 ScrollView{
-                    QuestionWithSmallTextField(question: "Number of emploees",placeholder:"Enter Number",selectedOption: $CurrentMonthlyWage)
-                    QuestionWithSmallTextField(question: "Number of Permanent female employees",placeholder:"Enter Number",selectedOption: $CurrentDailyWage)
-                    QuestionWithSmallTextField(question: "Number of casual male employees",placeholder:"Enter Number",selectedOption: $RevenueLastMonth)
-                    QuestionWithSmallTextField(question: "Revenues this month",placeholder:"Enter Number",selectedOption: $CurrentMonthlyWage)
-                    QuestionWithSmallTextField(question: "Days employed per month by casuals",placeholder:"Enter Number Of days",selectedOption: $RevenueNexttMonth)
-                    QuestionWithButtons(question: "Health benefits for permanent emlpoyees")
+                    QuestionWithSmallTextField(question: "Number of emploees",placeholder:"Enter Number",selectedOption: $siteQuestionData.numberOfPermanentMaleEmployees)
+                    QuestionWithSmallTextField(question: "Number of Permanent female employees",placeholder:"Enter Number",selectedOption: $siteQuestionData.numberOfPermanentFemaleEmployees)
+                    QuestionWithSmallTextField(question: "Number of casual male employees",placeholder:"Enter Number",selectedOption: $siteQuestionData.numberOfCasualMaleEmployees)
+                    QuestionWithSmallTextField(question: "Number of casual female employees ",placeholder:"Enter Number",selectedOption: $siteQuestionData.numberOfCasualFemaleEmployees)
+                    
+                    QuestionWithSmallTextField(question: "Revenues this month",placeholder:"Enter Number",selectedOption: $siteQuestionData.daysEmployedPerMonthByCasuals)
+                    QuestionWithSmallTextField(question: "Days employed per month by casuals",placeholder:"Enter Number Of days",selectedOption: $siteQuestionData.daysEmployedPerMonthByCasuals)
+                    QuestionWithButtons(question: "Health benefits for permanent emlpoyees",answer:$siteQuestionData.HealthInsurance)
 
 
-                    //QuestionWithSmallTextField(question: "Enter ID Number",placeholder:"ID Numher",selectedOption:$IDNumber)
 
                     
 

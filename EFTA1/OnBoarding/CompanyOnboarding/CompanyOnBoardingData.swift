@@ -13,50 +13,51 @@ import MapKit
 
 
 
-class CompanyOnboardingData: ObservableObject, DocumentHandling {
-    @Published var selectedQuestionIndex = 0
-    @Published var isExpanded: Bool = false
-    @Published var customerType: Int? = nil // CustomerType:<integer>
-    @Published var CompanyName: String = "" // CustomerName:<string>
-    @Published var idType: String? = nil // IdType:<integer>
-    @Published var TIN: String = "" // IdNumber:<string>
-    @Published var VRN: String = "" // PassportNumber:<string>
-    @Published var contactPersonName: String = "" // PassportNumber:<string>
-    @Published var idNumber: String = "" // PassportNumber:<string>
+import SwiftUI
+import Combine
 
-    
-    //@Published var VRN: String? = nil // Gender:<integer>
-    @Published var maritalStatus: String? = nil // MaritalStatus:<integer>
-    @Published var postalAddress: String = "" // PostalAddress:<string>
-    @Published var region: String? = nil // Region:<string>
-    @Published var district: String? = nil // District:<string>
-    @Published var ward: String = "" // Ward:<string>
-    @Published var nationality: String? = nil // Nationality:<string>
-    @Published var emailAddress: String = "" // EmailAddress:<string>
-    @Published var phoneNumber: String = "" // PhoneNumber:<string>
-    @Published var tin: String = "" // TIN:<string>
-    @Published var typeOfEquipment: String = "" // TypeOfEquipment:<string>
-    @Published var priceOfEquipment: String = "" // PriceOfEquipment:<string>
-    @Published var profileImage: UIImage? = nil
-    @Published var selectedCoordinate: CLLocationCoordinate2D? = nil // CustomerLocation
+class CompanyOnboardingData: ObservableObject,DocumentHandling {
+    // Page 1
+
+    @Published var companyName: String = ""
+    @Published var TIN: String = ""
+    @Published var VRN: String = ""
+    @Published var postalAddress: String = ""
+    @Published var region: String?
+    @Published var district: String?
     @Published var districtOptions: [String] = []
-    @Published var titleForCustomerOnboarding: String = ""
+    @Published var ward: String = ""
 
-    // UI related states
-    @Published var isPickerPresented = false
-    @Published var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    // Page 2
+    @Published var contactPersonName: String = ""
+    @Published var idType: String?
+    @Published var idNumber: String = ""
+    @Published var phoneNumber: String = ""
+    @Published var emailAddress: String = ""
+    @Published var nationality: String? = nil // Nationality:<string>
+    @Published var typeOfEquipment: String = ""
+    @Published var priceOfEquipment: String = ""
 
+    // Page 3 (Location-related variables)
+    // Add your own logic here
+    @Published var selectedCoordinate: CLLocationCoordinate2D? = nil // CustomerLocation
+
+
+    // Page 4 (Documents-related variables)
+    // Add your own logic here
     @Published var documentURLs: [String: [URL]] = [:]
 
-    // Implement DocumentHandling protocol methods
-       func addDocument(_ document: URL, forIDType idType: String) {
-           if var existingDocuments = documentURLs[idType] {
-               existingDocuments.append(document)
-               documentURLs[idType] = existingDocuments
-           } else {
-               documentURLs[idType] = [document]
-           }
-       }
+
+    // Implement any DocumentHandling methods if required
+    
+    func addDocument(_ document: URL, forIDType idType: String) {
+        if var existingDocuments = documentURLs[idType] {
+            existingDocuments.append(document)
+            documentURLs[idType] = existingDocuments
+        } else {
+            documentURLs[idType] = [document]
+        }
+    }
 
     func clearDocuments() {
         documentURLs.removeAll()

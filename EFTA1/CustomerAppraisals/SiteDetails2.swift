@@ -13,11 +13,10 @@ struct SiteDetails2: View {
     @State private var capturedImage: UIImage?
 
     @EnvironmentObject var config: AppConfig
-    @EnvironmentObject var customerApraisalData : CustomerApraisalData
 
     @Environment(\.presentationMode) var presentationMode
 
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
     var body: some View {
  
 
@@ -27,25 +26,28 @@ struct SiteDetails2: View {
                 ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Site Details",description: "Kindly collect the following information from the customer") // Pass progress as a binding
 
                 ScrollView{
-                PhotoCaptureButton(capturedImage: $capturedImage,
-                                   SiteQuestionData: siteQuestionData,
+                PhotoCaptureButton(capturedImage: $siteQuestionData.electricalFacilities,
+                                   siteQuestionData: siteQuestionData,
                                    question: "Are the required electricity facilities available? Are three phase power / other facilities required?",
-                                   imageStorage: $siteQuestionData.profileImage)
+                                   imageStorage: $siteQuestionData.electricalFacilities)
                     
-                PhotoCaptureButton(capturedImage: $capturedImage,
-                                       SiteQuestionData: siteQuestionData,
+                    
+                    
+                    
+                PhotoCaptureButton(capturedImage: $siteQuestionData.waterAndOtherFacilities,
+                                   siteQuestionData: siteQuestionData,
                                        question: "Are water and any other required facilities available??",
-                                       imageStorage: $siteQuestionData.profileImage)
+                                       imageStorage: $siteQuestionData.waterAndOtherFacilities)
                     
-                PhotoCaptureButton(capturedImage: $capturedImage,
-                                       SiteQuestionData: siteQuestionData,
+                PhotoCaptureButton(capturedImage: $siteQuestionData.siteChangesRequired,
+                                   siteQuestionData: siteQuestionData,
                                        question: "Have you noted any site changes that will be required?",
-                                       imageStorage: $siteQuestionData.profileImage)
+                                       imageStorage: $siteQuestionData.siteChangesRequired)
                 
                 
-                QuestionWithTextField(question: "Does the applicant have enough experience with this kind of machinery before? If not, will they hire experienced people? Did you ask for copies of CVs or driving licenses of their employees, or copies of any relevant employee certificates?")
+                    QuestionWithTextField(question: "Does the applicant have enough experience with this kind of machinery before? If not, will they hire experienced people? Did you ask for copies of CVs or driving licenses of their employees, or copies of any relevant employee certificates?", answers:$siteQuestionData.experienceInMachinery)
                 
-                    QuestionWithButtons(question: customerApraisalData.name)
+                    QuestionWithButtons(question: "Did you see any customers on site?", answer:$siteQuestionData.areCustomersOnSite)
 
                 
                 }

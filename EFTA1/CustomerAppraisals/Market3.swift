@@ -15,7 +15,7 @@ struct Market3: View {
     @EnvironmentObject var config: AppConfig
 
     
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
     
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
@@ -27,17 +27,16 @@ struct Market3: View {
 
                 ScrollView{
 
-                    QuestionWithButtons(question: "If the sector is not familiar to EFTA, did you discuss the processes involved in production in detail?")
-                    QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?")
+                    QuestionWithButtons(question: "Do the applicant's forecasted volumes make sense based on the capacity of the equipment?",answer: $siteQuestionData.areForecastedVolumesMakingSense)
+            
+                    PhotoCaptureButton(capturedImage: $siteQuestionData.otherIncomeSourcesProof,
+                                       siteQuestionData: siteQuestionData,
+                                       question: "Did you see proof of the applicant's other sources of income? Are those businesses operating well? Is it worth visiting those businesses?",
+                                       imageStorage: $siteQuestionData.otherIncomeSourcesProof)
                     
-                    PhotoCaptureButton(capturedImage: $capturedImage,
-                                       SiteQuestionData: siteQuestionData,
-                                       question: "Has a full description of the site been noted (number of buildings / warehouses / acreage etc)?",
-                                       imageStorage: $siteQuestionData.profileImage)
                     
-                    
-                    QuestionWithButtons(question: "Have you checked who are the applicant's top three customers (will these cover a high enough % of projected sales, or will we need more than 3)?")
-                    QuestionWithButtons(question: "Have you confirmed who are the key competitors, where they are located, whether there is any risk of over-supply / too much competition in the local area?")
+                    QuestionWithButtons(question: "Have you discussed the possibility that the applicant may decide to produce different products over the next three years?",answer: $siteQuestionData.potentialProductDiversification)
+                    QuestionWithButtons(question: "Are there any other services (e.g. ploughing services) that the applicant is thinking about providing?",answer: $siteQuestionData.additionalServicesConsideration)
 
 
                 
@@ -46,18 +45,7 @@ struct Market3: View {
                 
                 }
                 Spacer ()
-                /*
-                NavigationLink(destination: Character_Credit()){
-
-                Text("Continue")
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height:40)
-                    .background(config.primaryColor) // Gray background when profileImage is nil
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-                    }
-                */
+            
                 
                 CustomNavigationButton(destination: Character_Credit(), label: "Continue", backgroundColor: config.primaryColor)
 

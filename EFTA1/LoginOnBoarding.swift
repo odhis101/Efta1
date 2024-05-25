@@ -83,7 +83,7 @@ struct LoginOnBoarding: View {
                             VStack(spacing: 16) {
                               
                                 // Page Indicator (Dots)
-                                PageControl(numberOfPages: carouselItems.count, currentPage: $currentIndex)
+                                //PageControl(numberOfPages: carouselItems.count, currentPage: $currentIndex)
                                 
                                 // Continue Button
                                 Button(action: {

@@ -34,13 +34,13 @@ struct Dashboard: View {
             
          
                       LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                          CustomComponent(iconName: "visit 1", text: "New          Customer",variable: 1)
-                          CustomComponent(iconName: "appraisal 1", text: "Customer Appraisal",variable: 2)
-                          CustomComponent(iconName: "delivery 1", text: "Equipment Delivery",variable: 3)
-                          CustomComponent(iconName: "monitoring-system 2", text: "Customer Monitoring",variable: 4)
-                          CustomComponent(iconName: "towing-vehicle 1", text: "Customer Repossession",variable: 5)
+                          CustomComponent(iconName: "visit 1", text: "New \n Customer",variable: 1)
+                          CustomComponent(iconName: "appraisal 1", text: "Customer \n Appraisal",variable: 2)
+                          CustomComponent(iconName: "delivery 1", text: "Equipment \n Delivery",variable: 3)
+                          CustomComponent(iconName: "monitoring-system 2", text: "Customer \n Monitoring",variable: 4)
+                          CustomComponent(iconName: "towing-vehicle 1", text: "Customer \n Repossession",variable: 5)
                           CustomComponent(iconName: "clipboard_1273337 1", text: "Reports",variable: 6)
-                          CustomComponent(iconName: "file_10900273 1", text: "Customer Statements",variable:7)
+                          CustomComponent(iconName: "file_10900273 1", text: "Customer \n Statements",variable:7)
                       }
                       .padding()
         
@@ -208,105 +208,6 @@ struct PointsView: View {
                     
                     Spacer()
 
-                    
-                    
-                    
-                    
-                    /*
-                    Button(action: {
-                        // Navigate to the desired view
-                        navigateToApprasial = true
-                    }) {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(height: 40)
-                            .frame(width: geometry.size.width * 0.95)
-                            .padding(.leading, 10)
-                            .overlay(
-                                VStack(spacing: 0) {
-                                    HStack {
-                                        Image("appraisal")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 20, height: 20)
-                                            .foregroundColor(.white)
-
-                                        Text("Customer appraisal")
-                                            .font(.headline)
-                                            .foregroundColor(.white)
-                                            .padding(.horizontal)
-
-                                        Spacer()
-
-                                        Circle()
-                                            .foregroundColor(.green) // Set the circle color to green
-                                            .frame(width: 20, height: 20) // Adjust size as needed
-                                            .padding()
-                                            .overlay(
-                                                Text("2")
-                                                    .foregroundColor(.white) // Set the text color to white
-                                                    .font(.system(size: 15)) // Adjust font size and weight as needed
-                                            )
-
-                                        Image(systemName: "arrow.right")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 15, height: 15)
-                                            .foregroundColor(.white)
-                                            .padding()
-                                    }
-                                    .padding()
-                                }
-                            )
-                    }
-
-                    Button(action: {
-                        // Navigate to the desired view
-                        navigateToMonitoring = true
-                    }) {
-
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.gray.opacity(0.3))
-                            .frame(height: 40)
-                            .frame(width: geometry.size.width * 0.95)
-                            .padding(.top,10)
-                            .padding(.leading,10)
-                            .overlay(
-                                VStack(spacing: 0) {
-                                    HStack {
-                                        Image("monitoring-system")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 20, height: 20)
-                                            .foregroundColor(.white)
-
-                                        Text("Customer monitoring")
-                                            .font(.headline)
-                                            .foregroundColor(.white)
-                                            .padding(.horizontal)
-
-                                        Spacer()
-                                        Circle()
-                                            .foregroundColor(.green) // Set the circle color to green
-                                            .frame(width: 20, height: 20) // Adjust size as needed
-                                            .padding()
-                                            .overlay(
-                                                Text("2")
-                                                    .foregroundColor(.white) // Set the text color to white
-                                                    .font(.system(size: 15)) // Adjust font size and weight as needed
-                                            )
-                                        Image(systemName: "arrow.right")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 15, height: 15)
-                                            .foregroundColor(.white)
-                                            .padding()
-                                    }
-                                    .padding()
-                                }
-                            )
-                    }
-                    */
                     NavigationLink(destination: CustomerApraisalsSearch(), isActive: $navigateToApprasial) { EmptyView() }
                     NavigationLink(destination: CustomerMonitoringSearch(), isActive: $navigateToMonitoring) { EmptyView() }
                 }

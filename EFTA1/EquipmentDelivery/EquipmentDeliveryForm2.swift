@@ -39,8 +39,8 @@ struct EquipmentDeliveryForm2: View {
              
                     QuestionWithDate(question: "Date insurance ends")
                     
-                    QuestionWithButtons(question: "Can the investment be activated?")
-                    QuestionWithTextField(question: "If no, why not and what is the agreed plan and timeline for activation?")
+                    //QuestionWithButtons(question: "Can the investment be activated?")
+                   // QuestionWithTextField(question: "If no, why not and what is the agreed plan and timeline for activation?")
                     QuestionWithSmallTextField(question: "",placeholder: "EFTA Asset number",selectedOption: $AssetNumber)
 
                     

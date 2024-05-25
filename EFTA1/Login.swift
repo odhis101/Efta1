@@ -20,7 +20,10 @@ struct Login: View {
     let goback = true // Make it static
     @State var showAlert = false
     @State var errorMessage = ""
-
+    @State private var isLoading = false // State for loading indicator
+    @State private var showToast = false // State to show toast message
+    @State private var toastMessage = "" // Message for the toast
+    @State private var isSuccess = false // Success status for the toast
     
 
     @Environment(\.presentationMode) var presentationMode
@@ -73,18 +76,11 @@ struct Login: View {
                             }
 
     }
-            .alert(isPresented: $showError) {
-                Alert(
-                    title: Text("Pin Dont Match "),
-                    message: Text("Please try again "),
-                    primaryButton: .destructive(Text("Retry"), action: {
-                        //shouldNavigate = true
-                    }),
-                    secondaryButton: .cancel({
-                        // Optional: Handle cancellation
-                    })
-                )
+            .overlay(isLoading ? LoadingModal() : nil)
+            .toast(isPresenting: $showToast) {
+                AlertToast(type: isSuccess ? .complete(.green) : .error(.red), title: toastMessage)
             }
+        
 
         
         
@@ -93,6 +89,8 @@ struct Login: View {
     private func loginWithPasscode(passcode: String) {
         // Retrieve phone number from Keychain
         //shouldNavigate = true // Navigate to the next screen
+        isLoading = true
+
 
         guard let phoneNumber = AuthManager.shared.loadPhoneNumber() else {
             print("Phone number not found in Keychain")
@@ -101,18 +99,22 @@ struct Login: View {
         }
         print("this the first request asking for number ", phoneNumber)
 
+        // network that might cause annoying bugs later 
+        
         NetworkManager.shared.mobileAppLogin(phoneNumber: phoneNumber, pin: passcode) { success, error in
             DispatchQueue.main.async {
-                if success {
-                    shouldNavigate = true // Navigate to the next screen
-                } else {
-                    print(phoneNumber)
-                    errorMessage = error?.localizedDescription ?? "Unknown error"
-                    showAlert = true
-                    //shouldNavigate = true // Navigate to the next screen
-                    //showError = true // Show error alert
-                    print("Login error: \(error?.localizedDescription ?? "Unknown error")")
-                    pinCode = "" // Reset PIN code
+                
+                self.isLoading = false
+                self.showToast = true
+                self.isSuccess = success
+                self.shouldNavigate = true
+                //self.toastMessage = error
+                print("Login error: \(error?.localizedDescription ?? "Unknown error")")
+
+                
+                // Hide toast after 3 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.showToast = false
                 }
             }
         }

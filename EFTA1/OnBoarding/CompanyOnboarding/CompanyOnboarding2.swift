@@ -24,6 +24,7 @@ struct CompanyOnboarding2: View {
     @State private var TypesOfEquimpments:String=""
     @State private var Equipmentprice:String=""
     @EnvironmentObject var onboardingData: CompanyOnboardingData
+    @EnvironmentObject var StolenonboardingData: OnboardingData
 
 
     @State private var selectedRegion: String? = nil
@@ -42,22 +43,17 @@ struct CompanyOnboarding2: View {
             GeometryReader { geometry in
                 VStack {
                     ScrollView{
-                        ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Company onboarding",description: "Kindly collect the following information from the customer")
+                        ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:StolenonboardingData.titleForCustomerOnboarding ,description: "Kindly collect the following information from the customer")
 
-                        QuestionWithSmallTextField(question: "",placeholder:"Contact person name",selectedOption:$onboardingData.contactPersonName)
-                        
+                        QuestionWithSmallTextField(question: "", placeholder: "Contact person name", selectedOption: $onboardingData.contactPersonName)
                         QuestionWithDropdown(question: "Type Of ID", options: ["Driving License", "Passport", "National ID"], selectedOption: $onboardingData.idType)
-                        
                         QuestionWithSmallTextField(question: "Enter ID Number", placeholder: "ID Number", selectedOption: $onboardingData.idNumber)
-                        QuestionWithSmallTextField(question: "Phone Number",placeholder:"Phone Number",selectedOption:$onboardingData.phoneNumber)
-                        QuestionWithSmallTextField(question: "Email",placeholder:"Email address",selectedOption:$onboardingData.emailAddress)
-
-
-                    QuestionWithDropdown(question: "Nationality ", options: nationality,selectedOption:$onboardingData.nationality)
-
-                        QuestionWithSmallTextField(question: "Types Of Equipment",placeholder:"types of equipment",selectedOption:$onboardingData.typeOfEquipment)
+                        QuestionWithSmallTextField(question: "Phone Number", placeholder: "Phone Number", selectedOption: $onboardingData.phoneNumber)
+                        QuestionWithSmallTextField(question: "Email", placeholder: "Email address", selectedOption: $onboardingData.emailAddress)
+                        QuestionWithDropdown(question: "Nationality ", options: nationality,selectedOption:$onboardingData.nationality)
+                        QuestionWithSmallTextField(question: "Types Of Equipment", placeholder: "Types of equipment", selectedOption: $onboardingData.typeOfEquipment)
+                        QuestionWithSmallTextField(question: "Equipment price", placeholder: "Equipment price", selectedOption: $onboardingData.priceOfEquipment)
                         
-                        QuestionWithSmallTextField(question: "Equipment price",placeholder:"Equipment price",selectedOption:$onboardingData.priceOfEquipment)
                     }
                     Spacer()
                     

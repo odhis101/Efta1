@@ -16,7 +16,9 @@ struct IndividualOnboarding: View {
     let questions = ["What is your favorite color?", "What is your pet's name?", "Where were you born?"]
         let locationData: [LocationData] = createLocationData()
         @State private var districtOptions: [String] = []
-
+    
+    // Computed property to check if all required fields are filled
+    // Computed property to check if all required fields are filled
     var body: some View {
             GeometryReader { geometry in
                 VStack {
@@ -26,10 +28,10 @@ struct IndividualOnboarding: View {
                     ScrollView{
                         
                         QuestionWithSmallTextField(question: "Customer Name", placeholder: "Customer Name", selectedOption: $onboardingData.customerName)
-                        QuestionWithDropdown(question: "Type Of ID", options: ["Driving License", "Passport", "National ID"], selectedOption: $onboardingData.idType)
+                        QuestionWithDropdown(question: "Type Of ID", options: ["NATIONAL_ID", "PASSPORT"], selectedOption: $onboardingData.idType)
                         QuestionWithSmallTextField(question: "Enter ID Number", placeholder: "ID Number", selectedOption: $onboardingData.idNumber)
-                        QuestionWithDropdown(question: "Gender", options: ["Male", "Female"], selectedOption: $onboardingData.gender)
-                        QuestionWithDropdown(question: "Marital Status", options: ["Married", "Single"], selectedOption: $onboardingData.maritalStatus)
+                        QuestionWithDropdown(question: "Gender", options: ["MALE", "FEMALE"], selectedOption: $onboardingData.gender)
+                        QuestionWithDropdown(question: "Marital Status", options: ["SINGLE", "MARRIED","DIVORCED","WIDOWED"], selectedOption: $onboardingData.maritalStatus)
                         QuestionWithSmallTextField(question: "Postal Address", placeholder: "Postal Address", selectedOption: $onboardingData.postalAddress)
                         QuestionWithDropdown(question: "Region", options: locationData.map { $0.region }, selectedOption: $onboardingData.region)
                             .onChange(of: onboardingData.region) { newValue in

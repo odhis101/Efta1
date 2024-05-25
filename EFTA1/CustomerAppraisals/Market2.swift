@@ -14,7 +14,7 @@ struct Market2: View {
 
     @EnvironmentObject var config: AppConfig
 
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -27,11 +27,12 @@ struct Market2: View {
 
                 ScrollView{
 
-                    QuestionWithButtons(question: "If the sector is not familiar to EFTA, did you discuss the processes involved in production in detail?")
-                    QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?")
-                    QuestionWithButtons(question: "Have you checked who are the applicant's top three customers (will these cover a high enough % of projected sales, or will we need more than 3)?")
-                    QuestionWithButtons(question: "Have you confirmed who are the key competitors, where they are located, whether there is any risk of over-supply / too much competition in the local area?")
-                    QuestionWithButtons(question: "Have you asked how the customer plans to differentiate themselves from their competitors?")
+                    QuestionWithButtons(question: "Did you get an understanding of long it usually takes the applicant to sell their products or services after production?",answer: $siteQuestionData.isApplicantUnderstandingProductSalesTime)
+                    QuestionWithButtons(question: "Have you checked to what extent the applicant is reliant on government related customers?",answer:$siteQuestionData.isApplicantReliantOnGovernmentCustomers)
+                    QuestionWithButtons(question: "Have you checked whether the applicant sells all of their products at once, as soon as they produce them? Or whether they sell themthroughout the year?",answer: $siteQuestionData.isApplicantSellingProductsAtOnce)
+                    QuestionWithButtons(question: "Have you discussed any seasonality that might impact the business? Have these also been factored into the volumes in the financial schedules?",answer: $siteQuestionData.isApplicantSellingThroughoutYear)
+                    
+                    QuestionWithButtons(question: "Have you asked how the customer plans to differentiate themselves from their competitors?",answer:$siteQuestionData.isSeasonalityImpactingBusiness)
 
 
                 

@@ -14,7 +14,7 @@ struct Character_Credit: View {
     @EnvironmentObject var config: AppConfig
 
     
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
@@ -26,13 +26,13 @@ struct Character_Credit: View {
 
                 ScrollView{
 
-                    QuestionWithButtons(question: "If the sector is not familiar to EFTA, did you discuss the processes involved in production in detail?")
-                    QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?")
-                    QuestionWithButtons(question: "Have you checked who are the applicant's top three customers (will these cover a high enough % of projected sales, or will we need more than 3)?")
-                    QuestionWithButtons(question: "Have you confirmed who are the key competitors, where they are located, whether there is any risk of over-supply / too much competition in the local area?")
-                    QuestionWithButtons(question: "Have you asked how the customer plans to differentiate themselves from their competitors?")
+                    QuestionWithButtons(question: "Did you get phone numbers and names for personal references and raw material suppliers?",answer: $siteQuestionData.arePhoneNumbersAndReferencesCollected)
+                    QuestionWithButtons(question: "Did you ask about any outstanding credit disputes and did you mention we will be checking CreditInfo?",answer: $siteQuestionData.isCreditDisputeDiscussed)
+                    QuestionWithButtons(question: "Has a CreditInfo search bee undertaken and do you have any questions arising from this for the applicant?",answer: $siteQuestionData.isCreditInfoSearchConducted)
+                    QuestionWithButtons(question: "Have you confirmed who are the key competitors, where they are located, whether there is any risk of over-supply / too much competition in the local area?",answer: $siteQuestionData.areExistingLoansReviewed)
+                    QuestionWithButtons(question: "Did you speak with neighbors (can help with verification of key data, further character references, highlighting any issues)?",answer: $siteQuestionData.areNeighborsConsulted)
 
-                    QuestionWithButtons(question: "Have you asked how the customer plans to differentiate themselves from their competitors?")
+              
 
                 
                     

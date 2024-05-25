@@ -91,8 +91,11 @@ struct ListedDocument: View {
         VStack {
             Button(action: {}) { // Mimic the style of QuestionWithFileType
                 HStack {
+                    VStack(alignment: .leading){
                     Text(documentName)
                         .foregroundColor(.black)
+                        .multilineTextAlignment(.leading)
+                    }
                     Spacer()
                     HStack {
                         Image(systemName: "checkmark.circle")

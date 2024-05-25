@@ -551,112 +551,104 @@ class NetworkManager: ObservableObject {
        }
 
 
-    func uploadData(onboardingData: OnboardingData) {
-        print("Starting data upload...")
-        
-        let url = URL(string: "\(baseURL)/Mobile/individualcustomer")!
-        print("Request URL: \(url)")
-        
-        let boundary = "Boundary-\(UUID().uuidString)"
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        var StaffUserId = ""
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        
-        if let staffuserId = AuthManager.shared.loadUserId() {
-            StaffUserId = staffuserId
-        } else {
-            print("No phone number found in Keychain")
-        }
-        
-        let parameters: [String: Any] = [
-            "CustomerType": onboardingData.customerType ?? "",
-            "CustomerName": onboardingData.customerName,
-            "IdType": onboardingData.idType ?? "",
-            "IdNumber": onboardingData.idNumber,
-            "PassportNumber": onboardingData.passportNumber ?? "",
-            "Gender": onboardingData.gender ?? "",
-            "MaritalStatus": onboardingData.maritalStatus ?? "",
-            "PostalAddress": onboardingData.postalAddress,
-            "Region": onboardingData.region ?? "",
-            "District": onboardingData.district ?? "",
-            "Ward": onboardingData.ward,
-            "Nationality": onboardingData.nationality ?? "",
-            "EmailAddress": onboardingData.emailAddress,
-            "PhoneNumber": onboardingData.phoneNumber,
-            "TIN": onboardingData.tin ?? "",
-            "TypeOfEquipment": onboardingData.typeOfEquipment,
-            "PriceOfEquipment": onboardingData.priceOfEquipment,
-            "CustomerLocation.Latitude": onboardingData.selectedCoordinate?.latitude ?? 0.0,
-            "CustomerLocation.Longitude": onboardingData.selectedCoordinate?.longitude ?? 0.0,
-            "StaffUserId": StaffUserId
-        ]
-        
-        print("these are the parameters", parameters)
-        
-        print("Adding parameters to request...")
-        
-        var files: [(data: Data, fieldName: String, fileName: String, mimeType: String)] = []
-        
-        if let profileImage = onboardingData.profileImage,
-           let imageData = profileImage.jpegData(compressionQuality: 0.8) {
-            files.append((data: imageData, fieldName: "999", fileName: "profile.jpg", mimeType: "image/jpeg"))
-        }
-        
-        print("Adding profile image to files...")
-        
-        for (_, urls) in onboardingData.documentURLs {
+    func uploadData(onboardingData: OnboardingData, completion: @escaping (Bool, String) -> Void) {
+            print("Starting data upload...")
+            
+            let url = URL(string: "\(baseURLData)/Mobile/individualcustomer")!
+            print("Request URL: \(url)")
+            
+            let boundary = "Boundary-\(UUID().uuidString)"
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            var StaffUserId = ""
+            request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+            
+            if let staffuserId = AuthManager.shared.loadUserId() {
+                StaffUserId = staffuserId
+            } else {
+                print("No phone number found in Keychain")
+            }
+            
+            let parameters: [String: Any] = [
+                "CustomerType": onboardingData.customerType ?? "",
+                "CustomerName": onboardingData.customerName,
+                "IdType": onboardingData.idType ?? "",
+                "IdNumber": onboardingData.idNumber,
+                "PassportNumber": onboardingData.passportNumber ?? "",
+                "Gender": onboardingData.gender ?? "",
+                "MaritalStatus": onboardingData.maritalStatus ?? "",
+                "PostalAddress": onboardingData.postalAddress,
+                "Region": onboardingData.region ?? "",
+                "District": onboardingData.district ?? "",
+                "Ward": onboardingData.ward,
+                "Nationality": onboardingData.nationality ?? "",
+                "EmailAddress": onboardingData.emailAddress,
+                "PhoneNumber": onboardingData.phoneNumber,
+                "TIN": onboardingData.tin ?? "",
+                "TypeOfEquipment": onboardingData.typeOfEquipment,
+                "PriceOfEquipment": onboardingData.priceOfEquipment,
+                "CustomerLocation.Latitude": onboardingData.selectedCoordinate?.latitude ?? 0.0,
+                "CustomerLocation.Longitude": onboardingData.selectedCoordinate?.longitude ?? 0.0,
+                "StaffUserId": StaffUserId
+            ]
+            
+            print("These are the parameters", parameters)
+            
+            var files: [(data: Data, fieldName: String, fileName: String, mimeType: String)] = []
+            
+            if let profileImage = onboardingData.profileImage,
+               let imageData = profileImage.jpegData(compressionQuality: 0.8) {
+                files.append((data: imageData, fieldName: "999", fileName: "profile.jpg", mimeType: "image/jpeg"))
+            }
+            
+        for (idType, urls) in onboardingData.documentURLs {
             for documentURL in urls {
                 if let documentData = try? Data(contentsOf: documentURL) {
                     let fileName = documentURL.lastPathComponent
-                    let fieldName = "documents[\(onboardingData.idType ?? "")]"  // Unwrapped idType here
+                    let fieldName = idType  // Use the ID type associated with the document
+                    print("this is the field name", fieldName)
                     files.append((data: documentData, fieldName: fieldName, fileName: fileName, mimeType: "application/octet-stream"))
                 }
             }
         }
-        
-        print("Adding document URLs to files...")
-        
-        let body = createMultipartFormData(boundary: boundary, parameters: parameters, files: files)
-        request.httpBody = body
-        
-        print("this is from creating the body ", body)
-        
-        // Log request details
-        logRequest(request)
-        
-        print("Request body:")
-        
-        print("Starting data task...")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("Error uploading data: \(error)")
-                return
-            }
-            guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                if let httpResponse = response as? HTTPURLResponse {
-                    print("Server error: \(httpResponse.statusCode)")
-                    if let responseData = data, let responseBody = String(data: responseData, encoding: .utf8) {
-                        print("Response body: \(responseBody)")
-                    }
-                } else {
-                    print("Server error")
-                }
-                return
-            }
-            
-            print("Response status code: \(response.statusCode)")
-            print("Response body:")
-            if let responseBody = String(data: data, encoding: .utf8) {
-                print(responseBody)
-            } else {
-                print("Unable to convert response data to string")
-            }
-        }
-        task.resume()
-    }
 
+            let body = createMultipartFormData(boundary: boundary, parameters: parameters, files: files)
+            request.httpBody = body
+            
+            // Log request details
+            logRequest(request)
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Error uploading data: \(error)")
+                    completion(false, "Error uploading data: \(error.localizedDescription)")
+                    return
+                }
+                guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+                    if let httpResponse = response as? HTTPURLResponse {
+                        print("Server error: \(httpResponse.statusCode)")
+                        if let responseData = data, let responseBody = String(data: responseData, encoding: .utf8) {
+                            print("Response body: \(responseBody)")
+                        }
+                    } else {
+                        print("Server error")
+                    }
+                    completion(false, "Server error")
+                    return
+                }
+                
+                print("Response status code: \(response.statusCode)")
+                print("Response body:")
+                if let responseBody = String(data: data, encoding: .utf8) {
+                    print(responseBody)
+                    completion(true, "Submission successful!")
+                } else {
+                    print("Unable to convert response data to string")
+                    completion(true, "Submission successful!")
+                }
+            }
+            task.resume()
+        }
     func createMultipartFormData(boundary: String, parameters: [String: Any], files: [(data: Data, fieldName: String, fileName: String, mimeType: String)]) -> Data {
         var body = Data()
 

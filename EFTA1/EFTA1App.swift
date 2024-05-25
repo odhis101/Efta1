@@ -9,12 +9,11 @@ import SwiftUI
 
 @main
 struct EFTA1App: App {
-    @StateObject var SiteQuestionData = SiteQuestionDataHandler()
+    @StateObject var SiteQuestionData = SiteDetailsDataHandler()
     //@StateObject var documentHandler = DocumentHandler() // Instantiate your DocumentHandler
     @StateObject var CustomerOnboardingData = OnboardingData() // Instantiate your DocumentHandler
     @StateObject var config = AppConfig(region: .efta)
     @StateObject var pinHandlesr = PinHandler()
-    @StateObject var customerApraisal = CustomerApraisalData()
     @StateObject var companyOnboarding = CompanyOnboardingData()
 
 
@@ -28,7 +27,6 @@ struct EFTA1App: App {
                 .environmentObject(CustomerOnboardingData)
                 .environmentObject(config)
                 .environmentObject(pinHandlesr)
-                .environmentObject(customerApraisal)
                 .environmentObject(companyOnboarding)
                 .environment(\.font, Font.custom("Inter", size: 16)) // Set default font globally
 

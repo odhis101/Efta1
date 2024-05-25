@@ -24,9 +24,11 @@ struct CompanyOnboarding: View {
     @State private var ward:String=""
     let locationData: [LocationData] = createLocationData()
     @State private var districtOptions: [String] = []
+    @EnvironmentObject var StolenonboardingData: OnboardingData
 
     @EnvironmentObject var config: AppConfig
     @Environment(\.presentationMode) var presentationMode
+    
 
 
     
@@ -34,23 +36,24 @@ struct CompanyOnboarding: View {
             GeometryReader { geometry in
                 VStack {
                     
-                    ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Company onboarding",description: "KKindly collect the following information from the customer")
+                    ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:StolenonboardingData.titleForCustomerOnboarding ,description: "Kindly collect the following information from the customer")
                 
-                    QuestionWithSmallTextField(question: "",placeholder:"Company name",selectedOption:$onboardingData.CompanyName)
-                    QuestionWithSmallTextField(question: "",placeholder:"TIN",selectedOption:$onboardingData.TIN)
-                    QuestionWithSmallTextField(question: "",placeholder:"VRN (optional)",selectedOption:$onboardingData.VRN)
-                    QuestionWithSmallTextField(question: "",placeholder:"Postal Address",selectedOption:$onboardingData.postalAddress)
-                    QuestionWithDropdown(question: "Region", options: locationData.map { $0.region }, selectedOption: $onboardingData.region)
-                        .onChange(of: onboardingData.region) { newValue in
-                            if let region = newValue, let data = locationData.first(where: { $0.region == region }) {
-                                onboardingData.districtOptions = data.districts
-                            } else {
-                                onboardingData.districtOptions = []
-                            }
-                            onboardingData.district = nil // Reset district when region changes
-                        }
-                    QuestionWithDropdown(question: "District", options: onboardingData.districtOptions, selectedOption: $onboardingData.district)
-                    QuestionWithSmallTextField(question: "Ward", placeholder: "Enter Respective Ward", selectedOption: $onboardingData.ward)
+                                QuestionWithSmallTextField(question: "", placeholder: "\(StolenonboardingData.titleForCustomerOnboarding) name", selectedOption: $onboardingData.companyName)
+                    
+                                QuestionWithSmallTextField(question: "", placeholder: "TIN", selectedOption: $onboardingData.TIN)
+                                QuestionWithSmallTextField(question: "", placeholder: "VRN (optional)", selectedOption: $onboardingData.VRN)
+                                QuestionWithSmallTextField(question: "", placeholder: "Postal Address", selectedOption: $onboardingData.postalAddress)
+                                QuestionWithDropdown(question: "Region", options: locationData.map { $0.region }, selectedOption: $onboardingData.region)
+                                    .onChange(of: onboardingData.region) { newValue in
+                                        if let region = newValue, let data = locationData.first(where: { $0.region == region }) {
+                                            onboardingData.districtOptions = data.districts
+                                        } else {
+                                            onboardingData.districtOptions = []
+                                        }
+                                        onboardingData.district = nil // Reset district when region changes
+                                    }
+                                QuestionWithDropdown(question: "District", options: onboardingData.districtOptions, selectedOption: $onboardingData.district)
+                                QuestionWithSmallTextField(question: "Ward", placeholder: "Enter Respective Ward", selectedOption: $onboardingData.ward)
 
                     
                     Spacer()

@@ -14,7 +14,7 @@ struct CustomerInformationSheet2: View {
 
     @EnvironmentObject var config: AppConfig
 
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
     
     @Environment(\.presentationMode) var presentationMode
     
@@ -36,7 +36,7 @@ struct CustomerInformationSheet2: View {
                     
                     QuestionWithBulletpoints(question: "Governance:", bulletPoints: bulletedQuestions2)
                     
-                    QuestionWithTextField(question: "Actions that were agreed with the customer at this site visit")
+                   // QuestionWithTextField(question: "Actions that were agreed with the customer at this site visit")
 
                     
 

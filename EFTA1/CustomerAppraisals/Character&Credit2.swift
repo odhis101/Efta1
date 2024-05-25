@@ -16,7 +16,7 @@ struct Character_Credit2: View {
 
     @Environment(\.presentationMode) var presentationMode
 
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
     var body: some View {
 
         GeometryReader { geometry in
@@ -26,13 +26,13 @@ struct Character_Credit2: View {
 
                 ScrollView{
 
-                    QuestionWithButtons(question: "If the sector is not familiar to EFTA, did you discuss the processes involved in production in detail?")
-                    QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?")
-                    QuestionWithButtons(question: "Have you checked who are the applicant's top three customers (will these cover a high enough % of projected sales, or will we need more than 3)?")
-                    QuestionWithButtons(question: "Have you confirmed who are the key competitors, where they are located, whether there is any risk of over-supply / too much competition in the local area?")
-                    QuestionWithButtons(question: "Have you asked how the customer plans to differentiate themselves from their competitors?")
+                    QuestionWithButtons(question: "Did you ask the customer what their top three challenges have been in the past?",answer: $siteQuestionData.topThreeChallenges)
+                    QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?",answer:$siteQuestionData.typicalApplicantsAndTheirBusinesses)
+                    QuestionWithButtons(question: "Did you discuss the appropriate downpayment and product with the applicant based on your assessment of their business?",answer: $siteQuestionData.donwnPaymentDiscussion)
+                    QuestionWithButtons(question: "Have you discussed with the applicant how they plan to pay for the downpayment?",answer: $siteQuestionData.donwnPaymentPaymentPlan)
+                    QuestionWithButtons(question: "Did you check whether the applicant has any debtors, and how long these repayments have been outstanding?",answer:$siteQuestionData.applicantsDebtors)
 
-                    QuestionWithButtons(question: "Have you asked how the customer plans to differentiate themselves from their competitors?")
+                    QuestionWithButtons(question: "Have you asked how the customer plans to differentiate themselves from their competitors?",answer: $siteQuestionData.areEmployeesConsulted)
 
                 
                     

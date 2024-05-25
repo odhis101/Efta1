@@ -693,6 +693,8 @@ struct QuestionWithTime: View {
 struct QuestionWithTextField: View {
     var question: String
     @State private var answer = ""
+    @Binding public var answers: String
+
 
     var body: some View {
         VStack(spacing: 10) {
@@ -759,64 +761,61 @@ struct QuestionWithBulletpoints: View {
     }
 }
 
+
 struct PhotoCaptureButton: View {
     @Binding var capturedImage: UIImage?
-    @ObservedObject var SiteQuestionData: SiteQuestionDataHandler
+    @ObservedObject var siteQuestionData: SiteDetailsDataHandler
     var question: String
-    
-    var imagePickerTitle: String = "Select Photo"
     @State private var isPickerPresented = false
     var imageStorage: Binding<UIImage?> // Binding to a dynamic image storage property
 
     var body: some View {
-        VStack{
+        VStack {
             Text(question)
                 .font(.caption) // Adjust font size as needed
-        ZStack {
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color.gray.opacity(0.2))
-                .frame(maxWidth: .infinity)
-                .frame(height:60)
-                .overlay(
-                    HStack {
-                        Text("Capture a Photo ")
-                            .padding(.leading, 20)
-                        Spacer()
-                        Button(action: {
-                            // Toggle image picker presentation
-                            isPickerPresented.toggle()
-                        }) {
-                            Image(systemName: "photo")
-                                .padding(.trailing,30)
-
-                        }
-                        if SiteQuestionData.profileImage != nil {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 60)
+                    .overlay(
+                        HStack {
+                            Text("Capture a Photo ")
+                                .padding(.leading, 20)
+                            Spacer()
                             Button(action: {
-                                // Clear the captured image
-                                imageStorage.wrappedValue = nil
+                                // Toggle image picker presentation
+                                isPickerPresented.toggle()
                             }) {
-                                Image("camera")
-                                    .foregroundColor(.red)
+                                Image(systemName: "camera")
+                                    .padding(.trailing, 30)
+                            }
+                            if imageStorage.wrappedValue != nil {
+                                Button(action: {
+                                    // Clear the captured image
+                                    imageStorage.wrappedValue = nil
+                                }) {
+                                    Image(systemName: "trash")
+                                        .foregroundColor(.red)
+                                }
                             }
                         }
-                    }
-                )
-            if let storedImage = imageStorage.wrappedValue {
-                Image(uiImage: storedImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 60, height: 60)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray, lineWidth: 3))
-                    .padding()
-                    .offset(x: 150, y: -20) // Adjust position as needed
+                    )
+                if let storedImage = imageStorage.wrappedValue {
+                    Image(uiImage: storedImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 60, height: 60)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.gray, lineWidth: 3))
+                        .padding()
+                        .offset(x: 150, y: -20) // Adjust position as needed
+                }
             }
         }
-    }
         .padding()
-
         .sheet(isPresented: $isPickerPresented) {
-            ImagePicker(image: $capturedImage, isPickerPresented: $isPickerPresented, sourceType: .photoLibrary)
+            ImagePicker(image: $capturedImage, isPickerPresented: $isPickerPresented, sourceType: .camera)
         }
         .onChange(of: capturedImage) { newValue in
             // Update the profile image in the imageStorage when capturedImage changes
@@ -827,27 +826,24 @@ struct PhotoCaptureButton: View {
 
 struct QuestionWithButtons: View {
     var question: String
-    @State private var isYesSelected = false
-    @State private var isNoSelected = false
+    @Binding var answer: Bool
     @EnvironmentObject var config: AppConfig
-
 
     var body: some View {
         VStack(spacing: 10) {
-            HStack{
-            Text(question)
-                .font(.caption)
-            Spacer ()
+            HStack {
+                Text(question)
+                    .font(.caption)
+                Spacer()
             }
 
             HStack {
                 Button(action: {
-                    isYesSelected.toggle()
-                    isNoSelected = false
+                    answer = true
                 }) {
                     RoundedRectangle(cornerRadius: 20)
                         .frame(width: 30, height: 30)
-                        .foregroundColor(isYesSelected ? config.primaryColor : .clear)
+                        .foregroundColor(answer == true ? config.primaryColor : .clear)
                         .overlay(
                             RoundedRectangle(cornerRadius: 20)
                                 .stroke(config.primaryColor, lineWidth: 2)
@@ -857,14 +853,12 @@ struct QuestionWithButtons: View {
                 Text("Yes")
                     .padding(.leading, 5)
 
-
                 Button(action: {
-                    isNoSelected.toggle()
-                    isYesSelected = false
+                    answer = false
                 }) {
                     RoundedRectangle(cornerRadius: 8)
                         .frame(width: 30, height: 30)
-                        .foregroundColor(isNoSelected ? config.primaryColor : .clear)
+                        .foregroundColor(answer == false ? config.primaryColor : .clear)
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(config.primaryColor, lineWidth: 2)
@@ -873,11 +867,9 @@ struct QuestionWithButtons: View {
                 }
                 Text("No")
                     .padding(.trailing, 5)
-                
+
                 Spacer()
-
             }
-
         }
         .padding()
     }

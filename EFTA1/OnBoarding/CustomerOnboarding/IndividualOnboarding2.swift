@@ -25,7 +25,7 @@ struct IndividualOnboarding2: View {
                         //QuestionWithSmallTextField(question: "Customer Name",placeholder:"Name")
                         QuestionWithDropdown(question: "Nationality ", options: nationality,selectedOption:$onboardingData.nationality)
                         QuestionWithSmallTextField(question: "Email",placeholder:"Email address",selectedOption:$onboardingData.emailAddress)
-                        QuestionWithSmallTextField(question: "Phone Number",placeholder:"Phone Number",selectedOption:$onboardingData.phoneNumber)
+                        QuestionWithSmallTextField(question: "Phone Number",placeholder:"Phone  Number",selectedOption:$onboardingData.phoneNumber)
                         QuestionWithSmallTextField(question: "TIN",placeholder:"TIN",selectedOption:$onboardingData.tin)
                         QuestionWithSmallTextField(question: "Types Of Equipment",placeholder:"types of equipment",selectedOption:$onboardingData.typeOfEquipment)
                         QuestionWithSmallTextField(question: "Equipment price",placeholder:"Equipment price",selectedOption:$onboardingData.priceOfEquipment)

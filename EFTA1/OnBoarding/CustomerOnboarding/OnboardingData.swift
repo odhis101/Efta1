@@ -44,14 +44,14 @@ class OnboardingData: ObservableObject, DocumentHandling {
     @Published var documentURLs: [String: [URL]] = [:]
 
     // Implement DocumentHandling protocol methods
-       func addDocument(_ document: URL, forIDType idType: String) {
-           if var existingDocuments = documentURLs[idType] {
-               existingDocuments.append(document)
-               documentURLs[idType] = existingDocuments
-           } else {
-               documentURLs[idType] = [document]
-           }
-       }
+    func addDocument(_ document: URL, forIDType idType: String) {
+        if var existingDocuments = documentURLs[idType] {
+            existingDocuments.append(document)
+            documentURLs[idType] = existingDocuments
+        } else {
+            documentURLs[idType] = [document]
+        }
+    }
 
     func clearDocuments() {
         documentURLs.removeAll()

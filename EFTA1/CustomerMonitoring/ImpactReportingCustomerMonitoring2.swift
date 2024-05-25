@@ -10,7 +10,7 @@ import SwiftUI
 struct ImpactReportingCustomerMonitoring2: View {
     @State private var progress: CGFloat = 1 // Initial progress
     @State private var capturedImage: UIImage?
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
     @State private var CurrentMonthlyWage:String=""
     @State private var CurrentDailyWage:String=""
     @State private var RevenueLastMonth:String=""

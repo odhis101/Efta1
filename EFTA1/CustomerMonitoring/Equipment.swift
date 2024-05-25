@@ -15,7 +15,6 @@ struct Equipment: View {
     @EnvironmentObject var config: AppConfig
 
     
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -29,23 +28,23 @@ struct Equipment: View {
 
                 ScrollView{
 
-                    QuestionWithButtons(question: "Did you see the asset?")
-                    QuestionWithTextField(question: "Comments")
+                   // QuestionWithButtons(question: "Did you see the asset?")
+                   // QuestionWithTextField(question: "Comments")
                     
-                    QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?")
+               //     QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?")
                     
                     QuestionWithDate(question: "Date to see the equipment?")
                     
-                    QuestionWithButtons(question: "Was the serial number attached?")
+                  //  QuestionWithButtons(question: "Was the serial number attached?")
                     
                     
-                    QuestionWithButtons(question: "Equipment seen operating")
+                   // QuestionWithButtons(question: "Equipment seen operating")
                     // we need to make a proper dropdown thingy
 
 
-                    QuestionWithButtons(question: "Service on the equipment is acceptable?")
-                    QuestionWithButtons(question: "Is the GPS tracker working?")
-                    QuestionWithButtons(question: "The equipment has insurance?")
+                   // QuestionWithButtons(question: "Service on the equipment is acceptable?")
+                   // QuestionWithButtons(question: "Is the GPS tracker working?")
+                  //  QuestionWithButtons(question: "The equipment has insurance?")
                     QuestionWithDate(question: "Date insurance ends")
 
 

@@ -35,16 +35,16 @@ struct RepossesionPickUp: View {
 
                 ScrollView{
 
-                    QuestionWithButtons(question: "Did you see the asset?")
+                   // QuestionWithButtons(question: "Did you see the asset?")
                     //QuestionWithDropdown(question: "What is the condition of the equipment?", options: ["Option 1", "Option 2", "Option 3"])
-                    QuestionWithTextField(question: "Comments about Condition of Equipment")
+                   // QuestionWithTextField(question: "Comments about Condition of Equipment")
                     
-                    QuestionWithButtons(question: "Customer Interviewed?")
+                  //  QuestionWithButtons(question: "Customer Interviewed?")
                     
                     
-                    QuestionWithTextField(question: "Comments about Condition of Equipment")
+                   // QuestionWithTextField(question: "Comments about Condition of Equipment")
 
-                    QuestionWithTextField(question: "Notes from Customer Interview, if Held")
+                    //QuestionWithTextField(question: "Notes from Customer Interview, if Held")
                     
                     SignatureCaptureField(signatureImage: $signature)
                          .padding()

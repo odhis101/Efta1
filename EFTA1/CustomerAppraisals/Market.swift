@@ -14,7 +14,7 @@ struct Market: View {
 
     @EnvironmentObject var config: AppConfig
 
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -27,12 +27,17 @@ struct Market: View {
 
                 ScrollView{
 
-                    QuestionWithButtons(question: "If the sector is not familiar to EFTA, did you discuss the processes involved in production in detail?")
-                    QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?")
-                    QuestionWithButtons(question: "Have you checked who are the applicant's top three customers (will these cover a high enough % of projected sales, or will we need more than 3)?")
-                    QuestionWithButtons(question: "Have you confirmed who are the key competitors, where they are located, whether there is any risk of over-supply / too much competition in the local area?")
-                    QuestionWithButtons(question: "Have you asked how the customer plans to differentiate themselves from their competitors?")
-                    QuestionWithButtons(question: "Have you confirmed the credit terms the applicant receives from suppliers and gives to customers?")
+                    QuestionWithButtons(question: "If the sector is not familiar to EFTA, did you discuss the processes involved in production in detail?",answer: $siteQuestionData.isSectorNotFamiliarToEFTA)
+                    
+                    QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?",answer: $siteQuestionData.areTypicalCustomersDiscussed)
+                    
+                    QuestionWithButtons(question: "Have you checked who are the applicant's top three customers (will these cover a high enough % of projected sales, or will we need more than 3)?",answer: $siteQuestionData.areTopThreeCustomersIdentified)
+                    
+                    QuestionWithButtons(question: "Have you confirmed who are the key competitors, where they are located, whether there is any risk of over-supply / too much competition in the local area?",answer: $siteQuestionData.areKeyCompetitorsConfirmed)
+                    
+                    QuestionWithButtons(question: "Have you asked how the customer plans to differentiate themselves from their competitors?", answer: $siteQuestionData.isDifferentiationStrategyDiscussed)
+                    
+                    QuestionWithButtons(question: "Have you confirmed the credit terms the applicant receives from suppliers and gives to customers?",answer: $siteQuestionData.areCreditTermsConfirmed)
 
 
                 

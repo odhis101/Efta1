@@ -37,5 +37,10 @@
     <string>This application needs access to the photo library to open photos.</string>
     <key>NSDocumentPickerUsageDescription</key>
     <string>This application needs access to documents to open them.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to show your current position on the map.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>We need your location to show your current position on the map.</string>
+
 </dict>
 </plist>

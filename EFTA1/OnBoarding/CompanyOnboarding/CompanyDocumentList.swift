@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct CustomerDocumentList: View {
+struct CompanyDocumentList: View {
     @State private var progress: CGFloat = 0.85
     @EnvironmentObject var config: AppConfig
-    @EnvironmentObject var onboardingData: OnboardingData
+    @EnvironmentObject var onboardingData: CompanyOnboardingData
     @State private var navigateBack = false
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                ProgressBar(geometry: geometry, progress: $progress, presentationMode: presentationMode, title: "Customer Document List", description: "Kindly complete the following details")
+                ProgressBar(geometry: geometry, progress: $progress, presentationMode: presentationMode, title: "Company Document List", description: "Kindly complete the following details")
 
                 VStack{
                     ForEach(Array(onboardingData.documentURLs.values.enumerated()), id: \.element) { index, documentURLs in
@@ -64,14 +64,13 @@ struct CustomerDocumentList: View {
                     
                 
                
-                CustomNavigationButton(destination: CustomerSummary(), label: "Continue", backgroundColor: config.primaryColor)
+                CustomNavigationButton(destination: CompanySummary(), label: "Continue", backgroundColor: config.primaryColor)
                 
             }
         }
       
         .onAppear {
             print("Document URLs: \(onboardingData.documentURLs)")
-            
             
         }
         DocumentModalView2(
@@ -82,44 +81,4 @@ struct CustomerDocumentList: View {
     }
 }
 
-struct ListedDocument: View {
-    var documentName: String
-    @EnvironmentObject var config: AppConfig
-    var onDelete: () -> Void // Closure to handle deletion
-    
-    var body: some View {
-        VStack {
-            Button(action: {}) { // Mimic the style of QuestionWithFileType
-                HStack {
-                    Text(documentName)
-                        .foregroundColor(.black)
-                    Spacer()
-                    HStack {
-                        Image(systemName: "checkmark.circle")
-                            .foregroundColor(.green)
-                        Button(action: onDelete) {
-                            Image(systemName: "trash")
-                                .foregroundColor(.red)
-                        }
-                    }
-                }
-                .padding(.horizontal)
-            }
-            Rectangle()
-                .frame(height: 2)
-                .foregroundColor(config.primaryColor)
-                .padding(.horizontal)
-        }
-        .padding(.bottom, 25)
-    }
-}
-struct CustomerDocumentList_Previews: PreviewProvider {
-    static var previews: some View {
-        let config = AppConfig(region: .efken)
-        let onboardingData = OnboardingData()
-        
-        return CustomerDocumentList()
-            .environmentObject(config)
-            .environmentObject(onboardingData)
-    }
-}
+

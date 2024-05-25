@@ -14,7 +14,7 @@ struct Document_Assets: View {
 
     @EnvironmentObject var config: AppConfig
 
-    @ObservedObject var siteQuestionData = SiteQuestionDataHandler()
+    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -25,24 +25,24 @@ struct Document_Assets: View {
                 ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"Documentation & Assets",description: "Kindly complete the following details") // Pass progress as a binding
 
                 ScrollView{
-                PhotoCaptureButton(capturedImage: $capturedImage,
-                                   SiteQuestionData: siteQuestionData,
+                PhotoCaptureButton(capturedImage: $siteQuestionData.missingCertificates,
+                                   siteQuestionData: siteQuestionData,
                                    question: "Are there any certificates / registrations missing from the application which you need to see? Are all of the certificates up to date?",
-                                   imageStorage: $siteQuestionData.profileImage)
+                                   imageStorage: $siteQuestionData.missingCertificates)
                     
-                PhotoCaptureButton(capturedImage: $capturedImage,
-                                       SiteQuestionData: siteQuestionData,
+                    PhotoCaptureButton(capturedImage: $siteQuestionData.assetsInGoodStanding,
+                                       siteQuestionData: siteQuestionData,
                                        question: "Can you see the assets noted in the application? Are they in good standing?",
-                                       imageStorage: $siteQuestionData.profileImage)
+                                       imageStorage: $siteQuestionData.assetsInGoodStanding)
                     
-                PhotoCaptureButton(capturedImage: $capturedImage,
-                                       SiteQuestionData: siteQuestionData,
+                    PhotoCaptureButton(capturedImage: $siteQuestionData.stockLevelsAligned,
+                                       siteQuestionData: siteQuestionData,
                                        question: "Are stock levels in line with those noted in the application form?",
-                                       imageStorage: $siteQuestionData.profileImage)
-                PhotoCaptureButton(capturedImage: $capturedImage,
-                                           SiteQuestionData: siteQuestionData,
+                                       imageStorage: $siteQuestionData.stockLevelsAligned)
+                    PhotoCaptureButton(capturedImage: $siteQuestionData.orderBooksAndPayments,
+                                       siteQuestionData: siteQuestionData,
                                            question: "Have you taken copies of the order books (and payments books where relevant)?",
-                                           imageStorage: $siteQuestionData.profileImage)
+                                           imageStorage: $siteQuestionData.orderBooksAndPayments)
 
                 
                 }

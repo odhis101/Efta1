@@ -198,7 +198,7 @@ struct RectangleOptions: View {
             )
         case 3:
             return AnyView(
-                IndividualOnboarding()
+                CompanyOnboarding()
                     .onAppear {
                         onboardingData.titleForCustomerOnboarding = "Partnership"
                         isActive = false // Reset isActive when navigating
@@ -207,7 +207,7 @@ struct RectangleOptions: View {
             )
         case 4:
             return AnyView(
-                IndividualOnboarding()
+                CompanyOnboarding()
                     .onAppear {
                         onboardingData.titleForCustomerOnboarding = "Trustees"
                         isActive = false // Reset isActive when navigating
@@ -216,7 +216,7 @@ struct RectangleOptions: View {
             )
         case 5:
             return AnyView(
-                IndividualOnboarding()
+                CompanyOnboarding()
                     .onAppear {
                         onboardingData.titleForCustomerOnboarding = "Groups or Amcos"
                         isActive = false // Reset isActive when navigating
