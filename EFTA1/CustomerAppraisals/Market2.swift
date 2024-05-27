@@ -27,8 +27,12 @@ struct Market2: View {
 
                 ScrollView{
 
-                    QuestionWithButtons(question: "Did you get an understanding of long it usually takes the applicant to sell their products or services after production?",answer: $siteQuestionData.isApplicantUnderstandingProductSalesTime)
+                    QuestionWithButtons(question: "Did you get an understanding of long it usually takes the applicant to sell their products or services after production?",answer: $siteQuestionData.didYouUnderstandProductSalesTime)
+                    
                     QuestionWithButtons(question: "Have you checked to what extent the applicant is reliant on government related customers?",answer:$siteQuestionData.isApplicantReliantOnGovernmentCustomers)
+                    
+                    //haveYouCheckedRelianceOnCustomers
+                    
                     QuestionWithButtons(question: "Have you checked whether the applicant sells all of their products at once, as soon as they produce them? Or whether they sell themthroughout the year?",answer: $siteQuestionData.isApplicantSellingProductsAtOnce)
                     QuestionWithButtons(question: "Have you discussed any seasonality that might impact the business? Have these also been factored into the volumes in the financial schedules?",answer: $siteQuestionData.isApplicantSellingThroughoutYear)
                     

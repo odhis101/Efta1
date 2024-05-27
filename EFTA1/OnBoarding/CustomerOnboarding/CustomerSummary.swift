@@ -21,7 +21,11 @@ struct CustomerSummary: View {
     @State private var isLoading = false // State for loading indicator
     @State private var showToast = false // State to show toast message
     @State private var toastMessage = "" // Message for the toast
-    @State private var isSuccess = false // Success status for the toast
+    @State private var isSuccess: Bool? = nil // Success status for the modal
+    @State private var message: String = "" // Message for the modal
+    @State private var showingModal = false // State for showing the custom modal
+    @State private var isNavigate = false
+
 
     var receiptItems: [(String, String)] {
         [
@@ -47,6 +51,8 @@ struct CustomerSummary: View {
     
     var body: some View {
         GeometryReader { geometry in
+            ZStack {
+
             VStack {
                 ProgressBar(geometry: geometry, progress: $progress, presentationMode: presentationMode, title: "Summary", description: "Kindly review the information collected")
                 
@@ -81,7 +87,8 @@ struct CustomerSummary: View {
                     EmptyView()
                 }
                 Button("Continue") {
-                    showingConfirmation = true
+                    //showingConfirmation = true
+                    showingModal = true
                 }
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
@@ -90,39 +97,33 @@ struct CustomerSummary: View {
                 .cornerRadius(20)
                 .padding()
             }
-            .alert(isPresented: $showingConfirmation) {
-                Alert(
-                    title: Text("Confirm Submission"),
-                    message: Text("You are about to submit customer details. Are you sure you want to proceed?"),
-                    primaryButton: .destructive(Text("Submit"), action: {
-                        submitCustomerData()
-                    }),
-                    secondaryButton: .cancel()
-                )
             }
-            .overlay(isLoading ? LoadingModal() : nil)
-            .toast(isPresenting: $showToast) {
-                AlertToast(type: isSuccess ? .complete(.green) : .error(.red), title: toastMessage)
-            }
+            
+            NavigationLink(destination: MyTabView(), isActive: $isNavigate) { // NavigationLink to the next page
+                                   EmptyView() // Invisible navigation link
+                               }
+            
+            
         }
+        .overlay(CustomModal(isPresented: $showingModal, isLoading: $isLoading, isSuccess: $isSuccess, message: $message, Navigation: $isNavigate, onSubmit: {
+                       submitCustomerData()
+                   }))
     }
     
     private func submitCustomerData() {
-            isLoading = true
-            NetworkManager().uploadData(onboardingData: onboardingData) { success, message in
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                    self.showToast = true
-                    self.isSuccess = success
-                    self.toastMessage = message
-                    
-                    // Hide toast after 3 seconds
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                        self.showToast = false
-                    }
-                }
+        isLoading = true
+        //isSuccess = nil // Reset success state
+        NetworkManager().uploadData(onboardingData: onboardingData) { success, message in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                self.isSuccess = success
+                self.message = message
+                // Hide the modal after showing the result for a while
+               
             }
-        }}
+        }
+    }
+}
 
 
 
@@ -141,13 +142,10 @@ struct ReceiptBox: View {
             ForEach(items, id: \.0) { item in
                 HStack {
                     Text(item.0)
-                        .font(.caption)
                     Spacer()
                     Text(item.1)
-                        .font(.caption)
                         .bold()
                 }
-                .padding(.horizontal)
             }
             HStack{
                 Spacer ()
@@ -156,7 +154,6 @@ struct ReceiptBox: View {
                 }) {
                     Text("Edit")
                         .foregroundColor(config.primaryColor)
-                        .padding(.horizontal)
                     
                 }
             }
@@ -216,11 +213,102 @@ struct DocumentContainerView: View {
     }
 }
 
-struct CustomerSummary_Previews: PreviewProvider {
-    static var previews: some View {
-        CustomerSummary()
-            .environmentObject(OnboardingData()) // Provide a dummy OnboardingData object
-            .environmentObject(AppConfig(region: .efken)) // Provide a dummy AppConfig object
+
+
+
+
+
+struct CustomModal: View {
+    @Binding var isPresented: Bool
+    @Binding var isLoading: Bool
+    @Binding var isSuccess: Bool?
+    @Binding var message: String
+    @Binding var Navigation: Bool
+    
+    let onSubmit: () -> Void
+    @EnvironmentObject var config: AppConfig // Make sure the environment object is available
+    
+    var body: some View {
+        if isPresented {
+            VStack {
+                Spacer()
+                VStack {
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(Color.white)
+                        .frame(width: UIScreen.main.bounds.width * 0.8,height: UIScreen.main.bounds.width * 0.5)
+                        .overlay(
+                            VStack(spacing: 20) {
+                                if isLoading {
+                                    ProgressView("Submitting...")
+                                        .progressViewStyle(CircularProgressViewStyle(tint: config.primaryColor))
+                                } else if let isSuccess = isSuccess {
+                                    Image(systemName: isSuccess ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 50, height: 50)
+                                        .foregroundColor(isSuccess ? config.primaryColor : .red)
+                                    Text(message)
+                                        .foregroundColor(isSuccess ? config.primaryColor : .red)
+                                    HStack {
+                                        Button(action: {
+                                            isPresented = false
+                                        }) {
+                                            Text("Cancel")
+                                                .foregroundColor(.white)
+                                                .padding()
+                                                .background(Color.gray)
+                                                .cornerRadius(10)
+                                        }
+                                        Button(action: {
+                                            if isSuccess {
+                                                Navigation = true
+                                            } else {
+                                                isPresented = false
+                                            }
+                                        }) {
+                                            Text("OK")
+                                                .foregroundColor(.white)
+                                                .padding()
+                                                .background(config.primaryColor)
+                                                .cornerRadius(10)
+                                        }
+                                    }
+                                } else {
+                                    Image(systemName: "exclamationmark.triangle")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 50, height: 50)
+                                        .foregroundColor(config.primaryColor)
+                                    Text("Are you sure you want to submit?")
+                                        //.foregroundColor(config.primaryColor)
+                                    HStack {
+                                        Button(action: {
+                                            isPresented = false
+                                        }) {
+                                            Text("Cancel")
+                                                .foregroundColor(.white)
+                                                .padding()
+                                                .background(Color.gray)
+                                                .cornerRadius(10)
+                                        }
+                                        Button(action: {
+                                            onSubmit()
+                                        }) {
+                                            Text("OK")
+                                                .foregroundColor(.white)
+                                                .padding()
+                                                .background(config.primaryColor)
+                                                .cornerRadius(10)
+                                        }
+                                    }
+                                }
+                            }
+                            .padding()
+                        )
+                }
+                Spacer()
+            }
+        }
     }
 }
 
@@ -248,3 +336,5 @@ struct LoadingModal: View {
         .background(Color.black.opacity(0.4).edgesIgnoringSafeArea(.all))
     }
 }
+
+

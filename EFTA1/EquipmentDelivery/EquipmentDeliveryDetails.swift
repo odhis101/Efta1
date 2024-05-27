@@ -20,13 +20,15 @@ struct EquipmentDeliveryDetails: View {
     @EnvironmentObject var config: AppConfig
 
     var userData: UserData
+    @Environment(\.presentationMode) var presentationMode
+
 
 
     var body: some View {
         GeometryReader { geometry in
         VStack{
             VStack{
-            QuickIntro(title: "Alex Mwangiss", description: "Kindly proceed to appraise the customer after confirming their details")
+                QuickIntro(title: "Alex Mwangiss", description: "Kindly proceed to appraise the customer after confirming their details", presentationMode: presentationMode)
             ZStack{
                 MapComponent(geometry: geometry)
                 CustomerDetailsReceiptBox(items: receiptItems,geometry: geometry)

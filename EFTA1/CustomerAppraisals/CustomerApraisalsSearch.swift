@@ -11,12 +11,14 @@ struct CustomerApraisalsSearch: View {
     @State private var Search = ""
     @State private var isActiveFirstText = true
     @State private var data: [UserData] = [] // Initialize empty array to hold data
+    @Environment(\.presentationMode) var presentationMode
+
 
 
     var body: some View {
         VStack{
             
-            QuickIntro(title: "Customer Appraisals", description: "kindly select one of the customers you want to appraise")
+            QuickIntro(title: "Customer Appraisals", description: "kindly select one of the customers you want to appraise", presentationMode: presentationMode)
             QuestionWithSmallTextField(question: "Search",placeholder: "Search",selectedOption: $Search)
 
             ToggleableTextComponent(text1: "Upcoming schedules", text2: "All Customers", isActiveFirstText: isActiveFirstText) {
@@ -59,9 +61,22 @@ struct QuickIntro: View {
     let title:String
     
     let description:String
+    @Binding var presentationMode: PresentationMode // Binding for navigation
+
     
     var body: some View {
         VStack(alignment: .leading){
+            Button(action: {
+                print("pressed")
+                self.presentationMode.dismiss()
+                //self.showAlert = true // Set showAlert to true to show the alert
+
+            }) {
+                Image("Leading-icon-button")
+                    .font(.system(size: 20))
+                    .foregroundColor(Color(hex: "#49454F"))
+                    .padding(.leading, 10)
+            }
             Text(title)
                 .font(.title3)
                 .fontWeight(.semibold)
@@ -72,7 +87,10 @@ struct QuickIntro: View {
         }
         .padding(.trailing,10)
         .padding()
+        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
     }
+    
 }
 
 

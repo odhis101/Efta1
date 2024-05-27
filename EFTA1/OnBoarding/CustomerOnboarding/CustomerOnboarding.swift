@@ -189,7 +189,7 @@ struct RectangleOptions: View {
             )
         case 2:
             return AnyView(
-                IndividualOnboarding()
+                CompanyOnboarding()
                     .onAppear {
                         onboardingData.titleForCustomerOnboarding = "Sole Proprietor"
                         isActive = false // Reset isActive when navigating

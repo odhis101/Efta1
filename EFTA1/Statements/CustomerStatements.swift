@@ -14,12 +14,13 @@ struct CustomerStatements: View {
     @State private var isModalVisible = false
     @State private var isPresentingModal = false
 
+    @Environment(\.presentationMode) var presentationMode
 
 
     var body: some View {
         GeometryReader { geometry in
         VStack{
-        QuickIntro(title: "Alex Mwangi", description: "Kindly see the customer details and proceed to generate a statement")
+        QuickIntro(title: "Alex Mwangi", description: "Kindly see the customer details and proceed to generate a statement",presentationMode: presentationMode)
 
     
                         VStack(alignment: .leading){

@@ -13,9 +13,14 @@ struct CustomNavigationButton<Destination>: View where Destination: View {
     var label: String
     var backgroundColor: Color
     @EnvironmentObject var config: AppConfig
-
+    @State private var navigate: Bool = false
+    
     var body: some View {
-        NavigationLink(destination: destination) {
+        Button(action: {
+            if config.primaryColor == backgroundColor {
+                navigate = true
+            }
+        }) {
             Text(label)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
@@ -24,9 +29,12 @@ struct CustomNavigationButton<Destination>: View where Destination: View {
                 .cornerRadius(10)
                 .padding(.horizontal)
                 .padding(.vertical)
-                .disabled(backgroundColor != config.primaryColor) // Disable if the color is not the primary color
-
-            
         }
+        .disabled(backgroundColor != config.primaryColor) // Disable if the color is not the primary color
+        .background(
+            NavigationLink(destination: destination, isActive: $navigate) {
+                EmptyView()
+            }
+        )
     }
 }

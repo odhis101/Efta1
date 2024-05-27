@@ -18,6 +18,8 @@ class SiteDetailsDataHandler: ObservableObject {
     @Published var siteChangesRequired: UIImage?
     @Published var experienceInMachinery: String = ""
     @Published var areCustomersOnSite: Bool = false
+    @Published var customerPhoneNumber: String = "" // PhoneNumber:<string>
+
     
     // Documentation & Assets
     @Published var missingCertificates: UIImage?
@@ -34,8 +36,8 @@ class SiteDetailsDataHandler: ObservableObject {
     @Published var isDifferentiationStrategyDiscussed: Bool = false
     @Published var areCreditTermsConfirmed: Bool = false
     
-    @Published var isApplicantUnderstandingProductSalesTime: Bool = false
-    @Published var isApplicantReliantOnGovernmentCustomers: Bool = false
+    @Published var didYouUnderstandProductSalesTime: Bool = false // change 
+    @Published var isApplicantReliantOnGovernmentCustomers: Bool = false // change
     @Published var isApplicantSellingProductsAtOnce: Bool = false
     @Published var isApplicantSellingThroughoutYear: Bool = false
     @Published var isSeasonalityImpactingBusiness: Bool = false

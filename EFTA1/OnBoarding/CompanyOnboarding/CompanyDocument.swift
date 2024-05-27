@@ -22,8 +22,7 @@ struct CompanyDocument: View {
 
             GeometryReader { geometry in
                 VStack{
-                    ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"\(StolenonboardingData.titleForCustomerOnboarding) document",description: "Kindly upload the Company documents ")
-                        .padding(.trailing,20)
+                    ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:"\(StolenonboardingData.titleForCustomerOnboarding) documents",description: "Kindly upload the Company documents ")
                     
                     Spacer()
                     

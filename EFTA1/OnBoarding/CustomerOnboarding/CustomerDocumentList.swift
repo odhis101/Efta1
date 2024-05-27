@@ -14,6 +14,13 @@ struct CustomerDocumentList: View {
     @State private var navigateBack = false
     @Environment(\.presentationMode) var presentationMode
     
+    var isFormComplete: Bool {
+        onboardingData.documentURLs.values.flatMap { $0 }.count >= 3 // Check if there are at least 3 documents
+    }
+    
+    
+    
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -64,8 +71,11 @@ struct CustomerDocumentList: View {
                     
                 
                
-                CustomNavigationButton(destination: CustomerSummary(), label: "Continue", backgroundColor: config.primaryColor)
-                
+                CustomNavigationButton(
+                                 destination: CustomerSummary(),
+                                 label: "Continue",
+                                 backgroundColor: isFormComplete ? config.primaryColor : Color.gray // Pass the color conditionally
+                             )
             }
         }
       

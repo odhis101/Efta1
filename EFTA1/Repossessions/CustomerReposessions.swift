@@ -12,10 +12,11 @@ struct CustomerReposessions: View {
     @State private var isActiveFirstText = true
     @State private var data: [UserData] = [] // Initialize empty array to hold data
     @State private var Search:String=""
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         VStack{
-            QuickIntro(title: "Customer Repossesions", description: "kindly select one of the customers you want to Reposses ")
+            QuickIntro(title: "Customer Repossesions", description: "kindly select one of the customers you want to Reposses ", presentationMode: presentationMode)
             // make this search bar look better and more searchier
             QuestionWithSmallTextField(question: "Search",placeholder: "Search",selectedOption: $Search)
 

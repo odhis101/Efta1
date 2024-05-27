@@ -486,53 +486,99 @@ struct ToggleableTextComponent: View {
     @EnvironmentObject var config: AppConfig
 
     var body: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(Color.white)
-            .frame(height: 40)
-            .frame(maxWidth: .infinity)
-            .padding()
-            .overlay(
-                HStack {
-                    Button(action: {
-                        // toggle active state
-                        onToggle()
-                    }) {
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(isActiveFirstText ? config.primaryColor : Color.clear) // Use green color if active
-                            .frame(height: 40)
-                            .frame(maxWidth: .infinity)
-
-                            .padding()
-
-
-
-                            .overlay(
-                                Text(text1)
-                                    .foregroundColor(isActiveFirstText ? .white : .black) // Text color changes based on active state
-                                    .padding()
-                            )
-                    }
-                    Spacer()
-                    Button(action: {
-                        // toggle active state
-                        onToggle()
-                    }) {
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(!isActiveFirstText ? config.primaryColor: Color.clear) // Use green color if active
-                            .frame(height: 40)
-                        
-                            .padding()
-
-                            .overlay(
-                                Text(text2)
-                                    .foregroundColor(!isActiveFirstText ? .white : .black) // Text color changes based on active state
-                                    .padding()
-                            )
-                    }
+        ZStack {
+            // Background rectangle
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.gray.opacity(0.1))
+                .frame(height: 35)
+                .frame(maxWidth: .infinity)
+            
+            HStack(spacing: 0) { // Remove spacing to control section widths
+                Button(action: {
+                    onToggle()
+                }) {
+                    RoundedRectangle(cornerRadius: isActiveFirstText ? 10 : 0)
+                        .fill(isActiveFirstText ? config.primaryColor : Color.clear) // Use primary color if active
+                        .frame(height: 35)
+                        .overlay(
+                            Text(text1)
+                                .foregroundColor(isActiveFirstText ? .white : .black) // Text color changes based on active state
+                                .padding()
+                                .font(.caption)
+                        )
                 }
-            )
+                Button(action: {
+                    onToggle()
+                }) {
+                    RoundedRectangle(cornerRadius: !isActiveFirstText ? 10 : 0)
+                        .fill(!isActiveFirstText ? config.primaryColor : Color.clear) // Use primary color if active
+                        .frame(height: 35)
+                        .overlay(
+                            Text(text2)
+                                .foregroundColor(!isActiveFirstText ? .white : .black) // Text color changes based on active state
+                                .padding()
+                                .font(.caption)
+                        )
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .clipShape(RoundedRectangle(cornerRadius: 10)) // Ensures the buttons' content stays within bounds
+        }
+        .padding()
     }
 }
+
+struct ToggleableTextComponentTwoOptions: View {
+    var text1: String
+    var text2: String
+    @Binding var activeState: Int // 0 for Approved, 1 for Pending, 2 for Rejected
+    @EnvironmentObject var config: AppConfig
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 10)
+            .fill(Color.gray.opacity(0.1))
+            .frame(height: 35)
+            .frame(maxWidth: .infinity)
+            .overlay(
+                HStack(spacing: 0) { // Remove spacing to control section widths
+                    Button(action: {
+                        activeState = 0 // Toggle to Approved
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(activeState == 0 ? config.primaryColor : Color.clear) // Use primary color if active
+                            .frame(height: 30)
+                            .overlay(
+                                Text(text1)
+                                    .foregroundColor(activeState == 0 ? .white : .black) // Text color changes based on active state
+                                    .padding()
+                                    .font(.caption)
+                            )
+                    }
+                    Divider().frame(height: 30)
+                    Button(action: {
+                        activeState = 1 // Toggle to Pending
+                    }) {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(activeState == 1 ? config.primaryColor : Color.clear) // Use primary color if active
+                            .frame(height: 30)
+                            .overlay(
+                                Text(text2)
+                                    .foregroundColor(activeState == 1 ? .white : .black) // Text color changes based on active state
+                                    .padding()
+                                    .font(.caption)
+
+                            )
+                    }
+                    Divider().frame(height: 30)
+                  
+                }
+                .frame(maxWidth: .infinity)
+                .clipShape(RoundedRectangle(cornerRadius: 10)) // Ensures the buttons' content stays within bounds
+            )
+            .padding()
+    }
+}
+
 
 struct QuestionWithDate: View {
     @State private var showDatePicker = false

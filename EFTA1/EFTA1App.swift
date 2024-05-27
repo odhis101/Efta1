@@ -21,7 +21,7 @@ struct EFTA1App: App {
 
     var body: some Scene {
         WindowGroup {
-            SplashView()
+            LoginOnBoarding()
                 .environmentObject(SiteQuestionData)
                 //.environmentObject(documentHandler)
                 .environmentObject(CustomerOnboardingData)

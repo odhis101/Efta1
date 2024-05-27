@@ -20,6 +20,7 @@ struct ReposessionDetails: View {
         ]
     var userData: UserData
     @EnvironmentObject var config: AppConfig
+    @Environment(\.presentationMode) var presentationMode
 
 
 
@@ -27,7 +28,7 @@ struct ReposessionDetails: View {
         GeometryReader { geometry in
         VStack{
             VStack{
-            QuickIntro(title: "Alex Mwangiss", description: "Kindly proceed to appraise the customer after confirming their details")
+                QuickIntro(title: "Alex Mwangiss", description: "Kindly proceed to appraise the customer after confirming their details",presentationMode:presentationMode)
             ZStack{
                 MapComponent(geometry: geometry)
                 CustomerDetailsReceiptBox(items: receiptItems,geometry: geometry)

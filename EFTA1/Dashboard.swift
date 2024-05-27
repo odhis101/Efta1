@@ -34,13 +34,13 @@ struct Dashboard: View {
             
          
                       LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                          CustomComponent(iconName: "visit 1", text: "New \n Customer",variable: 1)
-                          CustomComponent(iconName: "appraisal 1", text: "Customer \n Appraisal",variable: 2)
+                          CustomComponent(iconName: "visit 1", text: "New \nCustomer",variable: 1)
+                          CustomComponent(iconName: "appraisal 1", text: "Customer \nAppraisal",variable: 2)
                           CustomComponent(iconName: "delivery 1", text: "Equipment \n Delivery",variable: 3)
-                          CustomComponent(iconName: "monitoring-system 2", text: "Customer \n Monitoring",variable: 4)
-                          CustomComponent(iconName: "towing-vehicle 1", text: "Customer \n Repossession",variable: 5)
+                          CustomComponent(iconName: "monitoring-system 2", text: "Customer \nMonitoring",variable: 4)
+                          CustomComponent(iconName: "towing-vehicle 1", text: "Customer \nRepossession",variable: 5)
                           CustomComponent(iconName: "clipboard_1273337 1", text: "Reports",variable: 6)
-                          CustomComponent(iconName: "file_10900273 1", text: "Customer \n Statements",variable:7)
+                          CustomComponent(iconName: "file_10900273 1", text: "Customer\nStatements",variable:7)
                       }
                       .padding()
         

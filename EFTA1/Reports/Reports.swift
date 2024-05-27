@@ -11,6 +11,9 @@ import SwiftUICharts  // Import the SwiftUICharts library
 
 struct Reports: View {
     @EnvironmentObject var config: AppConfig
+    @Environment(\.presentationMode) var presentationMode
+
+    
     
     // Create an instance of PieChartData
     @StateObject var pieChartData: PieChartData = {
@@ -30,7 +33,7 @@ struct Reports: View {
     var body: some View {
 
         VStack {
-            QuickIntro(title: "Reports", description: "Here is your current report status based on your recent activities")
+            QuickIntro(title: "Reports", description: "Here is your current report status based on your recent activities", presentationMode: presentationMode)
                    
             
             let datas = [

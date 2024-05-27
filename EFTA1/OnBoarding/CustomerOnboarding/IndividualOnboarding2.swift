@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct IndividualOnboarding2: View {
-        let nationality : [String] = createNationalities()
-        @EnvironmentObject var onboardingData: OnboardingData
-        @State private var progress: CGFloat = 0.42 // Initial progress
+    let nationality : [String] = createNationalities()
+    @EnvironmentObject var onboardingData: OnboardingData
+    @State private var progress: CGFloat = 0.42 // Initial progress
     @EnvironmentObject var config: AppConfig
     @Environment(\.presentationMode) var presentationMode
+    
+    // Computed property to check if all required fields are filled
+       var isFormComplete: Bool {
+           !(onboardingData.nationality ?? "").isEmpty &&
+           !(onboardingData.emailAddress ?? "").isEmpty &&
+           !onboardingData.phoneNumber.isEmpty &&
+           !(onboardingData.tin ?? "").isEmpty &&
+           !(onboardingData.typeOfEquipment ?? "").isEmpty &&
+           !(onboardingData.priceOfEquipment ?? "").isEmpty
+       }
+    
 
     var body: some View {
             GeometryReader { geometry in
@@ -35,21 +46,7 @@ struct IndividualOnboarding2: View {
                     }
                     Spacer()
                     
-                    /*
-                    NavigationLink(destination: CapturePhoto()) {
-
-                    Text("Continue")
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height:50)
-                        .background(config.primaryColor) // Gray background when profileImage is nil
-                        .cornerRadius(8)
-                        .padding(.horizontal)
-                        .padding(.vertical)
-                    }
-                     */
-                    
-                    CustomNavigationButton(destination: CapturePhoto(), label: "Continue", backgroundColor: config.primaryColor)
+                    CustomNavigationButton(destination: CapturePhoto(), label: "Continue",backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
                     
                     
                     

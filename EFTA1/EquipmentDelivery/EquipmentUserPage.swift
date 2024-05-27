@@ -15,10 +15,11 @@ struct EquipmentUserPage: View {
     @State private var data: [UserData] = [UserData(name: "John Doe", phoneNumber: "1234567890"),
                                             UserData(name: "Jane Smith", phoneNumber: "0987654321")]
     
-  
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
         VStack{
-            QuickIntro(title: "Equipment Delivery", description: "Kindly select one of the customers to make equipment delivery")
+            QuickIntro(title: "Equipment Delivery", description: "Kindly select one of the customers to make equipment delivery", presentationMode: presentationMode)
             
             QuestionWithSmallTextField(question: "Search",placeholder: "Search",selectedOption: $Search)
 

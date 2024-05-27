@@ -84,7 +84,7 @@ struct LoginOnBoarding: View {
                               
                                 // Page Indicator (Dots)
                                 //PageControl(numberOfPages: carouselItems.count, currentPage: $currentIndex)
-                                
+                                Spacer ()
                                 // Continue Button
                                 Button(action: {
                                     isModalVisible.toggle()

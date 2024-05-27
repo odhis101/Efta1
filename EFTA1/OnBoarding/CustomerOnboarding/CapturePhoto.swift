@@ -8,6 +8,11 @@ struct CapturePhoto: View {
     @EnvironmentObject var config: AppConfig
 
     @Environment(\.presentationMode) var presentationMode
+    
+    var isFormComplete: Bool {
+        onboardingData.profileImage != nil
+    }
+    
 
     var body: some View {
         GeometryReader { geometry in
@@ -57,7 +62,12 @@ struct CapturePhoto: View {
                     
                     Spacer()
                     
-                    CustomNavigationButton(destination: CustomerLocation(), label: "Continue", backgroundColor: config.primaryColor)
+                    CustomNavigationButton(
+                                    destination: CustomerLocation(),
+                                    label: "Continue",
+                                    backgroundColor: isFormComplete ? config.primaryColor : Color.gray // Pass the color conditionally
+                                )
+                    
                 }
             }
             .sheet(isPresented: $onboardingData.isPickerPresented) {

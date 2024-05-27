@@ -19,6 +19,19 @@ struct IndividualOnboarding: View {
     
     // Computed property to check if all required fields are filled
     // Computed property to check if all required fields are filled
+    // Computed property to check if all required fields are filled
+       var isFormComplete: Bool {
+           !onboardingData.customerName.isEmpty &&
+           !(onboardingData.idType ?? "").isEmpty &&
+           !onboardingData.idNumber.isEmpty &&
+           !(onboardingData.gender ?? "").isEmpty &&
+           !(onboardingData.maritalStatus ?? "").isEmpty &&
+           !onboardingData.postalAddress.isEmpty &&
+           !(onboardingData.region ?? "").isEmpty &&
+           !(onboardingData.district ?? "").isEmpty &&
+           !onboardingData.ward.isEmpty
+       }
+
     var body: some View {
             GeometryReader { geometry in
                 VStack {
@@ -51,7 +64,7 @@ struct IndividualOnboarding: View {
  
                     Spacer()
                                         
-                    CustomNavigationButton(destination: IndividualOnboarding2(), label: "Continue", backgroundColor: config.primaryColor)
+                    CustomNavigationButton(destination: IndividualOnboarding2(), label: "Continue",backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
 
                     
                     

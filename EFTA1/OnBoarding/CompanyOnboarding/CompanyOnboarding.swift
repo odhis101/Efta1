@@ -29,6 +29,16 @@ struct CompanyOnboarding: View {
     @EnvironmentObject var config: AppConfig
     @Environment(\.presentationMode) var presentationMode
     
+    
+    var isFormComplete: Bool {
+        !onboardingData.companyName.isEmpty &&
+        !(onboardingData.TIN ?? "").isEmpty &&
+        !onboardingData.VRN.isEmpty &&
+        !(onboardingData.postalAddress ?? "").isEmpty &&
+        !(onboardingData.region ?? "").isEmpty &&
+        !(onboardingData.district ?? "").isEmpty &&
+        !onboardingData.ward.isEmpty
+    }
 
 
     
@@ -37,7 +47,7 @@ struct CompanyOnboarding: View {
                 VStack {
                     
                     ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:StolenonboardingData.titleForCustomerOnboarding ,description: "Kindly collect the following information from the customer")
-                
+                    ScrollView{
                                 QuestionWithSmallTextField(question: "", placeholder: "\(StolenonboardingData.titleForCustomerOnboarding) name", selectedOption: $onboardingData.companyName)
                     
                                 QuestionWithSmallTextField(question: "", placeholder: "TIN", selectedOption: $onboardingData.TIN)
@@ -54,14 +64,13 @@ struct CompanyOnboarding: View {
                                     }
                                 QuestionWithDropdown(question: "District", options: onboardingData.districtOptions, selectedOption: $onboardingData.district)
                                 QuestionWithSmallTextField(question: "Ward", placeholder: "Enter Respective Ward", selectedOption: $onboardingData.ward)
-
+                    }
                     
                     Spacer()
                     
              
                     
-                    CustomNavigationButton(destination: CompanyOnboarding2(), label: "Continue", backgroundColor: config.primaryColor)
-                    
+                    CustomNavigationButton(destination: CompanyOnboarding2(), label: "Continue", backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
                     
                     
                

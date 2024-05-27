@@ -14,6 +14,11 @@ struct CompanyDocumentList: View {
     @State private var navigateBack = false
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var StolenonboardingData: OnboardingData
+    
+    var isFormComplete: Bool {
+        onboardingData.documentURLs.values.flatMap { $0 }.count >= 3 // Check if there are at least 3 documents
+    }
+    
 
     var body: some View {
         GeometryReader { geometry in
@@ -65,7 +70,7 @@ struct CompanyDocumentList: View {
                     
                 
                
-                CustomNavigationButton(destination: CompanySummary(), label: "Continue", backgroundColor: config.primaryColor)
+                CustomNavigationButton(destination: CompanySummary(), label: "Continue", backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
                 
             }
         }

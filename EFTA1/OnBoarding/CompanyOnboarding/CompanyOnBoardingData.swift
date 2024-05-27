@@ -33,6 +33,8 @@ class CompanyOnboardingData: ObservableObject,DocumentHandling {
     @Published var idType: String?
     @Published var idNumber: String = ""
     @Published var phoneNumber: String = ""
+    @Published var passportNumber: String = ""
+
     @Published var emailAddress: String = ""
     @Published var nationality: String? = nil // Nationality:<string>
     @Published var typeOfEquipment: String = ""

@@ -12,10 +12,12 @@ struct CreateSchedule: View {
     @State private var isActiveFirstText = true
     @State private var Search:String=""
     @EnvironmentObject var config: AppConfig
+    @Environment(\.presentationMode) var presentationMode
+
 
     var body: some View {
         VStack{
-        QuickIntro(title: "Equipment Delivery", description: "Kindly select one of the customers to make equipment delivery")
+            QuickIntro(title: "Equipment Delivery", description: "Kindly select one of the customers to make equipment delivery",presentationMode:presentationMode)
         
         QuestionWithDate(question: "Schedule Date ")
         
