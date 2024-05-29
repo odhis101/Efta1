@@ -15,19 +15,22 @@ struct EFTA1App: App {
     @StateObject var config = AppConfig(region: .efta)
     @StateObject var pinHandlesr = PinHandler()
     @StateObject var companyOnboarding = CompanyOnboardingData()
+    @StateObject var resetPin = ResetPin()
+
 
 
 //efken 
 
     var body: some Scene {
         WindowGroup {
-            LoginOnBoarding()
+            SplashView()
                 .environmentObject(SiteQuestionData)
                 //.environmentObject(documentHandler)
                 .environmentObject(CustomerOnboardingData)
                 .environmentObject(config)
                 .environmentObject(pinHandlesr)
                 .environmentObject(companyOnboarding)
+                .environmentObject(resetPin)
                 .environment(\.font, Font.custom("Inter", size: 16)) // Set default font globally
 
 

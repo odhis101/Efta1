@@ -97,6 +97,8 @@ struct DocumentModalView<Destination: View>: View {
 
     @State private var selectedOption: String? = nil // Local state variable for selected option
     @State var AlldocumentTypes: [DocumentType] = []
+    @State private var isLoading = false // Flag to track loading state
+
 
     var body: some View {
         GeometryReader { geometry in
@@ -113,7 +115,17 @@ struct DocumentModalView<Destination: View>: View {
                     VStack(spacing: 16) {
                         titleBar
                         QuestionWithDropdownModalDocument(question: "Type Of ID", DropdownExpand: $DropdownExpand, options: documentTypes, selectedOption: $selectedOption)
+                        
+                        if isLoading {
+                            // Show loading indicator if isLoading is true
+                                           ProgressView() // This is a simple loading indicator
+                                               .progressViewStyle(CircularProgressViewStyle())
+                            .padding()
+                            
+                        }
+                        else {
                         uploadButton
+                        }
                         continueButton
                     }
                     .padding()
@@ -260,12 +272,15 @@ struct DocumentModalView<Destination: View>: View {
     }
     
     func fetchDocumentTypes() {
+        isLoading = true // Set isLoading to true when starting the fetch
+
         guard let staffUserId = AuthManager.shared.loadUserId() else {
             print("No user ID found in Keychain")
             return
         }
         
         NetworkManager.shared.fetchDocumentTypes(staffUserId: staffUserId) { result in
+            isLoading = false
             DispatchQueue.main.async {
                 switch result {
                 case .success(let documentTypes):
@@ -302,6 +317,7 @@ struct DocumentModalView2: View {
 
     @State private var selectedOption: String? = nil // Local state variable for selected option
     @State var AlldocumentTypes: [DocumentType] = []
+    @State private var isLoading = false // Flag to track loading state
 
     var body: some View {
         GeometryReader { geometry in
@@ -318,7 +334,16 @@ struct DocumentModalView2: View {
                     VStack(spacing: 16) {
                         titleBar
                         QuestionWithDropdownModalDocument(question: "Type Of ID", DropdownExpand: $DropdownExpand, options: documentTypes, selectedOption: $selectedOption)
+                        if isLoading {
+                            // Show loading indicator if isLoading is true
+                                           ProgressView() // This is a simple loading indicator
+                                               .progressViewStyle(CircularProgressViewStyle())
+                            .padding()
+                            
+                        }
+                        else{
                         uploadButton
+                        }
                         continueButton
                     }
                     .padding()
@@ -429,6 +454,7 @@ struct DocumentModalView2: View {
     }
     
     func fetchDocumentTypes() {
+        isLoading = true
         guard let staffUserId = AuthManager.shared.loadUserId() else {
             print("No user ID found in Keychain")
             return
@@ -436,6 +462,7 @@ struct DocumentModalView2: View {
         
         NetworkManager.shared.fetchDocumentTypes(staffUserId: staffUserId) { result in
             DispatchQueue.main.async {
+                isLoading = false
                 switch result {
                 case .success(let documentTypes):
                     self.AlldocumentTypes = documentTypes

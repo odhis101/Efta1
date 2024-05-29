@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SiteDetails2: View {
-    @State private var progress: CGFloat = 0.2 // Initial progress
+    @State private var progress: CGFloat = 0.08 // Initial progress
     
     @State private var capturedImage: UIImage?
 
@@ -16,7 +16,15 @@ struct SiteDetails2: View {
 
     @Environment(\.presentationMode) var presentationMode
 
-    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
+    @EnvironmentObject var siteQuestionData : SiteDetailsDataHandler
+    var isFormComplete: Bool {
+         siteQuestionData.electricalFacilities != nil &&
+        siteQuestionData.waterAndOtherFacilities != nil &&
+        siteQuestionData.siteChangesRequired != nil &&
+         siteQuestionData.experienceInMachinery != nil &&
+         siteQuestionData.areCustomersOnSite != nil
+     }
+    
     var body: some View {
  
 
@@ -52,21 +60,7 @@ struct SiteDetails2: View {
                 
                 }
                 Spacer ()
-                /*
-                NavigationLink(destination: Document_Assets()){
-
-                Text("Continue")
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height:40)
-                    .background(config.primaryColor) // Gray background when profileImage is nil
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-
-                
-            }
-                 */
-                CustomNavigationButton(destination: Document_Assets(), label: "Continue", backgroundColor: config.primaryColor)
+                CustomNavigationButton(destination: Document_Assets(), label: "Continue", backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
             }
         }
             

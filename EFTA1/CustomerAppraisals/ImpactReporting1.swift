@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct ImpactReporting1: View {
-    @State private var progress: CGFloat = 1 // Initial progress
+    @State private var progress: CGFloat = 0.9 // Initial progress
     @State private var capturedImage: UIImage?
-    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
+    @EnvironmentObject var siteQuestionData : SiteDetailsDataHandler
     @State private var CurrentMonthlyWage:String=""
     @State private var CurrentDailyWage:String=""
     @State private var RevenueLastMonth:String=""
@@ -21,6 +21,15 @@ struct ImpactReporting1: View {
     @Environment(\.presentationMode) var presentationMode
 
     @EnvironmentObject var config: AppConfig
+    var isFormComplete: Bool {
+         siteQuestionData.numberOfPermanentMaleEmployees != nil &&
+        siteQuestionData.numberOfPermanentFemaleEmployees != nil &&
+        siteQuestionData.numberOfCasualMaleEmployees != nil &&
+         siteQuestionData.numberOfCasualFemaleEmployees != nil &&
+        siteQuestionData.daysEmployedPerMonthByCasuals != nil &&
+        siteQuestionData.daysEmployedPerMonthByCasuals != nil
+        
+     }
 
 
 
@@ -45,25 +54,12 @@ struct ImpactReporting1: View {
 
                     
 
-                    NavigationLink(destination: ImpactReporting(), isActive: $navigateToDashboard) {
-                                        EmptyView()
-                }
+                
                     
                 Spacer ()
 
-                        /*
-                    Button("Continue") {
-                        navigateToDashboard = true
-                    }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-                    .background(config.primaryColor)
-                    .cornerRadius(20)
-                    .padding()
-                         
-                         */
-                    CustomNavigationButton(destination: ImpactReporting(), label: "Continue", backgroundColor: config.primaryColor)
+                     
+                    CustomNavigationButton(destination: ImpactReporting(), label: "Continue",backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
 
                 }
             }

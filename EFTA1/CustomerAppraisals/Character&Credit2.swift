@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Character_Credit2: View {
-    @State private var progress: CGFloat = 0.2 // Initial progress
+    @State private var progress: CGFloat = 0.64 // Initial progress
     
     @State private var capturedImage: UIImage?
 
@@ -16,7 +16,18 @@ struct Character_Credit2: View {
 
     @Environment(\.presentationMode) var presentationMode
 
-    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
+    @EnvironmentObject var siteQuestionData : SiteDetailsDataHandler
+
+    var isFormComplete: Bool {
+         siteQuestionData.topThreeChallenges != nil &&
+        siteQuestionData.typicalApplicantsAndTheirBusinesses != nil &&
+        siteQuestionData.donwnPaymentDiscussion != nil &&
+         siteQuestionData.applicantsDebtors != nil &&
+        siteQuestionData.areEmployeesConsulted != nil
+
+        
+     }
+
     var body: some View {
 
         GeometryReader { geometry in
@@ -29,7 +40,6 @@ struct Character_Credit2: View {
                     QuestionWithButtons(question: "Did you ask the customer what their top three challenges have been in the past?",answer: $siteQuestionData.topThreeChallenges)
                     QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?",answer:$siteQuestionData.typicalApplicantsAndTheirBusinesses)
                     QuestionWithButtons(question: "Did you discuss the appropriate downpayment and product with the applicant based on your assessment of their business?",answer: $siteQuestionData.donwnPaymentDiscussion)
-                    QuestionWithButtons(question: "Have you discussed with the applicant how they plan to pay for the downpayment?",answer: $siteQuestionData.donwnPaymentPaymentPlan)
                     QuestionWithButtons(question: "Did you check whether the applicant has any debtors, and how long these repayments have been outstanding?",answer:$siteQuestionData.applicantsDebtors)
 
                     QuestionWithButtons(question: "Have you asked how the customer plans to differentiate themselves from their competitors?",answer: $siteQuestionData.areEmployeesConsulted)
@@ -52,7 +62,7 @@ struct Character_Credit2: View {
                     .padding(.horizontal)
                     }
                 */
-                CustomNavigationButton(destination: FinancialData(), label: "Continue", backgroundColor: config.primaryColor)
+                CustomNavigationButton(destination: FinancialData(), label: "Continue", backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
 
                 }
             }

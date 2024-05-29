@@ -481,7 +481,7 @@ struct QuestionWithSearchFeild: View {
 struct ToggleableTextComponent: View {
     var text1: String
     var text2: String
-    var isActiveFirstText: Bool
+    @Binding var isActiveFirstText: Bool
     var onToggle: () -> Void // Closure to handle toggle action
     @EnvironmentObject var config: AppConfig
 
@@ -582,14 +582,15 @@ struct ToggleableTextComponentTwoOptions: View {
 
 struct QuestionWithDate: View {
     @State private var showDatePicker = false
-    @State private var selectedDate = Date()
+    @Binding var selectedDate : Date
+
+    
     var question: String
 
     var body: some View {
         VStack(spacing:10)  {
             HStack{
             Text(question)
-                .font(.caption)
                 .multilineTextAlignment(.leading)
             Spacer ()
             }
@@ -686,6 +687,8 @@ struct QuestionWithDateStatement: View {
 struct QuestionWithTime: View {
     @State private var showTimePicker = false
     @State private var selectedTime = Date()
+    @Binding var selectedDate: Date
+
     var question: String
 
     var body: some View {
@@ -719,7 +722,7 @@ struct QuestionWithTime: View {
             }
             .sheet(isPresented: $showTimePicker) {
                 // Use a date picker within a modal sheet
-                DatePicker("Select Time", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                DatePicker("", selection: $selectedTime, displayedComponents: .hourAndMinute)
                     .datePickerStyle(WheelDatePickerStyle())
                     .padding()
                     .toolbar {
@@ -738,30 +741,26 @@ struct QuestionWithTime: View {
 
 struct QuestionWithTextField: View {
     var question: String
-    @State private var answer = ""
     @Binding public var answers: String
-
 
     var body: some View {
         VStack(spacing: 10) {
-            HStack{
-            Text(question)
-                .font(.caption)
-            Spacer()
+            HStack {
+                Text(question)
+                    .font(.caption)
+                Spacer()
             }
 
             RoundedRectangle(cornerRadius: 10)
                 .fill(Color(hex: "#F2F2F7"))
                 .frame(height: 80) // Adjust height as needed
-                .frame(maxWidth:.infinity)
+                .frame(maxWidth: .infinity)
                 .overlay(
-                    TextField("Enter your answer", text: $answer)
+                    TextField("Enter your answer", text: $answers)
                         .padding()
                 )
         }
         .padding(.horizontal)
-
-   
     }
 }
 

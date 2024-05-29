@@ -241,7 +241,7 @@ struct CustomModal: View {
                                 if isLoading {
                                     ProgressView("Submitting...")
                                         .progressViewStyle(CircularProgressViewStyle(tint: config.primaryColor))
-                                } else if let isSuccess = isSuccess {
+                                } else if var isSuccess = isSuccess {
                                     Image(systemName: isSuccess ? "checkmark.circle.fill" : "xmark.circle.fill")
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
@@ -252,6 +252,7 @@ struct CustomModal: View {
                                     HStack {
                                         Button(action: {
                                             isPresented = false
+                                            isSuccess = false
                                         }) {
                                             Text("Cancel")
                                                 .foregroundColor(.white)
@@ -260,11 +261,10 @@ struct CustomModal: View {
                                                 .cornerRadius(10)
                                         }
                                         Button(action: {
-                                            if isSuccess {
-                                                Navigation = true
-                                            } else {
-                                                isPresented = false
-                                            }
+                                            isPresented = false
+                                            isSuccess = false
+                                            Navigation = true
+                                        
                                         }) {
                                             Text("OK")
                                                 .foregroundColor(.white)
@@ -308,6 +308,13 @@ struct CustomModal: View {
                 }
                 Spacer()
             }
+            .onAppear(
+                perform: {
+                    isSuccess = nil
+                    message = ""
+                    
+                }
+            )
         }
     }
 }

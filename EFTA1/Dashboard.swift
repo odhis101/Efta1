@@ -8,60 +8,87 @@
 import SwiftUI
 
 struct Dashboard: View {
+    @State private var isMenuPresented = false
+    @State private var isNavigateToChangePin = false
+    @State private var isNavigateLogin = false
+
+    
     var body: some View {
         GeometryReader { geometry in
-            VStack(){
-            ScrollView {
+            ZStack {
+                VStack {
+                    ScrollView {
+                        TopDashboardComponent(isMenuPresented: $isMenuPresented)
+                            .padding()
+                        PointsView(geometry: geometry)
 
-            TopDashboardComponent()
+                        HStack {
+                            Text("What would you like to do")
+                                .font(.system(size: 16))
+                                .foregroundColor(.black)
+                                .bold()
+                            Spacer()
+                        }
+                        .padding(.top, 10)
+                        .padding()
+
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
+                            CustomComponent(iconName: "visit 1", text: "New \nCustomer", variable: 1)
+                            CustomComponent(iconName: "appraisal 1", text: "Customer \nAppraisal", variable: 2)
+                            CustomComponent(iconName: "delivery 1", text: "Equipment \n Delivery", variable: 3)
+                            CustomComponent(iconName: "monitoring-system 2", text: "Customer \nMonitoring", variable: 4)
+                            CustomComponent(iconName: "towing-vehicle 1", text: "Customer \nRepossession", variable: 5)
+                            CustomComponent(iconName: "clipboard_1273337 1", text: "Reports", variable: 6)
+                            CustomComponent(iconName: "file_10900273 1", text: "Customer\nStatements", variable: 7)
+                        }
+                        .padding()
+                    }
+                }
+                .disabled(isMenuPresented) // Disable interaction with the background when the menu is presented
+
+                BottomSheet(isPresented: $isMenuPresented) {
+                    VStack {
+                        Button(action: {
+                            print("Change PIN selected")
+                            isNavigateToChangePin = true
+                            isMenuPresented = false
+                        }) {
+                            Text("Change PIN")
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                        }
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .shadow(radius: 2)
+
+                        Button(action: {
+                            print("Log Out selected")
+                            isMenuPresented = false
+                            AuthManager.shared.deleteToken()
+                            isNavigateLogin = true
+
+
+                        }) {
+                            Text("Log Out")
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                        }
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .shadow(radius: 2)
+                        .padding(.bottom, 100) // Adjust this value to control how high the bottom sheet appears
+
+                    }
                     .padding()
-            PointsView(geometry: geometry)
-
-           
-       
-            HStack{
-                
-            Text("What would you like to do")
-                    .font(.system(size: 16)) // Adjust font size and weight as needed
-                    .foregroundColor(/*@START_MENU_TOKEN@*/.black/*@END_MENU_TOKEN@*/)
-                    .bold()
-                    
-                Spacer()
-
+                }
             }
-            .padding(.top,10)   
-            .padding()
-            
-         
-                      LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                          CustomComponent(iconName: "visit 1", text: "New \nCustomer",variable: 1)
-                          CustomComponent(iconName: "appraisal 1", text: "Customer \nAppraisal",variable: 2)
-                          CustomComponent(iconName: "delivery 1", text: "Equipment \n Delivery",variable: 3)
-                          CustomComponent(iconName: "monitoring-system 2", text: "Customer \nMonitoring",variable: 4)
-                          CustomComponent(iconName: "towing-vehicle 1", text: "Customer \nRepossession",variable: 5)
-                          CustomComponent(iconName: "clipboard_1273337 1", text: "Reports",variable: 6)
-                          CustomComponent(iconName: "file_10900273 1", text: "Customer\nStatements",variable:7)
-                      }
-                      .padding()
-        
-        
-            }
-         
+            NavigationLink(destination: ChangePin(), isActive: $isNavigateToChangePin) { EmptyView() }
 
-             
-            }
+            NavigationLink(destination: LoginOnBoarding(), isActive: $isNavigateLogin) { EmptyView() }
 
-
-        .navigationBarHidden(true)
         }
         .navigationBarHidden(true)
-        .navigationBarHidden(true)
-
-
     }
-
-
-
 }
 
 
@@ -292,51 +319,92 @@ struct CustomComponent: View {
 }
 
 
+
 struct TopDashboardComponent: View {
     @EnvironmentObject var config: AppConfig
+    @Binding var isMenuPresented: Bool
+    @State private var username: String = ""
 
     var body: some View {
-        HStack{
-            VStack(alignment: .leading){
-                
-            Text("Good Morning, Nuhu")
+        HStack {
+            VStack(alignment: .leading) {
+                Text("Good Morning, \(username)")
                     .fontWeight(.bold)
                     .foregroundColor(.black)
                     .font(.title2)
-                    
 
-            Text("last login: 04:00pm")
+                Text("last login: 04:00pm")
                     .font(.headline)
                     .foregroundColor(Color.gray)
-        
+
                 Rectangle()
                     .frame(height: 2)
                     .foregroundColor(config.primaryColor)
                     .frame(width: 38)
-
-                
-                
             }
             Spacer()
-            
-            HStack{
-                // get image called bell and image called burgericon
+
+            HStack {
                 Image("bell")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 20, height: 20)
-                
-                Image("burgerMenu")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 20, height: 20)
 
-            
-            
+                Button(action: {
+                    withAnimation {
+                        isMenuPresented.toggle()
+                    }
+                }) {
+                    Image("burgerMenu")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
                 }
-
             }
+        }
+        .onAppear {
+            if let loadedUsername = AuthManager.shared.loadUsername() {
+                username = loadedUsername
+            } else {
+                print("Username not found in Keychain")
+            }
+        }
+    }
+}
 
+struct BottomSheet<Content: View>: View {
+    @Binding var isPresented: Bool
+    let content: Content
 
+    init(isPresented: Binding<Bool>, @ViewBuilder content: () -> Content) {
+        self._isPresented = isPresented
+        self.content = content()
+    }
+
+    var body: some View {
+        ZStack {
+            if isPresented {
+                Color.black.opacity(0.3)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        withAnimation {
+                            isPresented = false
+                        }
+                    }
+
+                VStack {
+                    Spacer()
+                    VStack {
+                        content
+                    }
+                    .background(Color.white)
+                    .cornerRadius(16)
+                    .shadow(radius: 10)
+                    .transition(.move(edge: .bottom))
+                    .animation(.easeInOut)
+                }
+                .edgesIgnoringSafeArea(.bottom)
+            }
+        }
     }
 }

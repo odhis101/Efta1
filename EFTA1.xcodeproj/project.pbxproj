@@ -36,6 +36,10 @@
 		422557D92BC3480400FA14EF /* CustomerSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422557D82BC3480400FA14EF /* CustomerSummary.swift */; };
 		422557DB2BC3E0E700FA14EF /* MyTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422557DA2BC3E0E700FA14EF /* MyTabView.swift */; };
 		4226FCDA2C0076B300F5C336 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4226FCD92C0076B300F5C336 /* LocationManager.swift */; };
+		422E39AC2C071DD9008860FE /* ChangePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422E39AB2C071DD9008860FE /* ChangePin.swift */; };
+		422E39AE2C071F88008860FE /* CreateNewPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422E39AD2C071F88008860FE /* CreateNewPin.swift */; };
+		422E39B02C07205B008860FE /* ConfirmPIN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422E39AF2C07205B008860FE /* ConfirmPIN.swift */; };
+		422E39B22C072193008860FE /* NewPinDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422E39B12C072193008860FE /* NewPinDataHandler.swift */; };
 		423A17192BFDF6B500C5DF16 /* SecurityQuestionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423A17182BFDF6B500C5DF16 /* SecurityQuestionsTest.swift */; };
 		423D78352BFF96AD000681FC /* Modals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423D78342BFF96AD000681FC /* Modals.swift */; };
 		423D78392BFFC237000681FC /* CompanyOnBoardingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 423D78382BFFC237000681FC /* CompanyOnBoardingData.swift */; };
@@ -69,6 +73,7 @@
 		42B5EC6C2BCE7AAA00D5418C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC6B2BCE7AAA00D5418C /* Constants.swift */; };
 		42B5EC6E2BCE858E00D5418C /* OnboardingData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC6D2BCE858E00D5418C /* OnboardingData.swift */; };
 		42B5EC702BCEB8D100D5418C /* SelectProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B5EC6F2BCEB8CF00D5418C /* SelectProfile.swift */; };
+		42D4A8F82C05CA6800AA2816 /* ScheduleAppraisal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D4A8F72C05CA6800AA2816 /* ScheduleAppraisal.swift */; };
 		42DAADE12BBAE3C900F7FC7B /* CustomerOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DAADE02BBAE3C800F7FC7B /* CustomerOnboarding.swift */; };
 		42DDB66B2BBB60E00038D1CA /* IndividualOnboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DDB66A2BBB60E00038D1CA /* IndividualOnboarding.swift */; };
 		42DDB66F2BBB65450038D1CA /* CapturePhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DDB66E2BBB65450038D1CA /* CapturePhoto.swift */; };
@@ -97,6 +102,7 @@
 		42ECA2C72BC704F700FB4B43 /* Equipment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ECA2C62BC704F700FB4B43 /* Equipment.swift */; };
 		42ECA2C92BC7CC0300FB4B43 /* BusinessPerformance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ECA2C82BC7CC0200FB4B43 /* BusinessPerformance.swift */; };
 		42ECA2CB2BC7CF1A00FB4B43 /* CustomerInformationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42ECA2CA2BC7CF1A00FB4B43 /* CustomerInformationSheet.swift */; };
+		42F76B0B2C060272005D04D1 /* EasyMenu in Frameworks */ = {isa = PBXBuildFile; productRef = 42F76B0A2C060272005D04D1 /* EasyMenu */; };
 		42FE89302BFAE4950046F172 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 42FE892F2BFAE4950046F172 /* AlertToast */; };
 		42FE89322BFAE49B0046F172 /* SwiftUIDigitalSignature in Frameworks */ = {isa = PBXBuildFile; productRef = 42FE89312BFAE49B0046F172 /* SwiftUIDigitalSignature */; };
 		42FE89342BFAE4A80046F172 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 42FE89332BFAE4A80046F172 /* SwiftUICharts */; };
@@ -156,6 +162,10 @@
 		422557D82BC3480400FA14EF /* CustomerSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerSummary.swift; sourceTree = "<group>"; };
 		422557DA2BC3E0E700FA14EF /* MyTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTabView.swift; sourceTree = "<group>"; };
 		4226FCD92C0076B300F5C336 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		422E39AB2C071DD9008860FE /* ChangePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePin.swift; sourceTree = "<group>"; };
+		422E39AD2C071F88008860FE /* CreateNewPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewPin.swift; sourceTree = "<group>"; };
+		422E39AF2C07205B008860FE /* ConfirmPIN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmPIN.swift; sourceTree = "<group>"; };
+		422E39B12C072193008860FE /* NewPinDataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPinDataHandler.swift; sourceTree = "<group>"; };
 		423A17182BFDF6B500C5DF16 /* SecurityQuestionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityQuestionsTest.swift; sourceTree = "<group>"; };
 		423D78342BFF96AD000681FC /* Modals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modals.swift; sourceTree = "<group>"; };
 		423D78382BFFC237000681FC /* CompanyOnBoardingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyOnBoardingData.swift; sourceTree = "<group>"; };
@@ -191,6 +201,7 @@
 		42B5EC6B2BCE7AAA00D5418C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		42B5EC6D2BCE858E00D5418C /* OnboardingData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingData.swift; sourceTree = "<group>"; };
 		42B5EC6F2BCEB8CF00D5418C /* SelectProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectProfile.swift; sourceTree = "<group>"; };
+		42D4A8F72C05CA6800AA2816 /* ScheduleAppraisal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleAppraisal.swift; sourceTree = "<group>"; };
 		42DAADE02BBAE3C800F7FC7B /* CustomerOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerOnboarding.swift; sourceTree = "<group>"; };
 		42DDB66A2BBB60E00038D1CA /* IndividualOnboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualOnboarding.swift; sourceTree = "<group>"; };
 		42DDB66E2BBB65450038D1CA /* CapturePhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePhoto.swift; sourceTree = "<group>"; };
@@ -233,6 +244,7 @@
 				42FE89302BFAE4950046F172 /* AlertToast in Frameworks */,
 				429BB8FA2BBC0E8300A323A2 /* MapKit.framework in Frameworks */,
 				42FE89322BFAE49B0046F172 /* SwiftUIDigitalSignature in Frameworks */,
+				42F76B0B2C060272005D04D1 /* EasyMenu in Frameworks */,
 				429BB8FD2BBC0E9B00A323A2 /* HealthKit.framework in Frameworks */,
 				42FE89342BFAE4A80046F172 /* SwiftUICharts in Frameworks */,
 			);
@@ -313,10 +325,11 @@
 				425A5EC12BCFF41800C520B5 /* Statements */,
 				42B5EC562BCD1D0100D5418C /* Components */,
 				42ECA2AC2BC6C95100FB4B43 /* DataHandler */,
-				421400B52BB55588003E5A85 /* KeypadView.swift */,
 				423A17172BFDF68C00C5DF16 /* API Testing */,
 				42B5EC692BCE78BC00D5418C /* NetworkManager.swift */,
 				42B5EC6B2BCE7AAA00D5418C /* Constants.swift */,
+				422E39AA2C071D9F008860FE /* ChangePin */,
+				421400B52BB55588003E5A85 /* KeypadView.swift */,
 				4242D9B32BD13F15004AF3F3 /* keychainAcess.swift */,
 				4242D9B52BD14595004AF3F3 /* AuthManager.swift */,
 				423D78342BFF96AD000681FC /* Modals.swift */,
@@ -352,6 +365,17 @@
 				4214009E2BB5550F003E5A85 /* EFTA1UITestsLaunchTests.swift */,
 			);
 			path = EFTA1UITests;
+			sourceTree = "<group>";
+		};
+		422E39AA2C071D9F008860FE /* ChangePin */ = {
+			isa = PBXGroup;
+			children = (
+				422E39AB2C071DD9008860FE /* ChangePin.swift */,
+				422E39AD2C071F88008860FE /* CreateNewPin.swift */,
+				422E39AF2C07205B008860FE /* ConfirmPIN.swift */,
+				422E39B12C072193008860FE /* NewPinDataHandler.swift */,
+			);
+			path = ChangePin;
 			sourceTree = "<group>";
 		};
 		423A17172BFDF68C00C5DF16 /* API Testing */ = {
@@ -486,6 +510,7 @@
 			children = (
 				42ECA2A62BC5629300FB4B43 /* CustomerApraisalsSearch.swift */,
 				42ECA2A82BC576E500FB4B43 /* CustomerApraisalDetails.swift */,
+				42D4A8F72C05CA6800AA2816 /* ScheduleAppraisal.swift */,
 				42ECA2AA2BC6C07C00FB4B43 /* SiteDetails.swift */,
 				42ECA2AF2BC6F90300FB4B43 /* SiteDetails2.swift */,
 				42ECA2B12BC6FA4C00FB4B43 /* Document&Assets.swift */,
@@ -548,6 +573,7 @@
 				42FE89312BFAE49B0046F172 /* SwiftUIDigitalSignature */,
 				42FE89332BFAE4A80046F172 /* SwiftUICharts */,
 				42FE89352BFAE4AD0046F172 /* FilePicker */,
+				42F76B0A2C060272005D04D1 /* EasyMenu */,
 			);
 			productName = EFTA1;
 			productReference = 4214007E2BB554FD003E5A85 /* EFTA1.app */;
@@ -629,6 +655,7 @@
 				42F1452B2BFA5016005F27CC /* XCRemoteSwiftPackageReference "AlertToast" */,
 				42F1452E2BFA507E005F27CC /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
 				42F145312BFADE22005F27CC /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
+				42F76B092C060272005D04D1 /* XCRemoteSwiftPackageReference "EasyMenu" */,
 			);
 			productRefGroup = 4214007F2BB554FD003E5A85 /* Products */;
 			projectDirPath = "";
@@ -679,6 +706,7 @@
 				4281A70D2BE3903700743423 /* Buttons.swift in Sources */,
 				42ECA2C02BC6FE8400FB4B43 /* ImpactReporting.swift in Sources */,
 				42B5EC532BCD109C00D5418C /* EquipmentDeliveryItems.swift in Sources */,
+				422E39AC2C071DD9008860FE /* ChangePin.swift in Sources */,
 				4242D9B82BD14BB5004AF3F3 /* ImpactReporting1.swift in Sources */,
 				42E822042BD112B6003D59CF /* DataHandler.swift in Sources */,
 				42ECA29F2BC54F2E00FB4B43 /* CompanyLocation.swift in Sources */,
@@ -721,6 +749,7 @@
 				423D78352BFF96AD000681FC /* Modals.swift in Sources */,
 				4226FCDA2C0076B300F5C336 /* LocationManager.swift in Sources */,
 				4242D9B42BD13F17004AF3F3 /* keychainAcess.swift in Sources */,
+				42D4A8F82C05CA6800AA2816 /* ScheduleAppraisal.swift in Sources */,
 				42B5EC682BCE718000D5418C /* PieChart.swift in Sources */,
 				42B5EC5A2BCD23D300D5418C /* EquipmentDeliveryForm2.swift in Sources */,
 				42ECA2A32BC54FF400FB4B43 /* CompanySummary.swift in Sources */,
@@ -737,6 +766,7 @@
 				6E1FB8522BF7E9AC00677D28 /* ImpactReportingCustomerMonitoring.swift in Sources */,
 				42B5EC632BCE6D4100D5418C /* CreateSchedule.swift in Sources */,
 				4242D9BA2BD2659D004AF3F3 /* CustomerDocumentList.swift in Sources */,
+				422E39AE2C071F88008860FE /* CreateNewPin.swift in Sources */,
 				421400B62BB55588003E5A85 /* KeypadView.swift in Sources */,
 				420210672BC8244000FB24B4 /* CustomerMonitoringDocumentList.swift in Sources */,
 				42B5EC602BCD646B00D5418C /* PhotoCaptureViewModel.swift in Sources */,
@@ -753,8 +783,10 @@
 				422557D72BC2F00100FA14EF /* CustomerDocument.swift in Sources */,
 				4202106E2BC95FE000FB24B4 /* RepossesionPickUp.swift in Sources */,
 				42ECA2A92BC576E600FB4B43 /* CustomerApraisalDetails.swift in Sources */,
+				422E39B22C072193008860FE /* NewPinDataHandler.swift in Sources */,
 				429BB8F42BBBEB3200A323A2 /* Images.swift in Sources */,
 				42ECA2B82BC6FC6A00FB4B43 /* Market3.swift in Sources */,
+				422E39B02C07205B008860FE /* ConfirmPIN.swift in Sources */,
 				421400B42BB55580003E5A85 /* PINEntryView.swift in Sources */,
 				425A5EC72BD0FC3C00C520B5 /* Config.swift in Sources */,
 				420210652BC81F2F00FB24B4 /* DocumentHandler.swift in Sources */,
@@ -922,9 +954,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EFTA1/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to take photos for uploading Signature Pictures";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need your location to show your current position on the map.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show your current position on the map.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This application needs access to the photo library to open photos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
@@ -955,9 +991,13 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EFTA1/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to take photos for uploading Signature Pictures";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need your location to show your current position on the map.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show your current position on the map.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "This application needs access to the photo library to open photos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
@@ -1136,6 +1176,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		42F76B092C060272005D04D1 /* XCRemoteSwiftPackageReference "EasyMenu" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hdehghan/EasyMenu";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
 		6E1FB8352BF3B5B100677D28 /* XCRemoteSwiftPackageReference "AlertToast" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/elai950/AlertToast";
@@ -1147,6 +1195,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		42F76B0A2C060272005D04D1 /* EasyMenu */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 42F76B092C060272005D04D1 /* XCRemoteSwiftPackageReference "EasyMenu" */;
+			productName = EasyMenu;
+		};
 		42FE892F2BFAE4950046F172 /* AlertToast */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6E1FB8352BF3B5B100677D28 /* XCRemoteSwiftPackageReference "AlertToast" */;

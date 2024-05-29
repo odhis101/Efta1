@@ -9,16 +9,25 @@ import SwiftUI
 import MapKit
 
 struct CustomerApraisalDetails: View {
-    let receiptItems: [(String, String)] = [
-            ("ID number", "Makumbosho Ltd"),
-            ("Type of business", "123445"),
-            ("Equipment description", "1234567"),
-            ("Equipment price", "2008-0100"),
-        
+ 
+    
+    var userData: CustomerData
+
+    var receiptItems: [(String, String)] {
+        [
+            ("ID number", userData.customerIdentityNumber ?? "N/A"),
+            ("Type of business", userData.businessType),
+            ("Equipment description", userData.equipmentDescription ?? "N/A"),
+            ("Equipment price", userData.equipmentPrice != nil ? "\(userData.equipmentPrice!)" : "N/A"),
+           
         ]
-    var userData: UserData
+    }
+    //var userData: CustomerData
     @EnvironmentObject var config: AppConfig
+    @EnvironmentObject var siteQuestionData: SiteDetailsDataHandler
+
     @Environment(\.presentationMode) var presentationMode
+    
 
 
     var body: some View {
@@ -26,6 +35,7 @@ struct CustomerApraisalDetails: View {
         VStack{
             VStack{
             QuickIntro(title: "Alex Mwangiss", description: "Kindly proceed to appraise the customer after confirming their details",presentationMode: presentationMode)
+                    .padding(.top,30)
             ZStack{
                 MapComponent(geometry: geometry)
                 CustomerDetailsReceiptBox(items: receiptItems,geometry: geometry)
@@ -39,6 +49,7 @@ struct CustomerApraisalDetails: View {
             Spacer()
 
             HStack{
+                NavigationLink(destination: ScheduleAppraisal()){
                 Text("Schedule")
                     .foregroundColor(config.primaryColor) // Set text color to green
                     .frame(maxWidth: .infinity)
@@ -50,6 +61,7 @@ struct CustomerApraisalDetails: View {
                         RoundedRectangle(cornerRadius: 20)
                             .stroke(config.primaryColor, lineWidth: 2) // Set border color and width
                     )
+                }
 
 
                 NavigationLink(destination: SiteDetails()){
@@ -80,7 +92,12 @@ struct CustomerApraisalDetails: View {
         }
       
         
-        
+        .onAppear {
+                   siteQuestionData.customerPhoneNumber = userData.phoneNumber
+                   siteQuestionData.customerIdentityNumber = userData.customerIdentityNumber ?? "N/A"
+
+               }
+
     }
 }
 

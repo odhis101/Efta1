@@ -82,7 +82,7 @@ struct LogoAndTitleView: View {
                 if goBack{
                     Button(action: {
                         print("pressed")
-                        //self.presentationMode.dismiss()
+                        self.presentationMode.dismiss()
                         //self.showAlert = true // Set showAlert to true to show the alert
                         
                     }) {

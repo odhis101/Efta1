@@ -8,13 +8,22 @@
 import SwiftUI
 
 struct Market2: View {
-    @State private var progress: CGFloat = 0.2 // Initial progress
+    @State private var progress: CGFloat = 0.4 // Initial progress
     
     @State private var capturedImage: UIImage?
 
     @EnvironmentObject var config: AppConfig
 
-    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
+    @EnvironmentObject var siteQuestionData : SiteDetailsDataHandler
+
+    var isFormComplete: Bool {
+         siteQuestionData.didYouUnderstandProductSalesTime != nil &&
+        siteQuestionData.isApplicantReliantOnGovernmentCustomers != nil &&
+        siteQuestionData.isApplicantSellingProductsAtOnce != nil &&
+         siteQuestionData.isApplicantSellingThroughoutYear != nil &&
+        siteQuestionData.isSeasonalityImpactingBusiness != nil 
+        
+     }
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -45,21 +54,8 @@ struct Market2: View {
                 
                 }
                 Spacer ()
-                /*
-                NavigationLink(destination: Market3()){
-                Text("Continue")
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height:40)
-                    .background(config.primaryColor) // Gray background when profileImage is nil
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-                    
-                
-                }
-                */
-                
-                CustomNavigationButton(destination: Market3(), label: "Continue", backgroundColor: config.primaryColor)
+            
+                CustomNavigationButton(destination: Market3(), label: "Continue", backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
                 }
             }
             

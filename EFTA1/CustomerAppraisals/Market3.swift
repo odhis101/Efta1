@@ -8,16 +8,23 @@
 import SwiftUI
 
 struct Market3: View {
-    @State private var progress: CGFloat = 0.2 // Initial progress
+    @State private var progress: CGFloat = 0.48 // Initial progress
     
     @State private var capturedImage: UIImage?
 
     @EnvironmentObject var config: AppConfig
 
     
-    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
-    
+    @EnvironmentObject var siteQuestionData : SiteDetailsDataHandler
+
     @Environment(\.presentationMode) var presentationMode
+    var isFormComplete: Bool {
+         siteQuestionData.areForecastedVolumesMakingSense != nil &&
+        siteQuestionData.otherIncomeSourcesProof != nil &&
+        siteQuestionData.potentialProductDiversification != nil &&
+         siteQuestionData.additionalServicesConsideration != nil 
+        
+     }
     var body: some View {
 
         GeometryReader { geometry in
@@ -47,7 +54,7 @@ struct Market3: View {
                 Spacer ()
             
                 
-                CustomNavigationButton(destination: Character_Credit(), label: "Continue", backgroundColor: config.primaryColor)
+                CustomNavigationButton(destination: Character_Credit(), label: "Continue", backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
 
                 }
             }

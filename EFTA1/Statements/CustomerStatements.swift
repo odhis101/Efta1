@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct CustomerStatements: View {
-    var userData: UserData
+    var userData: CustomerData
     @EnvironmentObject var config: AppConfig
     @State private var isModalVisible = false
     @State private var isPresentingModal = false

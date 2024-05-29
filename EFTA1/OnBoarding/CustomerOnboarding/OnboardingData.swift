@@ -56,5 +56,33 @@ class OnboardingData: ObservableObject, DocumentHandling {
     func clearDocuments() {
         documentURLs.removeAll()
     }
+    func reset() {
+            selectedQuestionIndex = 0
+            isExpanded = false
+            customerType = nil
+            customerName = ""
+            idType = nil
+            idNumber = ""
+            passportNumber = ""
+            gender = nil
+            maritalStatus = nil
+            postalAddress = ""
+            region = nil
+            district = nil
+            ward = ""
+            nationality = nil
+            emailAddress = ""
+            phoneNumber = ""
+            tin = ""
+            typeOfEquipment = ""
+            priceOfEquipment = ""
+            profileImage = nil
+            selectedCoordinate = nil
+            districtOptions = []
+            titleForCustomerOnboarding = ""
+            isPickerPresented = false
+            sourceType = .photoLibrary
+            documentURLs = [:]
+        }
 }
 

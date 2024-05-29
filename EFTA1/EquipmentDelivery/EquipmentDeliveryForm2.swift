@@ -34,10 +34,10 @@ struct EquipmentDeliveryForm2: View {
                 ScrollView{
                     QuestionWithFileType()
                     
-                    QuestionWithDate(question: "Date insurance Starts")
+                    //QuestionWithDate(question: "Date insurance Starts")
 
              
-                    QuestionWithDate(question: "Date insurance ends")
+                    //QuestionWithDate(question: "Date insurance ends")
                     
                     //QuestionWithButtons(question: "Can the investment be activated?")
                    // QuestionWithTextField(question: "If no, why not and what is the agreed plan and timeline for activation?")

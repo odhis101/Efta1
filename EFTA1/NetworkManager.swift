@@ -473,20 +473,22 @@ class NetworkManager: ObservableObject {
         }.resume()
     }
 
-    func mobileAppLogin(phoneNumber: String, pin: String, completion: @escaping (Bool, Error?) -> Void) {
+    func mobileAppLogin(phoneNumber: String, pin: String, completion: @escaping (Bool, String, Int?) -> Void) {
         guard let url = URL(string: "\(baseURL)/auth/mobileapplogin") else {
-            completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
+            print("Invalid URL")
+            completion(false, "Invalid URL", nil)
             return
         }
+        
         let formattedPhoneNumber = formatPhoneNumber(phoneNumber)
         let requestBody: [String: Any] = [
             "phonenumber": formattedPhoneNumber,
             "pin": pin
         ]
-        
-        print("this is formatted number", formattedPhoneNumber)
+
         guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
-            completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Error creating JSON"]))
+            print("Error creating JSON")
+            completion(false, "Error creating JSON", nil)
             return
         }
 
@@ -494,54 +496,66 @@ class NetworkManager: ObservableObject {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonData
-        
-        print ("Request Body for login: \(requestBody)")
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                completion(false, error)
+                print("Error: \(error.localizedDescription)")
+                completion(false, "Error: \(error.localizedDescription)", nil)
                 return
             }
 
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response or status code"]))
+            guard let httpResponse = response as? HTTPURLResponse, let data = data else {
+                print("Invalid response")
+                completion(false, "Invalid response", nil)
                 return
             }
 
-            if let data = data, let responseBody = String(data: data, encoding: .utf8) {
-                print("Response Body:", responseBody)
+            print("Response status code: \(httpResponse.statusCode)")
+            if let responseBody = String(data: data, encoding: .utf8) {
+                print("Response body: \(responseBody)")
             }
 
-            if let data = data {
-                do {
-                    if let responseObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                        if let status = responseObject["status"] as? String, status == "00",
-                           let data = responseObject["data"] as? [String: Any],
-                           let token = data["token"] as? String,
-                           let userId = data["userId"] as? String {
-                            
-                            // Save the token and user ID
-                            AuthManager.shared.saveToken(token)
-                            AuthManager.shared.saveUserId(userId)
-                            AuthManager.shared.savePhoneNumber(formattedPhoneNumber)
+            do {
+                let responseObject = try JSONDecoder().decode(LoginResponse.self, from: data)
+                if responseObject.status == "00" {
+                    // Successful login
+                    if let loginData = responseObject.data {
+                        // Save the token and user ID
+                        AuthManager.shared.saveToken(loginData.token)
+                        AuthManager.shared.saveUserId(loginData.userId)
+                        AuthManager.shared.savePhoneNumber(formattedPhoneNumber)
+                        AuthManager.shared.saveUsername(loginData.username)
 
-                            
-                            completion(true, nil)
-                        } else {
-                            completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to log in"]))
-                        }
-                    } else {
-                        completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON response"]))
+                        
                     }
-                } catch {
-                    completion(false, error)
+                    completion(true, responseObject.message, nil)
+                } else {
+                    // Failed login
+                    let remainingAttempts = responseObject.remainingAttempts
+                    completion(false, responseObject.message, remainingAttempts)
                 }
-            } else {
-                completion(false, NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data received"]))
+            } catch {
+                // Error decoding response
+                print("Error decoding response: \(error.localizedDescription)")
+                completion(false, "Error decoding response", nil)
             }
         }.resume()
     }
-    
+
+    struct LoginResponse: Codable {
+        let status: String
+        let message: String
+        let data: LoginData?
+        let remainingAttempts: Int? // Include remainingAttempts here
+        
+        struct LoginData: Codable {
+            let token: String
+            let userId: String
+            let username: String
+
+        }
+    }
+
     // send customer onboarding
     
     private func appendToData(_ data: inout Data, string: String) {
@@ -549,6 +563,7 @@ class NetworkManager: ObservableObject {
                data.append(stringData)
            }
        }
+    
     
     
     func fetchDocumentTypes(staffUserId: String, completion: @escaping (Result<[DocumentType], Error>) -> Void) {
@@ -665,7 +680,7 @@ class NetworkManager: ObservableObject {
         
         if let profileImage = onboardingData.profileImage,
            let imageData = profileImage.jpegData(compressionQuality: 0.8) {
-            files.append((data: imageData, fieldName: "999", fileName: "profile.jpg", mimeType: "image/jpeg"))
+            files.append((data: imageData, fieldName: "CustomerPhoto", fileName: "profile.jpg", mimeType: "image/jpeg"))
         }
         
        
@@ -715,10 +730,15 @@ class NetworkManager: ObservableObject {
                         completion(false, responseDict.message)
                     }
                 } catch {
+                    if let responseBody = String(data: data, encoding: .utf8) {
+                        print("Response body: \(responseBody)")
+                    }
                     print("Error decoding response: \(error)")
                     completion(false, "Error decoding response")
                 }
-            } else {
+            }
+            
+            else {
                 if let responseBody = String(data: data, encoding: .utf8) {
                     print("Response body: \(responseBody)")
                 }
@@ -867,14 +887,21 @@ class NetworkManager: ObservableObject {
     func appraiseCustomer(bearer: String, siteDetails: SiteDetailsDataHandler, completion: @escaping (Bool, String) -> Void) {
             print("Starting customer appraisal upload...")
             
-            let url = URL(string: "https://yourapi.com/Mobile/appraiseCustomer")!
+            let url = URL(string: "\(baseURLData)/Mobile/appraiseCustomer")!
             print("Request URL: \(url)")
-            
+        var staffUserId = ""
+
+     
             let boundary = "Boundary-\(UUID().uuidString)"
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             request.setValue("Bearer \(bearer)", forHTTPHeaderField: "Authorization")
             request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        if let staffUserIdFromAuth = AuthManager.shared.loadUserId() {
+            staffUserId = staffUserIdFromAuth
+        } else {
+            print("No user ID found in Keychain")
+        }
             
             let parameters: [String: Any] = [
                 "customerPhoneNumber": siteDetails.isLandOwnershipConfirmed,  // Example value, replace with actual
@@ -920,7 +947,9 @@ class NetworkManager: ObservableObject {
                 "dailyWages": siteDetails.dailyWages,
                 "revenuesLastMonth": siteDetails.revenuesLastMonth,
                 "revenuesThisMonth": siteDetails.revenuesThisMonth,
-                "revenuesNextMonth": siteDetails.revenuesNextMonth
+                "revenuesNextMonth": siteDetails.revenuesNextMonth,
+                "StaffUserId": staffUserId,
+
             ]
             
             print("These are the parameters", parameters)
@@ -987,5 +1016,164 @@ class NetworkManager: ObservableObject {
             }
             task.resume()
         }
+    
+    
+
+    struct CustomerListResponse: Decodable {
+        let status: String
+        let message: String
+        let data: [CustomerData]?
+    }
+
+    func fetchCustomerList(completion: @escaping (Result<[CustomerData], Error>) -> Void) {
+        let urlString = "\(baseURLData)/Mobile/customerlist"
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL: \(urlString)")
+            completion(.failure(NSError(domain: "Invalid URL", code: 0, userInfo: nil)))
+            return
+        }
+        
+        print("Request URL: \(urlString)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        var staffUserId = ""
+        if let staffUserIdFromAuth = AuthManager.shared.loadUserId() {
+            staffUserId = staffUserIdFromAuth
+        } else {
+            print("No user ID found in Keychain")
+            completion(.failure(NSError(domain: "No User ID", code: 0, userInfo: nil)))
+            return
+        }
+        
+        print("Staff User ID: \(staffUserId)")
+        let requestData: [String: String] = ["userId": staffUserId]
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: requestData) else {
+            print("Failed to serialize JSON: \(requestData)")
+            completion(.failure(NSError(domain: "JSON Serialization Error", code: 0, userInfo: nil)))
+            return
+        }
+        
+        request.httpBody = jsonData
+        print("Request Body: \(String(data: jsonData, encoding: .utf8) ?? "nil")")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Network error: \(error.localizedDescription)")
+                completion(.failure(error))
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                print("Invalid response received")
+                completion(.failure(NSError(domain: "Invalid Response", code: 0, userInfo: nil)))
+                return
+            }
+            
+            print("Response Status Code: \(httpResponse.statusCode)")
+            guard httpResponse.statusCode == 200 else {
+                print("Server error: Status code \(httpResponse.statusCode)")
+                completion(.failure(NSError(domain: "Server Error", code: httpResponse.statusCode, userInfo: nil)))
+                return
+            }
+            
+            guard let data = data else {
+                print("No data received from server")
+                completion(.failure(NSError(domain: "No Data", code: 0, userInfo: nil)))
+                return
+            }
+            
+            if let jsonString = String(data: data, encoding: .utf8) {
+                print("Response Data: \(jsonString)")
+            } else {
+                print("Unable to convert response data to string")
+            }
+            
+            do {
+                let response = try JSONDecoder().decode(CustomerListResponse.self, from: data)
+                if response.status == "00", let customers = response.data {
+                    print("Successfully decoded customer data")
+                    completion(.success(customers))
+                } else {
+                    print("Response error: \(response.status)")
+                    completion(.failure(NSError(domain: "Response Error", code: 0, userInfo: nil)))
+                }
+            } catch {
+                print("Decoding error: \(error)")
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+    // Function to send a POST request to the specified endpoint
+    func scheduleAppraisal(customerId: String, scheduledDate: String, completion: @escaping (Result<Data, Error>) -> Void) {
+        // Define the URL
+        let url = URL(string: "\(baseURLData)/Mobile/scheduleappraisal")!
+        print("Request URL: \(url)")
+        
+        var staffUserId = ""
+        if let staffUserIdFromAuth = AuthManager.shared.loadUserId() {
+            staffUserId = staffUserIdFromAuth
+        } else {
+            print("No user ID found in Keychain")
+            completion(.failure(NSError(domain: "No User ID", code: 0, userInfo: nil)))
+            return
+        }
+        
+        // Define the request body
+        let requestBody: [String: Any] = [
+            "staffUserId": staffUserId,
+            "customerId": customerId,
+            "scheduledDate": scheduledDate
+        ]
+        
+        // Convert request body to JSON data
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
+            completion(.failure(NetworkError.invalidData))
+            return
+        }
+        
+        // Create the request
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = jsonData
+        
+        // Create and start data task
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            // Check for network errors
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            // Check for HTTP response status code
+            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+                completion(.failure(NetworkError.invalidResponse))
+                print("Response body: \(response)")
+
+                return
+            }
+            
+            // Check if data is available
+            guard let responseData = data else {
+                completion(.failure(NetworkError.noData))
+                return
+            }
+            
+            // Data received successfully
+            completion(.success(responseData))
+        }.resume()
+    }
+  }
+
+  // Define custom error types
+  enum NetworkError: Error {
+      case invalidURL
+      case invalidData
+      case invalidResponse
+      case noData
+  }
+
    
-   }
+   

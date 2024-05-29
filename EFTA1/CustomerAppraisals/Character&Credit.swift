@@ -8,14 +8,25 @@
 import SwiftUI
 
 struct Character_Credit: View {
-    @State private var progress: CGFloat = 0.2 // Initial progress
+    @State private var progress: CGFloat = 0.56 // Initial progress
     
     @State private var capturedImage: UIImage?
     @EnvironmentObject var config: AppConfig
 
     
-    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
+    @EnvironmentObject var siteQuestionData : SiteDetailsDataHandler
     @Environment(\.presentationMode) var presentationMode
+    
+    var isFormComplete: Bool {
+         siteQuestionData.arePhoneNumbersAndReferencesCollected != nil &&
+        siteQuestionData.isCreditDisputeDiscussed != nil &&
+        siteQuestionData.isCreditInfoSearchConducted != nil &&
+         siteQuestionData.areExistingLoansReviewed != nil &&
+        siteQuestionData.areNeighborsConsulted != nil
+
+        
+     }
+
 
     var body: some View {
 
@@ -40,20 +51,9 @@ struct Character_Credit: View {
                 
                 }
                 Spacer ()
-                /*
-                NavigationLink(destination: Character_Credit2()){
-
-                Text("Continue")
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height:40)
-                    .background(config.primaryColor) // Gray background when profileImage is nil
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-                    }
-                */
+           
                 
-                CustomNavigationButton(destination: Character_Credit2(), label: "Continue", backgroundColor: config.primaryColor)
+                CustomNavigationButton(destination: Character_Credit2(), label: "Continue", backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
 
                 }
             }

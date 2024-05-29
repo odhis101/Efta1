@@ -64,4 +64,27 @@ class CompanyOnboardingData: ObservableObject,DocumentHandling {
     func clearDocuments() {
         documentURLs.removeAll()
     }
+    
+    // Method to reset all properties to their initial values
+      func reset() {
+          companyName = ""
+          TIN = ""
+          VRN = ""
+          postalAddress = ""
+          region = nil
+          district = nil
+          districtOptions = []
+          ward = ""
+          contactPersonName = ""
+          idType = nil
+          idNumber = ""
+          phoneNumber = ""
+          passportNumber = ""
+          emailAddress = ""
+          nationality = nil
+          typeOfEquipment = ""
+          priceOfEquipment = ""
+          selectedCoordinate = nil
+          documentURLs = [:]
+      }
 }

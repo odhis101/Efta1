@@ -14,8 +14,15 @@ struct SiteDetails: View {
 
     @EnvironmentObject var config: AppConfig
 
-    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
+    @EnvironmentObject var siteQuestionData : SiteDetailsDataHandler
     @Environment(\.presentationMode) var presentationMode
+    
+    var isFormComplete: Bool {
+         siteQuestionData.fullDescriptionOfSite != nil &&
+         !siteQuestionData.landRentingDetails.isEmpty &&
+         siteQuestionData.deliveryChallenges != nil &&
+         siteQuestionData.securityArrangements != nil
+     }
     
 
     var body: some View {
@@ -36,7 +43,7 @@ struct SiteDetails: View {
 
                     QuestionWithButtons(question: "Did you get confirmation as to whether the applicant owns the land themselves?", answer: $siteQuestionData.isLandOwnershipConfirmed)
                     
-                    QuestionWithSmallTextField(question: " Customer Phone Number",placeholder:"Phone  Number",selectedOption:$siteQuestionData.customerPhoneNumber)
+                 
 
 
                     QuestionWithTextField(question: "If land is rented, did you discuss how long the applicant has rented their site for, any risks of not renewing the rental agreement, how often the applicant has to pay their rent?", answers: $siteQuestionData.landRentingDetails)
@@ -55,7 +62,7 @@ struct SiteDetails: View {
                 }
                 Spacer ()
                 
-                CustomNavigationButton(destination: SiteDetails2(), label: "Continue", backgroundColor: config.primaryColor)
+                CustomNavigationButton(destination: SiteDetails2(), label: "Continue", backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
                 
 
                 }

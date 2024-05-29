@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "easymenu",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/hdehghan/EasyMenu",
+      "state" : {
+        "revision" : "9dcbc244c9da59b71fbe6d75d557358160a67542",
+        "version" : "0.1.0"
+      }
+    },
+    {
       "identity" : "filepicker",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/markrenaud/FilePicker.git",

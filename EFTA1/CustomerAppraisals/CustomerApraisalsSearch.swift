@@ -7,54 +7,78 @@
 
 import SwiftUI
 
+
 struct CustomerApraisalsSearch: View {
-    @State private var Search = ""
+    @State private var search = ""
     @State private var isActiveFirstText = true
-    @State private var data: [UserData] = [] // Initialize empty array to hold data
+    @State private var data: [CustomerData] = [] // Initialize empty array to hold data
     @Environment(\.presentationMode) var presentationMode
-
-
+    
+    @State private var isLoading = false // Add isLoading state variable
 
     var body: some View {
-        VStack{
+        VStack {
+            QuickIntro(title: "Customer Appraisals", description: "Kindly select one of the customers you want to appraise", presentationMode: presentationMode)
+            QuestionWithSmallTextField(question: "", placeholder: "Search", selectedOption: $search)
             
-            QuickIntro(title: "Customer Appraisals", description: "kindly select one of the customers you want to appraise", presentationMode: presentationMode)
-            QuestionWithSmallTextField(question: "Search",placeholder: "Search",selectedOption: $Search)
-
-            ToggleableTextComponent(text1: "Upcoming schedules", text2: "All Customers", isActiveFirstText: isActiveFirstText) {
-                // this will allow data to be dynamically gotten here
+            ToggleableTextComponent(text1: "Upcoming schedules", text2: "All Customers", isActiveFirstText: $isActiveFirstText) {
+                // This will allow data to be dynamically gotten here
                 isActiveFirstText.toggle()
                 fetchData()
-
             }
-            DataListComponent(data: data, destinationType: .customerAppraisalDetails)
-                            .padding()
-            Spacer()
             
-
+            if isLoading {
+                ProgressView() // Show loading indicator if isLoading is true
+                    .progressViewStyle(CircularProgressViewStyle())
+            } else if data.isEmpty {
+                VStack {
+                    Text("No customers available")
+                        .font(.headline)
+                        .foregroundColor(.gray)
+                        .padding()
+                    
+                    NavigationLink(destination: SiteDetails()) {
+                        Text("For Testing Purposes Navigate to Form")
+                            .font(.headline)
+                            .foregroundColor(.red)
+                            .padding()
+                    }
+                }
+            } else {
+                // Filtered data list according to the active text
+                let filteredData = isActiveFirstText ? data.filter { $0.isScheduledForAppraisal == true } : data
+                
+                DataListComponent(data: filteredData, destinationType: .customerAppraisalDetails)
+                    .padding()
+            }
+            
+            Spacer()
         }
         .onAppear {
-                    // Call fetchData() when the view appears for the first time
-                    fetchData()
-                }
+            // Call fetchData() when the view appears for the first time
+            fetchData()
+        }
     }
-    // Function to fetch data based on active text
-     func fetchData() {
-         // Simulate fetching data based on the active text
-         if isActiveFirstText {
-             data = [
-                 UserData(name: "John Doe", phoneNumber: "1234567890"),
-                 UserData(name: "Jane Smith", phoneNumber: "0987654321")
-             ]
-         } else {
-             data = [
-                 UserData(name: "Alice Johnson", phoneNumber: "5555555555"),
-                 UserData(name: "Bob Brown", phoneNumber: "7777777777")
-             ]
-         }
-     }
-}
 
+    // Function to fetch data based on active text
+    func fetchData() {
+        isLoading = true // Set isLoading to true before starting data fetch
+        NetworkManager().fetchCustomerList { result in
+            switch result {
+            case .success(let customers):
+                // Update the data array with the fetched customer data
+                DispatchQueue.main.async {
+                    self.data = customers
+                    isLoading = false // Set isLoading to false after data fetch completes
+                }
+            case .failure(let error):
+                // Handle the error
+                print("Error fetching customer data: \(error)")
+                isLoading = false // Ensure isLoading is set to false in case of error
+            }
+        }
+    }
+}
 
 
 struct QuickIntro: View {
@@ -65,6 +89,7 @@ struct QuickIntro: View {
 
     
     var body: some View {
+        HStack {
         VStack(alignment: .leading){
             Button(action: {
                 print("pressed")
@@ -75,32 +100,40 @@ struct QuickIntro: View {
                 Image("Leading-icon-button")
                     .font(.system(size: 20))
                     .foregroundColor(Color(hex: "#49454F"))
-                    .padding(.leading, 10)
             }
             Text(title)
-                .font(.title3)
-                .fontWeight(.semibold)
-                .foregroundColor(Color.black)
+                .font(.system(size: 24))
+                .bold()
             Text(description)
+                .font(.system(size: 12))
                 .font(.headline)
                 .foregroundColor(Color.gray)
         }
-        .padding(.trailing,10)
-        .padding()
+        Spacer ()
+       
+    }
         .navigationBarBackButtonHidden(true)
         .navigationBarHidden(true)
-    }
+        .padding(.horizontal )
     
+    }
 }
 
 
 
 struct DataListComponent: View {
-    var data: [UserData]
+    var data: [CustomerData]
     var destinationType: DestinationType
     
     var body: some View {
+        ScrollView{
         VStack(spacing: 10) {
+            
+            if data.isEmpty {
+                Text("No customers available")
+                    .font(.headline)
+                    .foregroundColor(.gray)
+            }
             ForEach(data, id: \.self) { item in
                 NavigationLink(destination: destinationView(for: item)) {
                     HStack {
@@ -109,7 +142,7 @@ struct DataListComponent: View {
                             .foregroundColor(.blue)
                         
                         VStack(alignment: .leading) {
-                            Text("Name: \(item.name)")
+                            Text("Name: \(item.customerName)")
                                 .foregroundColor(.gray)
 
                             
@@ -129,10 +162,11 @@ struct DataListComponent: View {
                 }
             }
         }
+        }
     }
     
     @ViewBuilder
-    private func destinationView(for userData: UserData) -> some View {
+    private func destinationView(for userData: CustomerData) -> some View {
         switch destinationType {
         case .customerDetails:
             CustomerDetails(userData: userData)
@@ -156,6 +190,35 @@ struct UserData: Identifiable, Hashable {
     let id = UUID()
     let name: String
     let phoneNumber: String
+}
+struct CustomerData: Codable, Identifiable, Hashable {
+    let id: Int
+    let staffUserId: String
+    let employeeId: String? // Make employeeId optional if it's not always present
+    let customerName: String
+    let customerIdentityNumber: String? // Fix typo in property name
+    let businessType: String
+    let leaseType: String
+    let scheduledDate: String? // Fix typo in property name
+    let isScheduledForAppraisal: Bool? // Rename to match JSON key
+    let geoLat: String
+    let geoLong: String
+    let phoneNumber: String // Fix typo in property name
+    let dateCreated: String
+    let appraisalDate: String? // Match JSON key name
+    let actualAppraisalDate: String? // Match JSON key name
+    let equipmentPrice: Double?
+    let equipmentDescription: String?
+    let currency: String?
+
+    // Conformance to Hashable
+    static func == (lhs: CustomerData, rhs: CustomerData) -> Bool {
+        return lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
 
 enum DestinationType {

@@ -19,7 +19,7 @@ struct EquipmentDeliveryDetails: View {
         ]
     @EnvironmentObject var config: AppConfig
 
-    var userData: UserData
+    var userData: CustomerData
     @Environment(\.presentationMode) var presentationMode
 
 

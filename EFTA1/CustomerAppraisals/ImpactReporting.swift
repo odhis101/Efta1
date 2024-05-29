@@ -11,7 +11,7 @@ import AlertToast
 struct ImpactReporting: View {
     @State private var progress: CGFloat = 1 // Initial progress
     @State private var capturedImage: UIImage?
-    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
+    @EnvironmentObject var siteQuestionData : SiteDetailsDataHandler
     @State private var CurrentMonthlyWage: String = ""
     @State private var CurrentDailyWage: String = ""
     @State private var RevenueLastMonth: String = ""
@@ -23,7 +23,11 @@ struct ImpactReporting: View {
     @State private var isLoading = false // State for loading indicator
     @State private var showToast = false // State to show toast message
     @State private var toastMessage = "" // Message for the toast
-    @State private var isSuccess = false // Success status for the toast
+    @State private var isSuccess: Bool? = nil // Success status for the modal
+    @State private var showingModal = false // State for showing the custom modal
+    @State private var message = ""
+    @State private var isNavigate = false
+
 
     @EnvironmentObject var config: AppConfig
     @Environment(\.presentationMode) var presentationMode
@@ -49,7 +53,7 @@ struct ImpactReporting: View {
                     }
                     Spacer()
                     Button("Continue") {
-                        showingConfirmation = true
+                        showingModal = true
                     }
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
@@ -59,24 +63,12 @@ struct ImpactReporting: View {
                     .padding()
                 }
             }
-            .alert(isPresented: $showingConfirmation) {
-                Alert(
-                    title: Text("Confirm Submission"),
-                    message: Text("You are about to submit customer details. Are you sure you want to proceed?"),
-                    primaryButton: .destructive(Text("Submit"), action: {
-                        submitCustomerData()
-                    }),
-                    secondaryButton: .cancel()
-                )
-            }
-            .overlay(isLoading ? LoadingModal() : nil)
-            .toast(isPresenting: $showToast) {
-                AlertToast(type: isSuccess ? .complete(.green) : .error(.red), title: toastMessage)
-            }
-            NavigationLink(destination: MyTabView(), isActive: $navigateToDashboard) {
-                                   EmptyView()
-           }
+           
+          
         }
+        .overlay(CustomModal(isPresented: $showingModal, isLoading: $isLoading, isSuccess: $isSuccess, message: $message, Navigation: $isNavigate, onSubmit: {
+            submitCustomerData()
+                   }))
     }
 
     private func submitCustomerData() {
@@ -87,17 +79,8 @@ struct ImpactReporting: View {
                 self.showToast = true
                 self.isSuccess = success
                 self.toastMessage = message
-                self.navigateToDashboard = true
                 
-
-                // Hide toast after 3 seconds
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    self.showToast = false
-                }
-
-                if success {
-                    self.navigateToDashboard = true
-                }
+            
             }
         }
     }

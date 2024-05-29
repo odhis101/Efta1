@@ -19,9 +19,9 @@ struct CreateSchedule: View {
         VStack{
             QuickIntro(title: "Equipment Delivery", description: "Kindly select one of the customers to make equipment delivery",presentationMode:presentationMode)
         
-        QuestionWithDate(question: "Schedule Date ")
+   //     QuestionWithDate(question: "Schedule Date ")
         
-        QuestionWithTime(question: "Schedule Time ")
+       // QuestionWithTime(question: "Schedule Time ")
             Spacer ()
             
             NavigationLink(destination: MyTabView()) {

@@ -23,7 +23,7 @@ struct Statements: View {
             
             QuestionWithSmallTextField(question: "Search",placeholder: "Search",selectedOption: $Search)
 
-            DataListComponent(data: data, destinationType:.customerStatements)
+            //DataListComponent(data: data, destinationType:.customerStatements)
                             .padding()
 
 

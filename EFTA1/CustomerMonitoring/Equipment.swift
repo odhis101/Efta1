@@ -33,7 +33,7 @@ struct Equipment: View {
                     
                //     QuestionWithButtons(question: "Have you asked about the typical customers, and why they use the applicant's business?")
                     
-                    QuestionWithDate(question: "Date to see the equipment?")
+                  //  QuestionWithDate(question: "Date to see the equipment?")
                     
                   //  QuestionWithButtons(question: "Was the serial number attached?")
                     
@@ -45,7 +45,7 @@ struct Equipment: View {
                    // QuestionWithButtons(question: "Service on the equipment is acceptable?")
                    // QuestionWithButtons(question: "Is the GPS tracker working?")
                   //  QuestionWithButtons(question: "The equipment has insurance?")
-                    QuestionWithDate(question: "Date insurance ends")
+             //       QuestionWithDate(question: "Date insurance ends")
 
 
 

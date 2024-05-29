@@ -8,15 +8,22 @@
 import SwiftUI
 
 struct Document_Assets: View {
-    @State private var progress: CGFloat = 0.2 // Initial progress
+    @State private var progress: CGFloat = 0.16 // Initial progress
     
     @State private var capturedImage: UIImage?
 
     @EnvironmentObject var config: AppConfig
 
-    @ObservedObject var siteQuestionData = SiteDetailsDataHandler()
-    
+    @EnvironmentObject var siteQuestionData : SiteDetailsDataHandler
+
     @Environment(\.presentationMode) var presentationMode
+    
+    var isFormComplete: Bool {
+         siteQuestionData.missingCertificates != nil &&
+        siteQuestionData.assetsInGoodStanding != nil &&
+        siteQuestionData.stockLevelsAligned != nil &&
+         siteQuestionData.orderBooksAndPayments != nil
+     }
 
     var body: some View {
         GeometryReader { geometry in
@@ -47,19 +54,8 @@ struct Document_Assets: View {
                 
                 }
                 Spacer ()
-                /*
-                NavigationLink(destination: Market()){
-
-                Text("Continue")
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height:40)
-                    .background(config.primaryColor) // Gray background when profileImage is nil
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-                    }
-                */
-                CustomNavigationButton(destination: Market(), label: "Continue", backgroundColor: config.primaryColor)
+               
+                CustomNavigationButton(destination: Market(), label: "Continue", backgroundColor: isFormComplete ? config.primaryColor : Color.gray)
 
                 }
             }

@@ -10,9 +10,10 @@ import SwiftUI
 struct CustomerReposessions: View {
     @State private var searchText = ""
     @State private var isActiveFirstText = true
-    @State private var data: [UserData] = [] // Initialize empty array to hold data
     @State private var Search:String=""
     @Environment(\.presentationMode) var presentationMode
+    @State private var isLoading = false // Add isLoading state variable
+    @State private var data: [CustomerData] = [] // Initialize empty array to hold data
 
     var body: some View {
         VStack{
@@ -20,14 +21,38 @@ struct CustomerReposessions: View {
             // make this search bar look better and more searchier
             QuestionWithSmallTextField(question: "Search",placeholder: "Search",selectedOption: $Search)
 
-            ToggleableTextComponent(text1: "Pick-Up", text2: "Storage", isActiveFirstText: isActiveFirstText) {
+            ToggleableTextComponent(text1: "Pick-Up", text2: "Storage", isActiveFirstText: $isActiveFirstText) {
                 // this will allow data to be dynamically gotten here
                 isActiveFirstText.toggle()
                 fetchData()
 
             }
-            DataListComponent(data: data, destinationType: .reposessionDetails)
-                            .padding()
+            if isLoading {
+                    ProgressView() // Show loading indicator if isLoading is true
+                    .progressViewStyle(CircularProgressViewStyle())
+
+                     }
+                else if data.isEmpty {
+                    VStack{
+                            Text("No customers available")
+                                .font(.headline)
+                                .foregroundColor(.gray)
+                                .padding()
+                        
+                        NavigationLink(destination: Equipment()) {
+                            Text("For Scheduling Purposes Navigate to Form")
+                                .font(.headline)
+                                .foregroundColor(.red)
+                                .padding()
+                        }
+                    }
+                    
+                }
+            
+            else {
+                         DataListComponent(data: data, destinationType: .customerAppraisalDetails)
+                             .padding()
+                     }
             Spacer()
             
 
@@ -38,21 +63,26 @@ struct CustomerReposessions: View {
                 }
     }
     // Function to fetch data based on active text
-     func fetchData() {
-         // Simulate fetching data based on the active text
-         if isActiveFirstText {
-             data = [
-                 UserData(name: "John Doe", phoneNumber: "1234567890"),
-                 UserData(name: "Jane Smith", phoneNumber: "0987654321")
-             ]
-         } else {
-             data = [
-                 UserData(name: "Alice Johnson", phoneNumber: "5555555555"),
-                 UserData(name: "Bob Brown", phoneNumber: "7777777777")
-             ]
-         }
-     }
-    
+    func fetchData() {
+        isLoading = true // Set isLoading to true before starting data fetch
+        NetworkManager().fetchCustomerList { result in
+            switch result {
+            case .success(let customers):
+                // Update the data array with the fetched customer data
+                DispatchQueue.main.async {
+                    self.data = customers
+                    isLoading = false // Set isLoading to false after data fetch completes
+
+                }
+            case .failure(let error):
+                // Handle the error
+                print("Error fetching customer data: \(error)")
+                isLoading = false // Ensure isLoading is set to false in case of error
+
+            }
+        }
+    }
+
 }
 
 

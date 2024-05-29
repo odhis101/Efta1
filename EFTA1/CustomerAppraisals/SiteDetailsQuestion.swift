@@ -19,6 +19,7 @@ class SiteDetailsDataHandler: ObservableObject {
     @Published var experienceInMachinery: String = ""
     @Published var areCustomersOnSite: Bool = false
     @Published var customerPhoneNumber: String = "" // PhoneNumber:<string>
+    @Published var customerIdentityNumber: String = "" // PhoneNumber:<string>
 
     
     // Documentation & Assets

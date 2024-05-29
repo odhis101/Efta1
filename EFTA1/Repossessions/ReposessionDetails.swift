@@ -18,7 +18,7 @@ struct ReposessionDetails: View {
 
         
         ]
-    var userData: UserData
+    var userData: CustomerData
     @EnvironmentObject var config: AppConfig
     @Environment(\.presentationMode) var presentationMode
 

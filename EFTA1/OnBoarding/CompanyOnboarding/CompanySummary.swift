@@ -93,6 +93,9 @@ struct CompanySummary: View {
                 NavigationLink(destination: IndividualOnboarding2(), isActive: $navigateToCustomerDetails2) {
                     EmptyView()
                 }
+                NavigationLink(destination: MyTabView(), isActive: $isNavigate) { // NavigationLink to the next page
+                                       EmptyView() // Invisible navigation link
+                                   }
                 Button("Continue") {
                     showingConfirmation = true
                     showingModal = true
