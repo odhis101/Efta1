@@ -1,10 +1,3 @@
-//
-//  ConfirmPIN.swift
-//  EFTA1
-//
-//  Created by Joshua on 5/29/24.
-//
-
 import SwiftUI
 import AlertToast
 
@@ -22,10 +15,15 @@ struct ConfirmPIN: View {
     @State private var isLoading = false // State for loading indicator
     @State private var showToast = false // State to show toast message
     @State private var toastMessage = "" // Message for the toast
-    @State private var isSuccess = false // Success status for the toast
+    //@State private var isSuccess  // Success status for the toast
     @EnvironmentObject var resetPin: ResetPin
+    @State private var isSuccess: Bool? = nil // Success status for the modal
     @State var showingConfirmation = false
     @State var showMismatch = false
+    @State var showingModal = false
+    @State var message = ""
+    @State var passwords = ""
+
 
     @Environment(\.presentationMode) var presentationMode
 
@@ -45,13 +43,13 @@ struct ConfirmPIN: View {
                     KeyPadView(pinCode: $pinCode, instruction: "Enter a 4 digit PIN")
                         .frame(minHeight: geometry.size.height * 0.3, maxHeight: geometry.size.height * 0.45)
                         .padding(.vertical, geometry.size.height * 0.06)
-                    
+
                     Spacer()
                     NavigationLink(destination: forgotPin()) {
                         Text("Forgot Pin")
                             .foregroundColor(config.primaryColor)
                     }
-                    
+
                     NavigationLink(destination: MyTabView(), isActive: $shouldNavigate) {
                         EmptyView() // Invisible navigation link
                     }
@@ -62,43 +60,44 @@ struct ConfirmPIN: View {
         .onChange(of: pinCode) { newValue in
             // Check if the PIN length reaches 4
             if newValue.count == pinLength {
-                loginWithPasscode(passcode: newValue)
+                 passwords = newValue
+                showingModal = true
             }
         }
         .overlay(isLoading ? LoadingModal() : nil)
         .toast(isPresenting: $showToast) {
-            AlertToast(type: isSuccess ? .complete(.green) : .error(.red), title: toastMessage)
+            AlertToast(type: isSuccess ?? true ? .complete(.green) : .error(.red), title: toastMessage)
         }
+        .overlay(CustomModal(isPresented: $showingModal, isLoading: $isLoading, isSuccess: $isSuccess, message: $message, Navigation: $shouldNavigate, onSubmit: {
+            loginWithPasscode(passcode: passwords)
+        }))
     }
 
     private func loginWithPasscode(passcode: String) {
         isLoading = true
         showToast = false // Reset toast state
 
-        if passcode == resetPin.NewPin {
-            // Successful match
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        guard let phoneNumber = AuthManager.shared.loadPhoneNumber() else {
+            print("Phone number not found in Keychain")
+            return
+        }
+
+        NetworkManager.shared.updatePin(phoneNumber: phoneNumber, oldPin: resetPin.OldPin, newPin: passcode) { success, message in
+            DispatchQueue.main.async {
                 self.isLoading = false
-                self.isSuccess = true
-                self.toastMessage = "PIN matched successfully"
+                self.isSuccess = success
+                self.toastMessage = message
                 self.showToast = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self.shouldNavigate = true
+                self.message = message
+                //self.showingModal = true
+                if success {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        self.shouldNavigate = true
+                    }
+                } else {
+                    self.pinCode = ""
                 }
-            }
-        } else {
-            // PIN mismatch
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.isLoading = false
-                self.isSuccess = false
-                self.toastMessage = "New PIN does not match"
-                self.showToast = true
-                self.pinCode = ""
             }
         }
     }
 }
-
-
-
-

@@ -683,7 +683,6 @@ class NetworkManager: ObservableObject {
             files.append((data: imageData, fieldName: "CustomerPhoto", fileName: "profile.jpg", mimeType: "image/jpeg"))
         }
         
-       
         for (idType, urls) in onboardingData.documentURLs {
             for documentURL in urls {
                 do {
@@ -736,9 +735,7 @@ class NetworkManager: ObservableObject {
                     print("Error decoding response: \(error)")
                     completion(false, "Error decoding response")
                 }
-            }
-            
-            else {
+            } else {
                 if let responseBody = String(data: data, encoding: .utf8) {
                     print("Response body: \(responseBody)")
                 }
@@ -783,7 +780,33 @@ class NetworkManager: ObservableObject {
     struct UploadResponse: Codable {
         let status: String
         let message: String
-        let data: [String: String]?
+        let data: ResponseData?
+        
+        enum ResponseData: Codable {
+            case dictionary([String: String])
+            case string(String)
+            
+            init(from decoder: Decoder) throws {
+                let container = try decoder.singleValueContainer()
+                if let dictionary = try? container.decode([String: String].self) {
+                    self = .dictionary(dictionary)
+                } else if let string = try? container.decode(String.self) {
+                    self = .string(string)
+                } else {
+                    throw DecodingError.typeMismatch(ResponseData.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Expected dictionary or string"))
+                }
+            }
+            
+            func encode(to encoder: Encoder) throws {
+                var container = encoder.singleValueContainer()
+                switch self {
+                case .dictionary(let dictionary):
+                    try container.encode(dictionary)
+                case .string(let string):
+                    try container.encode(string)
+                }
+            }
+        }
     }
 
     
@@ -1165,6 +1188,72 @@ class NetworkManager: ObservableObject {
             completion(.success(responseData))
         }.resume()
     }
+    
+    func updatePin(phoneNumber: String, oldPin: String, newPin: String, completion: @escaping (Bool, String) -> Void) {
+            guard let url = URL(string: "\(baseURL)/auth/updatepin") else {
+                print("Invalid URL")
+                completion(false, "Invalid URL")
+                return
+            }
+
+            let formattedPhoneNumber = formatPhoneNumber(phoneNumber)
+            let requestBody: [String: Any] = [
+                "phonenumber": formattedPhoneNumber,
+                "oldpin": oldPin,
+                "newpin": newPin
+            ]
+
+            guard let jsonData = try? JSONSerialization.data(withJSONObject: requestBody) else {
+                print("Error creating JSON")
+                completion(false, "Error creating JSON")
+                return
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = jsonData
+
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Error: \(error.localizedDescription)")
+                    completion(false, "Error: \(error.localizedDescription)")
+                    return
+                }
+
+                guard let httpResponse = response as? HTTPURLResponse, let data = data else {
+                    print("Invalid response")
+                    completion(false, "Invalid response")
+                    return
+                }
+
+                print("Response status code: \(httpResponse.statusCode)")
+                if let responseBody = String(data: data, encoding: .utf8) {
+                    print("Response body: \(responseBody)")
+                }
+
+                do {
+                    let responseObject = try JSONDecoder().decode(UpdatePinResponse.self, from: data)
+                    if responseObject.status == "00" {
+                        // Successful pin update
+                        completion(true, responseObject.message)
+                    } else {
+                        // Failed pin update
+                        completion(false, responseObject.message)
+                    }
+                } catch {
+                    // Error decoding response
+                    print("Error decoding response: \(error.localizedDescription)")
+                    completion(false, "Error decoding response")
+                }
+            }.resume()
+        }
+
+        struct UpdatePinResponse: Codable {
+            let status: String
+            let message: String
+        }
+
   }
 
   // Define custom error types
