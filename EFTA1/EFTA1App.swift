@@ -10,7 +10,6 @@ import SwiftUI
 @main
 struct EFTA1App: App {
     @StateObject var SiteQuestionData = SiteDetailsDataHandler()
-    //@StateObject var documentHandler = DocumentHandler() // Instantiate your DocumentHandler
     @StateObject var CustomerOnboardingData = OnboardingData() // Instantiate your DocumentHandler
     @StateObject var config = AppConfig(region: .efta)
     @StateObject var pinHandlesr = PinHandler()
@@ -23,7 +22,7 @@ struct EFTA1App: App {
 
     var body: some Scene {
         WindowGroup {
-            SplashView()
+            CustomerSummary()
                 .environmentObject(SiteQuestionData)
                 //.environmentObject(documentHandler)
                 .environmentObject(CustomerOnboardingData)

@@ -18,8 +18,6 @@ struct IndividualOnboarding: View {
         @State private var districtOptions: [String] = []
     
     // Computed property to check if all required fields are filled
-    // Computed property to check if all required fields are filled
-    // Computed property to check if all required fields are filled
        var isFormComplete: Bool {
            !onboardingData.customerName.isEmpty &&
            !(onboardingData.idType ?? "").isEmpty &&
@@ -42,7 +40,7 @@ struct IndividualOnboarding: View {
                         
                         QuestionWithSmallTextField(question: "Customer Name", placeholder: "Customer Name", selectedOption: $onboardingData.customerName)
                         QuestionWithDropdown(question: "Type Of ID", options: ["NATIONAL_ID", "PASSPORT"], selectedOption: $onboardingData.idType)
-                        QuestionWithSmallTextField(question: "Enter ID Number", placeholder: "ID Number", selectedOption: $onboardingData.idNumber)
+                        QuestionWithSmallTextField(question: "Enter \(onboardingData.idType ?? "National_ID")  Number", placeholder: "ID Number", selectedOption: $onboardingData.idNumber)
                         QuestionWithDropdown(question: "Gender", options: ["MALE", "FEMALE"], selectedOption: $onboardingData.gender)
                         QuestionWithDropdown(question: "Marital Status", options: ["SINGLE", "MARRIED","DIVORCED","WIDOWED"], selectedOption: $onboardingData.maritalStatus)
                         QuestionWithSmallTextField(question: "Postal Address", placeholder: "Postal Address", selectedOption: $onboardingData.postalAddress)

@@ -45,19 +45,7 @@ struct CompanyDocument: View {
                         .padding(.horizontal)
                     }
                     Spacer()
-                    /*
-                    NavigationLink(destination: CompanySummary()) {
-
-                    Text("Continue")
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height:50)
-                            .background(config.primaryColor) // Gray background when profileImage is nil
-                            .cornerRadius(8)
-                            .padding(.horizontal)
-                            .padding(.vertical)
-                    }
-                     */
+                 
                     
                     CustomNavigationButton(destination: CompanySummary(), label: "Continue", backgroundColor: config.primaryColor)
                     

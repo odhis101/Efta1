@@ -1190,7 +1190,7 @@ class NetworkManager: ObservableObject {
     }
     
     func updatePin(phoneNumber: String, oldPin: String, newPin: String, completion: @escaping (Bool, String) -> Void) {
-            guard let url = URL(string: "\(baseURL)/auth/updatepin") else {
+            guard let url = URL(string: "\(baseURL)/auth/changepin") else {
                 print("Invalid URL")
                 completion(false, "Invalid URL")
                 return

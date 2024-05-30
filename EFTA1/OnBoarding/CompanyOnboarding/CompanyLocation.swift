@@ -86,19 +86,7 @@ struct CompanyLocation: View {
                     }
                     
                     Spacer()
-                    /*
-                    NavigationLink(destination: CustomerDocument()) {
-                        Text("Continue")
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height:40)
-                            .background(config.primaryColor)
-                            .cornerRadius(8)
-                            .padding(.horizontal)
-                            .padding(.bottom) // Add padding to separate the button from the map
-                    }
-                     */
-                    
+                
                     CustomNavigationButton(destination: CompanyDocument(), label: "Continue", backgroundColor: config.primaryColor)
 
                     

@@ -72,6 +72,8 @@ struct LoginOnBoarding: View {
 
                                     }
                                 }
+                                        
+                                        
                             )
                                                         }
                             else{

@@ -39,6 +39,17 @@ struct CompanyOnboarding: View {
         !(onboardingData.district ?? "").isEmpty &&
         !onboardingData.ward.isEmpty
     }
+    /*
+    var name = ""
+    
+    if StolenonboardingData.titleForCustomerOnboarding == "Limited Company" {
+        name = "Company"
+    } else {
+        name = StolenonboardingData.titleForCustomerOnboarding
+        
+    }
+        */
+        
 
 
     
@@ -48,11 +59,11 @@ struct CompanyOnboarding: View {
                     
                     ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:StolenonboardingData.titleForCustomerOnboarding ,description: "Kindly collect the following information from the customer")
                     ScrollView{
-                                QuestionWithSmallTextField(question: "", placeholder: "\(StolenonboardingData.titleForCustomerOnboarding) name", selectedOption: $onboardingData.companyName)
+                                QuestionWithSmallTextField(question: "\(StolenonboardingData.titleForCustomerOnboarding) name", placeholder: "\(StolenonboardingData.titleForCustomerOnboarding) name", selectedOption: $onboardingData.companyName)
                     
-                                QuestionWithSmallTextField(question: "", placeholder: "TIN", selectedOption: $onboardingData.TIN)
-                                QuestionWithSmallTextField(question: "", placeholder: "VRN (optional)", selectedOption: $onboardingData.VRN)
-                                QuestionWithSmallTextField(question: "", placeholder: "Postal Address", selectedOption: $onboardingData.postalAddress)
+                                QuestionWithSmallTextField(question: "TIN", placeholder: "TIN", selectedOption: $onboardingData.TIN)
+                                QuestionWithSmallTextField(question: "VRN", placeholder: "VRN (optional)", selectedOption: $onboardingData.VRN)
+                                QuestionWithSmallTextField(question: "Address", placeholder: "Postal Address", selectedOption: $onboardingData.postalAddress)
                                 QuestionWithDropdown(question: "Region", options: locationData.map { $0.region }, selectedOption: $onboardingData.region)
                                     .onChange(of: onboardingData.region) { newValue in
                                         if let region = newValue, let data = locationData.first(where: { $0.region == region }) {

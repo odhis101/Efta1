@@ -56,9 +56,10 @@ struct CompanyOnboarding2: View {
                     ScrollView{
                         ProgressBar(geometry: geometry, progress: $progress,presentationMode: presentationMode, title:StolenonboardingData.titleForCustomerOnboarding ,description: "Kindly collect the following information from the customer")
 
-                        QuestionWithSmallTextField(question: "", placeholder: "Contact person name", selectedOption: $onboardingData.contactPersonName)
+                        QuestionWithSmallTextField(question: "Contact person name", placeholder: "Contact person name", selectedOption: $onboardingData.contactPersonName)
                         QuestionWithDropdown(question: "Type Of ID", options: ["NATIONAL_ID", "PASSPORT"], selectedOption: $onboardingData.idType)
-                        QuestionWithSmallTextField(question: "Enter ID Number", placeholder: "ID Number", selectedOption: $onboardingData.idNumber)
+                        
+                        QuestionWithSmallTextField(question: "Enter \(onboardingData.idType ?? "National_ID") Number", placeholder: "\(onboardingData.idType ?? "National_ID") Number", selectedOption: $onboardingData.idNumber)
                         QuestionWithSmallTextField(question: "Phone Number", placeholder: "Phone Number", selectedOption: $onboardingData.phoneNumber)
                         QuestionWithSmallTextField(question: "Email", placeholder: "Email address", selectedOption: $onboardingData.emailAddress)
                         QuestionWithDropdown(question: "Nationality ", options: nationality,selectedOption:$onboardingData.nationality)
